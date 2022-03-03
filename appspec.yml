@@ -1,0 +1,14 @@
+version: 0.0
+os: windows
+files:
+  - source: /
+    destination: c:\ceneraweb
+hooks:
+  AfterInstall:
+    - location: scripts\install_dependencies.bat
+    - location: scripts\build.bat
+      timeout: 600
+  ApplicationStart:
+    - location: scripts\stop.bat
+    - location: scripts\start.bat
+      timeout: 20
