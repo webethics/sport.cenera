@@ -124,11 +124,14 @@ const useStyles = makeStyles({
       fontWeight: "500",
     },
   },
+  matched: {
+    fontWeight: 500,
+    color: "#0079BC",
+  },
 });
 
 export default function CustomizedTables() {
   const classes = useStyles();
-
   return (
     <div className={classes.bgContainer}>
       <Container>
@@ -155,13 +158,16 @@ export default function CustomizedTables() {
                     <StyledTableRow key={row.startime}>
                       <BodyTableCell component="th" scope="row">
                         {row.startime}
+                        {console.log(row)}
                       </BodyTableCell>
                       <BodyTableCell align="left">{row.endtime}</BodyTableCell>
                       <BodyTableCell align="left">{row.duration}</BodyTableCell>
                       <BodyTableCell align="left">{row.team}</BodyTableCell>
                       <BodyTableCell align="left">{row.location}</BodyTableCell>
                       <BodyTableCell align="left">{row.warderobe}</BodyTableCell>
-                      <BodyTableCell align="left">{row.activity}</BodyTableCell>
+                      <BodyTableCell className={`${row.activity === "Match" && classes.matched}`} align="left">
+                        {row.activity}
+                      </BodyTableCell>
                     </StyledTableRow>
                   ))}
                   {rowsexpand.map((row) => (
