@@ -161,7 +161,7 @@ export default function CustomizedTables() {
                 <TableBody>
                   {rows.map((row) => (
                     <StyledTableRow key={row.startime}>
-                      <BodyTableCell component="th" scope="row">
+                      <BodyTableCell scope="row">
                         {row.startime}
                         {console.log(row)}
                       </BodyTableCell>
@@ -177,7 +177,7 @@ export default function CustomizedTables() {
                   ))}
                   {rowsexpand.map((row) => (
                     <StyledTableRow className={classes.bottomTableRow} key={row.awayfield}>
-                      <BodyTableCell component="th" scope="row"></BodyTableCell>
+                      <BodyTableCell scope="row"></BodyTableCell>
                       <BodyTableCell align="left"></BodyTableCell>
                       <BodyTableCell className={classes.label} align="left">
                         {row.awayfield}
