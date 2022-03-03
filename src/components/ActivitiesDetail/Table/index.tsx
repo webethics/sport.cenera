@@ -128,6 +128,11 @@ const useStyles = makeStyles({
     fontWeight: 500,
     color: "#0079BC",
   },
+  bottomTableRow: {
+    "& td": {
+      border: "none",
+    },
+  },
 });
 
 export default function CustomizedTables() {
@@ -171,7 +176,7 @@ export default function CustomizedTables() {
                     </StyledTableRow>
                   ))}
                   {rowsexpand.map((row) => (
-                    <StyledTableRow key={row.awayfield}>
+                    <StyledTableRow className={classes.bottomTableRow} key={row.awayfield}>
                       <BodyTableCell component="th" scope="row"></BodyTableCell>
                       <BodyTableCell align="left"></BodyTableCell>
                       <BodyTableCell className={classes.label} align="left">
