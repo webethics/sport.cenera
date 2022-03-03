@@ -9,6 +9,7 @@ import Filters from "@cenera/components/ActivitiesDetail/Filters";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { activitiesDetailStyle } from "./styles";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(activitiesDetailStyle as any);
 
@@ -21,7 +22,9 @@ export default function ActivitiesDetail() {
         <AppBar position="static" className={classes.appbar}>
           <Box className={classes.justifyContentCenter}>
             <div className={classes.logoHolder}>
-              <img src={logo} alt="Logo" />
+              <Link to="/">
+                <img src={logo} alt="Logo" />
+              </Link>
             </div>
           </Box>
           <div className={classes.headerPattren}>

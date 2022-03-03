@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { activitiesPageStyle } from "./styles";
 import TitleHeader from "@cenera/components/TitleHeader";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(activitiesPageStyle as any);
 
@@ -21,7 +22,9 @@ export default function Activities() {
         <AppBar position="static" className={classes.appbar}>
           <Box className={classes.justifyContentCenter}>
             <div className={classes.logoHolder}>
-              <img src={logo} alt="Logo" />
+              <Link to="/">
+                <img src={logo} alt="Logo" />
+              </Link>
             </div>
           </Box>
           <div className={classes.headerPattren}>
