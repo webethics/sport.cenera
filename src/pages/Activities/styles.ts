@@ -1,10 +1,4 @@
 export const activitiesPageStyle = () => ({
-  // Container: {
-  //   "@media (min-width: 1200px)": {
-  //     width: "1170px",
-  //   },
-  // },
-
   appbar: {
     backgroundColor: "#fff",
     padding: "15px 15px 0 15px",

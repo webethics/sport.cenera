@@ -90,6 +90,12 @@ const useStyles = makeStyles({
     },
   },
 
+  Container: {
+    "@media (min-width: 1280px)": {
+      maxWidth: "1392px",
+    },
+  },
+
   tableContainer: {
     ...sectionSpacer,
   },
@@ -139,7 +145,7 @@ export default function CustomizedTables() {
   const classes = useStyles();
   return (
     <div className={classes.bgContainer}>
-      <Container>
+      <Container className={classes.Container}>
         <Grid container>
           <Grid item xs={12}>
             <TableContainer component={Paper} className={classes.tableContainer}>

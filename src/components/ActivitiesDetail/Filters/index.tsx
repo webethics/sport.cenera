@@ -20,7 +20,7 @@ export default function Filters() {
   };
 
   return (
-    <Container>
+    <Container className={classes.Container}>
       <Box display="flex" sx={{ flexDirection: { xs: "column", sm: "row" } }} mx={-1} mb={2}>
         <Box p={1} className={classes.formGroup}>
           <FormControl variant="outlined" className={classes.formControl}>

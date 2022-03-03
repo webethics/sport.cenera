@@ -1,7 +1,7 @@
 import { blackColor } from "@cenera/common/styles/common-styles";
 import dotpattrenH from "@cenera/assets/images/dotpattren-h.svg";
 
-export const listingStyle = () => ({
+export const listingStyle = (theme: any) => ({
   listing: {
     paddingBottom: "40px",
     overflow: "hidden",
@@ -12,6 +12,9 @@ export const listingStyle = () => ({
   listingContainer: {
     position: "relative",
     zIndex: 1,
+    [theme.breakpoints.up("lg")]: {
+      maxWidth: "1392px",
+    },
     "&:before": {
       content: '""',
       display: "block",

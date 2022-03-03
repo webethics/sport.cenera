@@ -1,5 +1,11 @@
 import { alpha, Theme } from "@material-ui/core/styles";
+
 export const filtersStyle = (theme: Theme) => ({
+  Container: {
+    "@media (min-width: 1280px)": {
+      maxWidth: "1392px",
+    },
+  },
   formGroup: {
     width: "100%",
     [theme.breakpoints.up("sm")]: {
