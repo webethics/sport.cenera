@@ -4,6 +4,7 @@ import dotpattrenH from "@cenera/assets/images/dotpattren-h.svg";
 export const listingStyle = () => ({
   listing: {
     paddingBottom: "40px",
+    overflow: "hidden",
     "@media (min-width: 992px)": {
       paddingBottom: "60px",
     },
