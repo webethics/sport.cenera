@@ -21,8 +21,9 @@ export const activitiesDetailStyle = () => ({
     position: "absolute",
     height: 56,
     width: "100%",
-    bottom: -56,
+    bottom: -30,
     left: 0,
+    zIndex: -1,
     "& img": {
       width: "100%",
       height: "100%",

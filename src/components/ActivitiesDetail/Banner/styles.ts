@@ -3,12 +3,12 @@ import { whiteColor, sectionSpacer } from "@cenera/common/styles/common-styles";
 export const bannerStyle = () => ({
   banner: {
     backgroundColor: "#0079BC",
-    padding: "calc(30px + 56px) 0 calc(30px + 56px) 0",
+    padding: "calc(15px + 26px) 0 calc(15px + 56px) 0",
     position: "relative",
     textAlign: "center",
     ...sectionSpacer,
     "@media (max-width: 767px)": {
-      padding: "calc(20px + 56px) 0 calc(20px + 56px) 0",
+      padding: "40px 0 60px 0",
     },
     "& h1": {
       fontSize: "1.5rem",

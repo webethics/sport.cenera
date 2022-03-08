@@ -9,6 +9,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { makeStyles } from "@material-ui/core/styles";
 import { filtersStyle } from "./styles";
 import Container from "@material-ui/core/Container";
+import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 
 const useStyles = makeStyles(filtersStyle as any);
 
@@ -56,6 +57,9 @@ export default function Filters() {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
+        </Box>
+        <Box className={classes.Filters}>
+          <FormatListBulletedIcon />
         </Box>
       </Box>
     </Container>

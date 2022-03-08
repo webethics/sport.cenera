@@ -1,14 +1,39 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
-
-.sectionSpacer {
-  margin-bottom: 60;
+.datepicker input[type="text"] {
+  font-size: 14px;
+  color: #1769ff;
+}
+.datepicker {
+  max-width: 200px !important;
+  width: 100%;
+}
+.desc_box {
+  width: 50%;
+}
+.desc_box2 {
+  max-width: 200px;
+  width: 100%;
+}
+@media screen and (max-width: 600px) {
+  .custom-form-control {
+    max-width: 100% !important;
+  }
+  .desc_box {
+    width: 100%;
+  }
+  .btn-wrap {
+    width: 100% !important;
+  }
 }

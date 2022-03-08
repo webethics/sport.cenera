@@ -5,15 +5,18 @@ import PeopleIcon from "@material-ui/icons/People";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import SportsSoccerIcon from "@material-ui/icons/SportsSoccer";
 import InfoIcon from "@material-ui/icons/Info";
+import SportsKabaddiIcon from "@material-ui/icons/SportsKabaddi";
 import GrainIcon from "@material-ui/icons/Grain";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import EventAvailableIcon from "@material-ui/icons/EventAvailable";
 import GroupsIcon from "@material-ui/icons/PeopleOutline";
 import { ClubsManagement } from "@cenera/views/Club";
 import { TeamsManagement } from "@cenera/views/Team";
 import { PlayersManagement } from "@cenera/views/Player";
 import { GameInfo, GameResults, GameLineUp, AwayTeam } from "@cenera/views/Games";
+import { Booking } from "@cenera/views/Activity";
 import { Dashboard } from "@cenera/views/Dashboard";
 import { UsersManagement } from "@cenera/views/UserManagement";
 
@@ -61,6 +64,7 @@ export const adminRoutes = [
     icon: DirectionsRunIcon,
     layout: "/admin",
   },
+
   {
     state: "gameCollapse",
     collapse: true,
@@ -93,6 +97,21 @@ export const adminRoutes = [
         name: "Away Team",
         component: AwayTeam,
         icon: GroupsIcon,
+        layout: "/admin",
+      },
+    ],
+  },
+
+  {
+    collapse: true,
+    name: "Activity",
+    icon: SportsKabaddiIcon,
+    views: [
+      {
+        path: "/activity/booking",
+        name: "Booking",
+        component: Booking,
+        icon: EventAvailableIcon,
         layout: "/admin",
       },
     ],

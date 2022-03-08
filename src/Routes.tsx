@@ -20,7 +20,7 @@ export const AppRoutes = () => {
 
   return (
     <Switch>
-      <Route path="/activities" exact={true} component={Activities} />
+      <Route path="/" exact={true} component={Activities} />
       <Route path="/activitiesdetail" exact={true} component={ActivitiesDetail} />
       <Route path="/login" exact={true} component={Login} />
       <Route path="/resetpassword" exact={true} component={PasswordReset} />

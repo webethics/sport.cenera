@@ -1,42 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { useHistory } from 'react-router-dom';
-import { CircularProgress } from '@material-ui/core';
+import React, { useState, useEffect } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useHistory } from "react-router-dom";
+import { CircularProgress } from "@material-ui/core";
 
-import { makeStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Icon from '@material-ui/core/Icon';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import MatButton from '@material-ui/core/Button';
+import { makeStyles } from "@material-ui/core/styles";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Icon from "@material-ui/core/Icon";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import MatButton from "@material-ui/core/Button";
 
-import Email from '@material-ui/icons/Email';
-import Check from '@material-ui/icons/Check';
+import Email from "@material-ui/icons/Email";
+import Check from "@material-ui/icons/Check";
 
 // core components
-import { GridContainer } from '@cenera/components/Grid/GridContainer';
-import { GridItem } from '@cenera/components/Grid/GridItem';
-import { CustomInput } from '@cenera/components/CustomInput/CustomInput';
-import { Button } from '@cenera/components/Button/Button';
-import { Card } from '@cenera/components/Card/Card';
-import { CardBody } from '@cenera/components/Card/CardBody';
-import { CardHeader } from '@cenera/components/Card/CardHeader';
-import { CardFooter } from '@cenera/components/Card/CardFooter';
-import { AuthNavbar } from '@cenera/components/NavBars/AuthNavbar';
-import { Footer } from '@cenera/components/Footer/Footer';
-import { useSnackbar } from 'notistack';
+import { GridContainer } from "@cenera/components/Grid/GridContainer";
+import { GridItem } from "@cenera/components/Grid/GridItem";
+import { CustomInput } from "@cenera/components/CustomInput/CustomInput";
+import { Button } from "@cenera/components/Button/Button";
+import { Card } from "@cenera/components/Card/Card";
+import { CardBody } from "@cenera/components/Card/CardBody";
+import { CardHeader } from "@cenera/components/Card/CardHeader";
+import { CardFooter } from "@cenera/components/Card/CardFooter";
+import { AuthNavbar } from "@cenera/components/NavBars/AuthNavbar";
+import { Footer } from "@cenera/components/Footer/Footer";
+import { useSnackbar } from "notistack";
 
-import { loginPageStyle } from './styles';
-import { useAppContext } from '@cenera/app-context';
-import { UserLoggedIn } from '@cenera/app-context/actions';
-import { UserService } from '@cenera/services';
-import { PasswordResetDialog } from '@cenera/components/PasswordResetDialog';
+import { loginPageStyle } from "./styles";
+import { useAppContext } from "@cenera/app-context";
+import { UserLoggedIn } from "@cenera/app-context/actions";
+import { UserService } from "@cenera/services";
+import { PasswordResetDialog } from "@cenera/components/PasswordResetDialog";
 
 const useStyles = makeStyles(loginPageStyle as any);
 
 export default function LoginPage() {
-  const [cardAnimation, setCardAnimation] = useState('cardHidden');
+  const [cardAnimation, setCardAnimation] = useState("cardHidden");
   const [passwordResetDlgOpen, setPasswordResetDlgOpen] = useState(false);
   const [, appDispatch] = useAppContext();
 
@@ -45,7 +45,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     setTimeout(() => {
-      setCardAnimation('');
+      setCardAnimation("");
     }, 700);
   }, []);
 
@@ -53,20 +53,20 @@ export default function LoginPage() {
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       rememberMe: true,
     },
     validationSchema: Yup.object({
       email: Yup.string()
-        .email('Invalid email address')
-        .required('Required'),
+        .email("Invalid email address")
+        .required("Required"),
       password: Yup.string()
         .required()
-        .min(5, 'Password length should be at least 5 characters')
-        .max(32, 'Password Length should be at most 32 characters'),
+        .min(5, "Password length should be at least 5 characters")
+        .max(32, "Password Length should be at most 32 characters"),
     }),
-    onSubmit: async formValues => {
+    onSubmit: async (formValues) => {
       if (formik.isValid) {
         try {
           const { data: result } = await UserService.login({
@@ -75,16 +75,16 @@ export default function LoginPage() {
           });
 
           appDispatch(UserLoggedIn(result));
-          history.replace('/');
+          history.replace("/admin/dashboard");
         } catch {
-          enqueueSnackbar('Login failed, either your email or password was wrong.', { variant: 'error' });
+          enqueueSnackbar("Login failed, either your email or password was wrong.", { variant: "error" });
         }
       }
     },
   });
 
   const handleRememberMeToggle = () => {
-    formik.setFieldValue('rememberMe', !values.rememberMe);
+    formik.setFieldValue("rememberMe", !values.rememberMe);
   };
 
   const { handleChange, handleBlur, values, errors, touched } = formik;
@@ -117,16 +117,14 @@ export default function LoginPage() {
                               <Email className={classes.inputAdornmentIcon} />
                             </InputAdornment>
                           ),
-                          name: 'email',
-                          type: 'email',
+                          name: "email",
+                          type: "email",
                           onChange: handleChange,
                           onBlur: handleBlur,
                           value: values.email,
                         }}
                       />
-                      {errors.email && touched.email ? (
-                        <label className={classes.errorLabel}>{errors.email}</label>
-                      ) : null}
+                      {errors.email && touched.email ? <label className={classes.errorLabel}>{errors.email}</label> : null}
 
                       <CustomInput
                         labelText="Password"
@@ -141,18 +139,16 @@ export default function LoginPage() {
                               <Icon className={classes.inputAdornmentIcon}>lock_outline</Icon>
                             </InputAdornment>
                           ),
-                          name: 'password',
-                          type: 'password',
-                          autoComplete: 'off',
+                          name: "password",
+                          type: "password",
+                          autoComplete: "off",
                           onChange: handleChange,
                           onBlur: handleBlur,
                           value: values.password,
                         }}
                       />
 
-                      {errors.password && touched.password ? (
-                        <label className={classes.errorLabel}>{errors.password}</label>
-                      ) : null}
+                      {errors.password && touched.password ? <label className={classes.errorLabel}>{errors.password}</label> : null}
 
                       <div className={classes.checkboxAndRadio}>
                         <FormControlLabel
@@ -179,19 +175,11 @@ export default function LoginPage() {
 
                       <MatButton onClick={() => setPasswordResetDlgOpen(true)}>Forgot your password?</MatButton>
 
-                      {formik.isSubmitting ? (
-                        <CircularProgress size="24px" className={classes.circularProgress} />
-                      ) : null}
+                      {formik.isSubmitting ? <CircularProgress size="24px" className={classes.circularProgress} /> : null}
                     </CardBody>
 
                     <CardFooter className={classes.justifyContentCenter}>
-                      <Button
-                        color="rose"
-                        simple={true}
-                        size="lg"
-                        block={true}
-                        type="submit"
-                        disabled={formik.isSubmitting}>
+                      <Button color="rose" simple={true} size="lg" block={true} type="submit" disabled={formik.isSubmitting}>
                         Login
                       </Button>
                     </CardFooter>

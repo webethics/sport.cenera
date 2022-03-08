@@ -60,7 +60,7 @@ function createDataExpand(awayfield: string, awaydata: string, warderobefield: s
   return { awayfield, awaydata, warderobefield, warderobedata };
 }
 
-const rowsexpand = [createDataExpand("Away Team:", "Dataserver", "Warderobe B", "Room 2"), createDataExpand("", "", "Warderobe C", "Room 3")];
+const rowsexpand = [createDataExpand("Away Team:", "Dataserver", "Warderobe B", "Room 2"), createDataExpand("Referee:", "", "Warderobe C", "Room 3")];
 
 const useStyles = makeStyles({
   bgContainer: {
@@ -101,6 +101,18 @@ const useStyles = makeStyles({
   },
   table: {
     minWidth: 700,
+    "& td": {
+      paddingTop: "12px",
+      paddingBottom: "12px",
+      "@media(max-width:767px)": {
+        whiteSpace: "nowrap",
+      },
+    },
+    "& th": {
+      "@media(max-width:767px)": {
+        whiteSpace: "nowrap",
+      },
+    },
   },
 
   label: {
@@ -155,9 +167,10 @@ export default function CustomizedTables() {
                     <StyledTableCell colSpan={7}>Monday march 01, 2022</StyledTableCell>
                   </TableRow>
                   <TableRow className={classes.customeTableRow}>
+                    <StyledTableCell align="left">Duration</StyledTableCell>
                     <StyledTableCell>Start time</StyledTableCell>
                     <StyledTableCell align="left">End Time</StyledTableCell>
-                    <StyledTableCell align="left">Duration</StyledTableCell>
+
                     <StyledTableCell align="left">Team</StyledTableCell>
                     <StyledTableCell align="left">Location</StyledTableCell>
                     <StyledTableCell align="left">Warderobe</StyledTableCell>
@@ -167,12 +180,13 @@ export default function CustomizedTables() {
                 <TableBody>
                   {rows.map((row) => (
                     <StyledTableRow key={row.startime}>
+                      <BodyTableCell align="left">{row.duration}</BodyTableCell>
                       <BodyTableCell scope="row">
                         {row.startime}
                         {console.log(row)}
                       </BodyTableCell>
                       <BodyTableCell align="left">{row.endtime}</BodyTableCell>
-                      <BodyTableCell align="left">{row.duration}</BodyTableCell>
+
                       <BodyTableCell align="left">{row.team}</BodyTableCell>
                       <BodyTableCell align="left">{row.location}</BodyTableCell>
                       <BodyTableCell align="left">{row.warderobe}</BodyTableCell>
