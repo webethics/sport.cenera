@@ -49,12 +49,11 @@ export const filtersStyle = (theme: Theme) => ({
       width: "20ch",
     },
   },
-  Filters: {
+  filters: {
     marginLeft: "auto",
+    display: "flex",
     alignSelf: "center",
-    "& svg": {
-      fontSize: 40,
-      color: "#000",
-    },
+    alignItems: "center", 
+    minWidth:'200px',
   },
 });

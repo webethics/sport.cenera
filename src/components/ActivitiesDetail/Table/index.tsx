@@ -1,5 +1,10 @@
 import React from "react";
-import { withStyles, Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import {
+  withStyles,
+  Theme,
+  createStyles,
+  makeStyles,
+} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Table from "@material-ui/core/Table";
@@ -45,22 +50,70 @@ const BodyTableCell = withStyles(() =>
   })
 )(TableCell);
 
-function createData(startime: string, endtime: string, duration: string, team: string, location: string, warderobe: string, activity: string) {
+function createData(
+  startime: string,
+  endtime: string,
+  duration: string,
+  team: string,
+  location: string,
+  warderobe: string,
+  activity: string
+) {
   return { startime, endtime, duration, team, location, warderobe, activity };
 }
 
 const rows = [
-  createData("10:00am", "05:00am", "2:00 hrs", "Art Boxing Club", "United Kingdom", "Ingen", "Training"),
-  createData("10:00am", "05:00am", "2:00 hrs", "Monaco", "Spain", "Ingen", "Training"),
-  createData("10:00am", "05:00am", "2:00 hrs", "Real Soccer", "Italy", "Ingen", "Training"),
-  createData("Cupcake", "05:00am", "2:00 hrs", "Oxigeno club", "Germany", "Ingen", "Match"),
+  createData(
+    "10:00am",
+    "05:00am",
+    "2:00 hrs",
+    "Art Boxing Club",
+    "United Kingdom",
+    "Ingen",
+    "Training"
+  ),
+  createData(
+    "10:00am",
+    "05:00am",
+    "2:00 hrs",
+    "Monaco",
+    "Spain",
+    "Ingen",
+    "Training"
+  ),
+  createData(
+    "10:00am",
+    "05:00am",
+    "2:00 hrs",
+    "Real Soccer",
+    "Italy",
+    "Ingen",
+    "Training"
+  ),
+  createData(
+    "Cupcake",
+    "05:00am",
+    "2:00 hrs",
+    "Oxigeno club",
+    "Germany",
+    "Ingen",
+    "Match"
+  ),
 ];
 
-function createDataExpand(awayfield: string, awaydata: string, warderobefield: string, warderobedata: string) {
+function createDataExpand(
+  awayfield: string,
+  awaydata: string,
+  warderobefield: string,
+  warderobedata: string
+) {
   return { awayfield, awaydata, warderobefield, warderobedata };
 }
 
-const rowsexpand = [createDataExpand("Away Team:", "Dataserver", "Warderobe B", "Room 2"), createDataExpand("Referee:", "", "Warderobe C", "Room 3")];
+const rowsexpand = [
+  createDataExpand("Away Team:", "Dataserver", "Warderobe B", "Room 2"),
+  createDataExpand("Referee:", "", "Warderobe C", "Room 3"),
+];
 
 const useStyles = makeStyles({
   bgContainer: {
@@ -76,6 +129,9 @@ const useStyles = makeStyles({
       top: "15%",
       left: "50px",
       zIndex: -1,
+      "@media(max-width:767px)": {
+        display: "none",
+      },
     },
     "&:after": {
       content: '""',
@@ -87,6 +143,9 @@ const useStyles = makeStyles({
       bottom: "15%",
       right: "50px",
       zIndex: -1,
+      "@media(max-width:767px)": {
+        display: "none",
+      },
     },
   },
 
@@ -102,15 +161,19 @@ const useStyles = makeStyles({
   table: {
     minWidth: 700,
     "& td": {
-      paddingTop: "12px",
-      paddingBottom: "12px",
+      paddingTop: "10px",
+      paddingBottom: "10px",
       "@media(max-width:767px)": {
         whiteSpace: "nowrap",
+        padding: "10px",
+        fontSize: "10px",
       },
     },
     "& th": {
       "@media(max-width:767px)": {
         whiteSpace: "nowrap",
+        padding: "10px 5px",
+        fontSize: "10px",
       },
     },
   },
@@ -160,11 +223,16 @@ export default function CustomizedTables() {
       <Container className={classes.Container}>
         <Grid container>
           <Grid item xs={12}>
-            <TableContainer component={Paper} className={classes.tableContainer}>
+            <TableContainer
+              component={Paper}
+              className={classes.tableContainer}
+            >
               <Table className={classes.table} aria-label="customized table">
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell colSpan={7}>Monday march 01, 2022</StyledTableCell>
+                    <StyledTableCell colSpan={7}>
+                      Monday march 01, 2022
+                    </StyledTableCell>
                   </TableRow>
                   <TableRow className={classes.customeTableRow}>
                     <StyledTableCell align="left">Duration</StyledTableCell>
@@ -189,22 +257,35 @@ export default function CustomizedTables() {
 
                       <BodyTableCell align="left">{row.team}</BodyTableCell>
                       <BodyTableCell align="left">{row.location}</BodyTableCell>
-                      <BodyTableCell align="left">{row.warderobe}</BodyTableCell>
-                      <BodyTableCell className={`${row.activity === "Match" && classes.matched}`} align="left">
+                      <BodyTableCell align="left">
+                        {row.warderobe}
+                      </BodyTableCell>
+                      <BodyTableCell
+                        className={`${row.activity === "Match" &&
+                          classes.matched}`}
+                        align="left"
+                      >
                         {row.activity}
                       </BodyTableCell>
                     </StyledTableRow>
                   ))}
                   {rowsexpand.map((row) => (
-                    <StyledTableRow className={classes.bottomTableRow} key={row.awayfield}>
+                    <StyledTableRow
+                      className={classes.bottomTableRow}
+                      key={row.awayfield}
+                    >
                       <BodyTableCell scope="row"></BodyTableCell>
                       <BodyTableCell align="left"></BodyTableCell>
                       <BodyTableCell className={classes.label} align="left">
                         {row.awayfield}
                       </BodyTableCell>
                       <BodyTableCell align="left">{row.awaydata}</BodyTableCell>
-                      <BodyTableCell align="left">{row.warderobefield}</BodyTableCell>
-                      <BodyTableCell align="left">{row.warderobedata}</BodyTableCell>
+                      <BodyTableCell align="left">
+                        {row.warderobefield}
+                      </BodyTableCell>
+                      <BodyTableCell align="left">
+                        {row.warderobedata}
+                      </BodyTableCell>
                       <BodyTableCell align="left"></BodyTableCell>
                     </StyledTableRow>
                   ))}
