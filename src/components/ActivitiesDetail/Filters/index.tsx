@@ -27,7 +27,7 @@ export default function Filters() {
     setLocation(event.target.value as string);
   };
 
-  const [filter, setfilter] = React.useState("10");
+  const [filter, setfilter] = React.useState("30");
   const handleChange3 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setfilter(event.target.value as string);
   }; 
