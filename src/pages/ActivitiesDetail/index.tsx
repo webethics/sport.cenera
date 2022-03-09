@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { activitiesDetailStyle } from "./styles";
 import { Link } from "react-router-dom";
 
+
 const useStyles = makeStyles(activitiesDetailStyle as any);
 
 export default function ActivitiesDetail() {

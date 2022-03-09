@@ -8,6 +8,7 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
+
 import Clubimag1 from "@cenera/assets/images/clubimg1.png";
 import Clubimag2 from "@cenera/assets/images/clubimg2.png";
 import Clubimag3 from "@cenera/assets/images/clubimg3.png";
@@ -31,13 +32,28 @@ export default function Listing() {
             <Card className={classes.card}>
               <CardActionArea>
                 <Link to="/activitiesdetail">
-                  <CardMedia className={classes.media} image={Clubimag1} title="Club Image" />
+                  <CardMedia
+                    className={classes.media}
+                    image={Clubimag1}
+                    title="Club Image"
+                  />
                   <CardContent>
-                    <Typography className={classes.cardTitle} gutterBottom variant="h6" component="h2">
+                    <Typography
+                      className={classes.cardTitle}
+                      gutterBottom
+                      variant="h6"
+                      component="h2"
+                    >
                       Oxigeno club
                     </Typography>
-                    <Typography className={classes.cardDecription} variant="body2" color="textSecondary" component="p">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem dui, bibendum eget vulputate purus gravida pharetra
+                    <Typography
+                      className={classes.cardDecription}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Sem dui, bibendum eget vulputate purus gravida pharetra
                     </Typography>
                   </CardContent>
                 </Link>
@@ -48,13 +64,28 @@ export default function Listing() {
             <Card className={classes.card}>
               <CardActionArea>
                 <Link to="/activitiesdetail">
-                  <CardMedia className={classes.media} image={Clubimag2} title="Club Image" />
+                  <CardMedia
+                    className={classes.media}
+                    image={Clubimag2}
+                    title="Club Image"
+                  />
                   <CardContent>
-                    <Typography className={classes.cardTitle} gutterBottom variant="h6" component="h2">
+                    <Typography
+                      className={classes.cardTitle}
+                      gutterBottom
+                      variant="h6"
+                      component="h2"
+                    >
                       Football club
                     </Typography>
-                    <Typography className={classes.cardDecription} variant="body2" color="textSecondary" component="p">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem dui, bibendum eget vulputate purus gravida pharetra
+                    <Typography
+                      className={classes.cardDecription}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Sem dui, bibendum eget vulputate purus gravida pharetra
                     </Typography>
                   </CardContent>
                 </Link>
@@ -65,13 +96,28 @@ export default function Listing() {
             <Card className={classes.card}>
               <CardActionArea>
                 <Link to="/activitiesdetail">
-                  <CardMedia className={classes.media} image={Clubimag3} title="Club Image" />
+                  <CardMedia
+                    className={classes.media}
+                    image={Clubimag3}
+                    title="Club Image"
+                  />
                   <CardContent>
-                    <Typography className={classes.cardTitle} gutterBottom variant="h6" component="h2">
+                    <Typography
+                      className={classes.cardTitle}
+                      gutterBottom
+                      variant="h6"
+                      component="h2"
+                    >
                       Basketball club
                     </Typography>
-                    <Typography className={classes.cardDecription} variant="body2" color="textSecondary" component="p">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem dui, bibendum eget vulputate purus gravida pharetra
+                    <Typography
+                      className={classes.cardDecription}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Sem dui, bibendum eget vulputate purus gravida pharetra
                     </Typography>
                   </CardContent>
                 </Link>
@@ -82,13 +128,28 @@ export default function Listing() {
             <Card className={classes.card}>
               <CardActionArea>
                 <Link to="/activitiesdetail">
-                  <CardMedia className={classes.media} image={Clubimag4} title="Club Image" />
+                  <CardMedia
+                    className={classes.media}
+                    image={Clubimag4}
+                    title="Club Image"
+                  />
                   <CardContent>
-                    <Typography className={classes.cardTitle} gutterBottom variant="h6" component="h2">
+                    <Typography
+                      className={classes.cardTitle}
+                      gutterBottom
+                      variant="h6"
+                      component="h2"
+                    >
                       Real soccer
                     </Typography>
-                    <Typography className={classes.cardDecription} variant="body2" color="textSecondary" component="p">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem dui, bibendum eget vulputate purus gravida pharetra
+                    <Typography
+                      className={classes.cardDecription}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Sem dui, bibendum eget vulputate purus gravida pharetra
                     </Typography>
                   </CardContent>
                 </Link>
@@ -99,13 +160,28 @@ export default function Listing() {
             <Card className={classes.card}>
               <CardActionArea>
                 <Link to="/activitiesdetail">
-                  <CardMedia className={classes.media} image={Clubimag5} title="Club Image" />
+                  <CardMedia
+                    className={classes.media}
+                    image={Clubimag5}
+                    title="Club Image"
+                  />
                   <CardContent>
-                    <Typography className={classes.cardTitle} gutterBottom variant="h6" component="h2">
+                    <Typography
+                      className={classes.cardTitle}
+                      gutterBottom
+                      variant="h6"
+                      component="h2"
+                    >
                       Hockey club
                     </Typography>
-                    <Typography className={classes.cardDecription} variant="body2" color="textSecondary" component="p">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem dui, bibendum eget vulputate purus gravida pharetra
+                    <Typography
+                      className={classes.cardDecription}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Sem dui, bibendum eget vulputate purus gravida pharetra
                     </Typography>
                   </CardContent>
                 </Link>
@@ -116,13 +192,28 @@ export default function Listing() {
             <Card className={classes.card}>
               <CardActionArea>
                 <Link to="/activitiesdetail">
-                  <CardMedia className={classes.media} image={Clubimag6} title="Club Image" />
+                  <CardMedia
+                    className={classes.media}
+                    image={Clubimag6}
+                    title="Club Image"
+                  />
                   <CardContent>
-                    <Typography className={classes.cardTitle} gutterBottom variant="h6" component="h2">
+                    <Typography
+                      className={classes.cardTitle}
+                      gutterBottom
+                      variant="h6"
+                      component="h2"
+                    >
                       Art Boxing Club
                     </Typography>
-                    <Typography className={classes.cardDecription} variant="body2" color="textSecondary" component="p">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem dui, bibendum eget vulputate purus gravida pharetra
+                    <Typography
+                      className={classes.cardDecription}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Sem dui, bibendum eget vulputate purus gravida pharetra
                     </Typography>
                   </CardContent>
                 </Link>
@@ -133,13 +224,28 @@ export default function Listing() {
             <Card className={classes.card}>
               <CardActionArea>
                 <Link to="/activitiesdetail">
-                  <CardMedia className={classes.media} image={Clubimag7} title="Club Image" />
+                  <CardMedia
+                    className={classes.media}
+                    image={Clubimag7}
+                    title="Club Image"
+                  />
                   <CardContent>
-                    <Typography className={classes.cardTitle} gutterBottom variant="h6" component="h2">
+                    <Typography
+                      className={classes.cardTitle}
+                      gutterBottom
+                      variant="h6"
+                      component="h2"
+                    >
                       Sporty club
                     </Typography>
-                    <Typography className={classes.cardDecription} variant="body2" color="textSecondary" component="p">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem dui, bibendum eget vulputate purus gravida pharetra
+                    <Typography
+                      className={classes.cardDecription}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Sem dui, bibendum eget vulputate purus gravida pharetra
                     </Typography>
                   </CardContent>
                 </Link>
@@ -150,13 +256,28 @@ export default function Listing() {
             <Card className={classes.card}>
               <CardActionArea>
                 <Link to="/activitiesdetail">
-                  <CardMedia className={classes.media} image={Clubimag8} title="Club Image" />
+                  <CardMedia
+                    className={classes.media}
+                    image={Clubimag8}
+                    title="Club Image"
+                  />
                   <CardContent>
-                    <Typography className={classes.cardTitle} gutterBottom variant="h6" component="h2">
+                    <Typography
+                      className={classes.cardTitle}
+                      gutterBottom
+                      variant="h6"
+                      component="h2"
+                    >
                       Tennis Academy
                     </Typography>
-                    <Typography className={classes.cardDecription} variant="body2" color="textSecondary" component="p">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem dui, bibendum eget vulputate purus gravida pharetra
+                    <Typography
+                      className={classes.cardDecription}
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Sem dui, bibendum eget vulputate purus gravida pharetra
                     </Typography>
                   </CardContent>
                 </Link>

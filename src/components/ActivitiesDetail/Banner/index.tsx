@@ -15,7 +15,8 @@ export default function Banner() {
       <Container>
         <Grid container alignItems="center" justifyContent="center">
           <Grid item>
-            <h1 className={classes.title}>Activity Calendar</h1>
+            <h1>Activity Calendar</h1>
+            <h2>Indian Ice Hockey</h2>
           </Grid>
         </Grid>
       </Container>

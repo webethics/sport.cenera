@@ -30,6 +30,7 @@ export const activitiesDetailStyle = () => ({
       objectFit: "cover",
     },
   },
+  
 
   footer: {
     backgroundColor: "#0079BC",

@@ -16,6 +16,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { blackColor, sectionSpacer } from "@cenera/common/styles/common-styles";
 import dotpattrenV from "@cenera/assets/images/dotpattren-v.svg";
+import Button from "@material-ui/core/Button";
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -163,6 +164,7 @@ const useStyles = makeStyles({
     "& td": {
       paddingTop: "10px",
       paddingBottom: "10px",
+      color: "#484848",
       "@media(max-width:767px)": {
         whiteSpace: "nowrap",
         padding: "10px",
@@ -294,6 +296,22 @@ export default function CustomizedTables() {
             </TableContainer>
           </Grid>
         </Grid>
+        <div
+          className=""
+          style={{ textAlign: "center", paddingBottom: "40px" }}
+        >
+          <Button
+            variant="text"
+            style={{
+              backgroundColor: "#0079BC",
+              color: "#ffffff",
+              width: "150px",
+              maxWidth: "100%",
+            }}
+          >
+            See More
+          </Button>
+        </div>
       </Container>
     </div>
   );

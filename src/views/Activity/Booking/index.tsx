@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { makeStyles, CircularProgress, Backdrop } from "@material-ui/core";
 // import { useSnackbar } from "notistack";
@@ -14,6 +14,8 @@ import ItemPicker from "./Components/ItemPicker";
 import { DatePicker, TimePicker } from "@material-ui/pickers";
 import { TextField, Divider } from "@material-ui/core";
 import UpcomingActivities from "./Components/UpcomingActivities";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 // import Teampicker from '@cenera/views/Games/TeamPicker/TeamPicker';
 
@@ -21,6 +23,7 @@ const useStyles = makeStyles(styles as any);
 
 export const Booking: FC = () => {
   const classes = useStyles();
+
   // const [appState] = useAppContext();
   // const [teamsList, setTeamsList] = useState(null); //new
   // const [teamId, setTeamId] = useState<any>(
@@ -34,21 +37,6 @@ export const Booking: FC = () => {
 
   // const { enqueueSnackbar } = useSnackbar();
   // const { dispatch } = useContext(appContext); //use SetTeamId
-
-  const handleDateChange = (pickerType: string, value: any) => {
-    SetselectedDate(value);
-    const formikField = { ...formik.values };
-    if (pickerType === "start_date") {
-      formikField["start_date"] = value;
-    } else if (pickerType === "start_time") {
-      formikField["start_time"] = value;
-    } else if (pickerType === "end_date") {
-      formikField["end_date"] = value;
-    } else if (pickerType === "end_time") {
-      formikField["end_time"] = value;
-    }
-    formik.setValues(formikField);
-  };
 
   // const deleteAwayTeam = () => {
   //   setDeleting(true);
@@ -75,17 +63,22 @@ export const Booking: FC = () => {
 
   const initialFormValues = {
     team: "",
-    orTeam:"",
+    orTeam: "",
     start_date: selectedDate,
     start_time: selectedDate,
     end_date: selectedDate,
     end_time: selectedDate,
     location: "",
     warderobe: "",
+    extra_wardrobe_time_before_15: false,
+    extra_wardrobe_time_before_30: false,
+    extra_wardrobe_time_after_15: false,
+    extra_wardrobe_time_after_30: false,
     activity: "",
     description: "",
     away_team: "",
     away_team_wardrobe: "",
+    referee_wardrobe: "",
   };
 
   const formik = useFormik({
@@ -97,6 +90,39 @@ export const Booking: FC = () => {
       console.log("form value after submit", formValues);
     },
   });
+
+  const handleDateChange = (pickerType: string, value: any) => {
+    SetselectedDate(value);
+    const formikField = { ...formik.values };
+    if (pickerType === "start_date") {
+      formikField["start_date"] = value;
+    } else if (pickerType === "start_time") {
+      formikField["start_time"] = value;
+    } else if (pickerType === "end_date") {
+      formikField["end_date"] = value;
+    } else if (pickerType === "end_time") {
+      formikField["end_time"] = value;
+    }
+    formik.setValues(formikField);
+  };
+
+  useEffect(() => {
+    if (formik.values.activity === "Match") {
+      formik.setValues({
+        ...formik.values,
+        extra_wardrobe_time_before_30: true,
+        extra_wardrobe_time_after_30: true,
+      });
+    } else {
+      formik.setValues({
+        ...formik.values,
+        extra_wardrobe_time_before_30: false,
+        extra_wardrobe_time_after_30: false,
+      });
+    }
+  }, [formik.values.activity]);
+
+  console.log(formik, "-----");
 
   // Update formplayers when we previous fresh data from server
   // useEffect(() => {
@@ -179,23 +205,42 @@ export const Booking: FC = () => {
                       data={teamsdata}
                       onChange={handleChange}
                       value={values.team}
-                      disabled = {values.orTeam && true}
+                      disabled={values.orTeam && true}
                       id="team"
                     />
                   </GridItem>
-                  <GridItem xs="3" sm="1" style={{ marginBottom: "15px" }}>
-                    <h5>or</h5>
-                  </GridItem>
-                  <GridItem xs="9" md="6" style={{ marginBottom: "15px" }}>
+                  <GridItem
+                    xs="12"
+                    sm="5"
+                    md="3"
+                    style={{ marginBottom: "15px" }}
+                  >
+                    <h5
+                      style={{
+                        fontSize: "14px",
+                        display: "inline-block",
+                        marginRight: "10px",
+                        marginTop: "0",
+                        lineHeight: "50px",
+                      }}
+                    >
+                      or
+                    </h5>
                     <TextField
-                      className="desc_box"
+                      style={{ width: "80%" }}
+                      className="desc_box "
                       id="orTeam"
                       variant="outlined"
                       value={values.orTeam}
-                      disabled={values.team && true} //if team selected it will disable
+                      disabled={values.team && true}
                       onChange={handleChange}
                     />
                   </GridItem>
+                  <GridItem
+                    xs="12"
+                    md="4"
+                    style={{ marginBottom: "15px" }}
+                  ></GridItem>
                   <GridItem xs="12" sm="2" sx={{ mb: 3 }}>
                     <h5 style={{ fontSize: "14px" }}>Start *</h5>
                   </GridItem>
@@ -299,6 +344,7 @@ export const Booking: FC = () => {
                     md="7"
                     style={{ marginBottom: "15px" }}
                   ></GridItem>
+
                   <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
                     <h5 style={{ fontSize: "14px" }}>Warderobe</h5>
                   </GridItem>
@@ -315,9 +361,90 @@ export const Booking: FC = () => {
                       id="warderobe"
                     />
                   </GridItem>
+
                   <GridItem
                     xs="12"
                     md="7"
+                    style={{ marginBottom: "15px" }}
+                  ></GridItem>
+
+                  {/* extra wadrobe time */}
+                  <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
+                    <h5 style={{ fontSize: "14px" }}>Extra Warderobe Time</h5>
+                  </GridItem>
+                  <GridItem
+                    xs="12"
+                    sm="5"
+                    md="3"
+                    style={{ marginBottom: "15px" }}
+                  >
+                    <h5 style={{ fontSize: "14px" }}>Before</h5>
+
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          id="extra_wardrobe_time_before_15"
+                          checked={values.extra_wardrobe_time_before_15}
+                          style={{ color: "#00acc1" }}
+                          onChange={handleChange}
+                          disabled={
+                            values.extra_wardrobe_time_before_30 && true
+                          }
+                        />
+                      }
+                      label="15 Min"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          id="extra_wardrobe_time_before_30"
+                          checked={values.extra_wardrobe_time_before_30}
+                          style={{ color: "#00acc1" }}
+                          onChange={handleChange}
+                          disabled={
+                            values.extra_wardrobe_time_before_15 && true
+                          }
+                        />
+                      }
+                      label="30 Min"
+                    />
+                  </GridItem>
+
+                  <GridItem
+                    xs="12"
+                    sm="5"
+                    md="3"
+                    style={{ marginBottom: "15px" }}
+                  >
+                    <h5 style={{ fontSize: "14px" }}>After</h5>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          id="extra_wardrobe_time_after_15"
+                          checked={values.extra_wardrobe_time_after_15}
+                          style={{ color: "#00acc1" }}
+                          onChange={handleChange}
+                          disabled={values.extra_wardrobe_time_after_30 && true}
+                        />
+                      }
+                      label="15 Min"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          id="extra_wardrobe_time_after_30"
+                          checked={values.extra_wardrobe_time_after_30}
+                          style={{ color: "#00acc1" }}
+                          onChange={handleChange}
+                          disabled={values.extra_wardrobe_time_after_15 && true}
+                        />
+                      }
+                      label="30 Min"
+                    />
+                  </GridItem>
+                  <GridItem
+                    xs="12"
+                    md="4"
                     style={{ marginBottom: "15px" }}
                   ></GridItem>
 
@@ -358,6 +485,7 @@ export const Booking: FC = () => {
 
                   {values.activity == "Match" && (
                     <>
+                      {/* for away team */}
                       <Divider
                         style={{
                           width: "100%",
@@ -393,6 +521,28 @@ export const Booking: FC = () => {
                       <Divider
                         style={{ width: "100%", marginBottom: "15px" }}
                       />
+
+                      {/* for referee */}
+                      <GridItem
+                        xs="12"
+                        sm="2"
+                        style={{ marginBottom: "15px" }}
+                      ></GridItem>
+                      <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
+                        <h5 style={{ fontSize: "14px" }}>Referee</h5>
+                      </GridItem>
+
+                      <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
+                        <h5 style={{ fontSize: "14px" }}>Warderobe</h5>
+                      </GridItem>
+                      <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
+                        <ItemPicker
+                          data={wardrobe}
+                          value={values.referee_wardrobe}
+                          onChange={handleChange}
+                          id="referee_wardrobe"
+                        />
+                      </GridItem>
                     </>
                   )}
                 </GridContainer>

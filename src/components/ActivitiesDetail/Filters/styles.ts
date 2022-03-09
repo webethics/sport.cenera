@@ -9,7 +9,7 @@ export const filtersStyle = (theme: Theme) => ({
   formGroup: {
     width: "100%",
     [theme.breakpoints.up("sm")]: {
-      maxWidth: 292,
+      maxWidth: 260,
     },
   },
   formControl: {
