@@ -6,7 +6,7 @@ export const bannerStyle = () => ({
     backgroundImage: `url(${bannerBg})`,
     backgroundSize: "cover",
     backgroundPosition: "bottom center",
-    padding: "calc(9% + 56px) 0 calc(9% + 56px) 0",
+    padding: "calc(1% + 56px) 0 calc(1% + 56px) 0",
     position: "relative",
     ...sectionSpacer,
     "& h1": {
@@ -24,7 +24,7 @@ export const bannerStyle = () => ({
         fontSize: "4rem",
       },
       "@media (min-width: 1400px)": {
-        fontSize: "5rem",
+        fontSize: "4rem",
       },
     },
   },

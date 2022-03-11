@@ -3,7 +3,7 @@ import { Modal,Box , makeStyles , CircularProgress, Backdrop} from "@material-ui
 import { useFormik } from "formik";
 import { GridContainer, GridItem } from "@cenera/components/Grid";
 import { Button } from "@cenera/components/Button/Button";
-import { styles } from "./../styles";
+import { styles } from "../styles";
 import {modalStyle} from "./styles"
 import ItemPicker from "./ItemPicker";
 import { DatePicker, TimePicker  } from "@material-ui/pickers";

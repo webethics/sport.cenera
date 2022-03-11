@@ -16,9 +16,10 @@ import { ClubsManagement } from "@cenera/views/Club";
 import { TeamsManagement } from "@cenera/views/Team";
 import { PlayersManagement } from "@cenera/views/Player";
 import { GameInfo, GameResults, GameLineUp, AwayTeam } from "@cenera/views/Games";
-import { Booking } from "@cenera/views/Activity";
+import { Booking, Configuration } from "@cenera/views/Activity";
 import { Dashboard } from "@cenera/views/Dashboard";
 import { UsersManagement } from "@cenera/views/UserManagement";
+import SettingsIcon from '@material-ui/icons/Settings';
 
 export const adminRoutes = [
   {
@@ -112,6 +113,13 @@ export const adminRoutes = [
         name: "Booking",
         component: Booking,
         icon: EventAvailableIcon,
+        layout: "/admin",
+      },
+      {
+        path: "/activity/configuration",
+        name: "Configuration",
+        component: Configuration,
+        icon: SettingsIcon,
         layout: "/admin",
       },
     ],

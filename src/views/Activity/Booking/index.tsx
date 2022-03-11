@@ -14,6 +14,7 @@ import ItemPicker from "./Components/ItemPicker";
 import { DatePicker, TimePicker } from "@material-ui/pickers";
 import { TextField, Divider } from "@material-ui/core";
 import UpcomingActivities from "./Components/UpcomingActivities";
+// import Filters from "./Components/UpcomingActivities/filters";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 

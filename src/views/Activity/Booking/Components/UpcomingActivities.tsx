@@ -1,15 +1,128 @@
 import React, { useEffect, useState } from "react";
-import { GridContainer, GridItem } from "@cenera/components/Grid";
+import { GridContainer } from "@cenera/components/Grid";
 import Grid from "@material-ui/core/Grid";
 import { CardHeader, Card, CardBody } from "@cenera/components/Card";
 import { makeStyles } from "@material-ui/core";
-import { styles } from "./../styles";
-import { Box, Typography, Backdrop, CircularProgress } from "@material-ui/core";
+import { styles } from "./styles";
+import {Backdrop, CircularProgress } from "@material-ui/core";
 import { Button } from "@cenera/components/Button/Button";
 import { useShowConfirmDialog } from "@cenera/common/hooks/confirmDialog";
 import EditActivityModal from "./EditActivityModal";
-import moment from "moment";
 import Checkbox from "@material-ui/core/Checkbox";
+
+import {withStyles, Theme, createStyles} from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import Filters from "./filters";
+
+const StyledTableCell = withStyles((theme: Theme) =>
+  createStyles({
+    head: {
+      backgroundColor: "#0079BC",
+      color: theme.palette.common.white,
+      textTransform: "uppercase",
+    },
+    body: {
+      fontSize: 14,
+    },
+
+    row: {
+      fontSize: 0,
+    },
+  })
+)(TableCell);
+
+const StyledTableRow = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      backgroundColor: theme.palette.common.white,
+    },
+  })
+)(TableRow);
+
+const BodyTableCell = withStyles(() =>
+  createStyles({
+    root: {
+      color: "#767676",
+    },
+  })
+)(TableCell);
+
+function createData(
+  startime: string,
+  endtime: string,
+  // duration: string,
+  team: string,
+  location: string,
+  warderobe: string,
+  activity: string
+) {
+  // return { startime, endtime, duration, team, location, warderobe, activity };
+  return { startime, endtime, team, location, warderobe, activity };
+}
+
+const rows = [
+  createData(
+    "10:00am",
+    "05:00am",
+    // "2:00 hrs", for duration 
+    "Art Boxing Club",
+    "United Kingdom",
+    "Ingen",
+    "Training"
+  ),
+  createData(
+    "10:00am",
+    "05:00am",
+    // "2:00 hrs",
+    "Monaco",
+    "Spain",
+    "Ingen",
+    "Training"
+  ),
+  createData(
+    "10:00am",
+    "05:00am",
+    // "2:00 hrs",
+    "Real Soccer",
+    "Italy",
+    "Ingen",
+    "Training"
+  ),
+  createData(
+    "Cupcake",
+    "05:00am",
+    // "2:00 hrs",
+    "Oxigeno club",
+    "Germany",
+    "Ingen",
+    "Match"
+  ),
+];
+
+function createDataExpand(
+  awayfield: string,
+  awaydata: string,
+  warderobefield: string,
+  warderobedata: string
+) {
+  return { awayfield, awaydata, warderobefield, warderobedata };
+}
+
+const rowsexpand = [
+  createDataExpand("Away Team:", "Dataserver", "Warderobe B", "Room 2"),
+  createDataExpand("Referee:", "", "Warderobe C", "Room 3"),
+];
+
+
+// const useStyles = makeStyles({
+  
+// });
 
 const useStyles = makeStyles(styles as any);
 
@@ -17,9 +130,7 @@ const UpcomingActivities = () => {
   const classes = useStyles();
   const [deleting, setDeleting] = useState(false);
   const [modalshow, setModalshow] = useState(false);
-  const [activityIdForEdit, setActivityIdForEdit] = useState<number | null>(
-    null
-  );
+  const [activityIdForEdit, setActivityIdForEdit] = useState<number | null>(null);
   const [activityIdForDelete, setActivityIdForDelete] = useState(null);
   const [bookedList, setBookedList] = useState([]);
 
@@ -122,124 +233,113 @@ const UpcomingActivities = () => {
   console.log("lll", activityIdForDelete);
 
   return (
-    <GridContainer>
-      <GridItem xs={11} sm={11} md={11} xl={8} className={classes.container}>
+    <div className="parent">
+      <GridContainer>
+        {alert}
+        <Backdrop className={classes.backdrop} open={deleting}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <EditActivityModal open={modalshow} onClose={() => setModalshow(false)} activityId={activityIdForEdit} />
+      </GridContainer>
+      <div className={classes.Container}>
         <Card>
           <CardHeader>
             <h4>Upcoming Activities</h4>
           </CardHeader>
 
           <CardBody>
-            {bookedList.map((res: any) => (
-              <GridContainer className={classes.cardContainer} key={res.id}>
-                <GridItem xs="4" sm="1">
-                  <Box>
-                    <Checkbox
-                      name={res.id}
-                      checked={res.checked}
-                      style={{ color: "#00acc1" }}
-                      onChange={handleCheckBox}
-                    />
-                  </Box>
-                </GridItem>
+            <Grid container>
+              <Grid item xs={12}>
+                <Filters />
+              </Grid>
+              <Grid item xs={12}>
+                <TableContainer
+                  component={Paper}
+                  className={classes.tableContainer}
+                >
+                  <Table className={classes.table} aria-label="customized table">
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell colSpan={8}>
+                          Monday march 01, 2022
+                        </StyledTableCell>
+                      </TableRow>
+                      <TableRow className={classes.customeTableRow}>
+                        {/* <StyledTableCell align="left">Duration</StyledTableCell> */}
+                        <StyledTableCell >Start time</StyledTableCell>
+                        <StyledTableCell align="left">End Time</StyledTableCell>
 
-                <GridItem xs="8" sm="2">
-                  <Box
-                    sx={{
-                      width: 100,
-                      height: 100,
-                      maxWidth: "100%",
-                      bgcolor: "#eeeeee",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <div>
-                      <Typography variant="h5" align="center">
-                        {moment(res.start).format("D")}
-                      </Typography>
-                      <Typography variant="body2" align="center">
-                        {moment(res.start).format("MMMM")}
-                      </Typography>
-                      <Typography variant="body2" align="center">
-                        {moment(res.start).format("YYYY")}
-                      </Typography>
-                    </div>
-                  </Box>
-                </GridItem>
+                        <StyledTableCell align="left">Team</StyledTableCell>
+                        <StyledTableCell align="left">Location</StyledTableCell>
+                        <StyledTableCell align="left">Warderobe</StyledTableCell>
+                        <StyledTableCell align="left">Activity</StyledTableCell>
+                        <StyledTableCell align="left"></StyledTableCell>
+                        <StyledTableCell align="left"></StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map((row) => (
+                        <StyledTableRow key={row.startime}>
+                          <BodyTableCell scope="row">
+                            {row.startime}
+                          </BodyTableCell>
+                          <BodyTableCell align="left">{row.endtime}</BodyTableCell>
 
-                <GridItem xs="6" sm="3" md="3">
-                  <h5 style={{ fontSize: "14px" }}>
-                    Team: <span className={classes.textColor}>{res.team}</span>{" "}
-                  </h5>
-                  <h5 style={{ fontSize: "14px" }}>
-                    Start:<span className={classes.textColor}>{res.start}</span>
-                  </h5>
-                  <h5 style={{ fontSize: "14px" }}>
-                    End:<span className={classes.textColor}>{res.end}</span>
-                  </h5>
-                </GridItem>
-
-                <GridItem xs="6" sm="3" md="3">
-                  <h5 style={{ fontSize: "14px" }}>
-                    Location:{" "}
-                    <span className={classes.textColor}>{res.location}</span>
-                  </h5>
-                  <h5 style={{ fontSize: "14px" }}>
-                    Warderobe:
-                    <span className={classes.textColor}>{res.Warderobe}</span>
-                  </h5>
-                  <h5 style={{ fontSize: "14px" }}>
-                    Activity:{" "}
-                    <span className={classes.textColor}>{res.activity}</span>
-                  </h5>
-                </GridItem>
-
-                <GridItem xs="12" sm="3" md="3">
-                  <Button
-                    color="info"
-                    style={{
-                      width: "150px",
-                      maxWidth: "100%",
-                      margin: "auto",
-                      display: "block",
-                    }}
-                    onClick={() => handleEditActivity(res.id)}
-                  >
-                    Edit
-                  </Button>
-                </GridItem>
-
-                {/* <GridContainer  style={{ display: "flex", justifyContent: "center" }}  >
-               <GridItem xs="6" sm="5" md="3">
-                 <h5 style={{ fontSize: "14px" }}>Away Team : Away team text</h5>
-               </GridItem>
-               <GridItem xs="6" sm="5" md="3">
-                 <h5 style={{ fontSize: "14px" }}>Warderobe: Warderobe</h5>
-               </GridItem>
-             </GridContainer> */}
-              </GridContainer>
-            ))}
-
-            <Grid container justify="center">
-              <Button color="danger" onClick={() => handleDeleteAll()}>
-                Delete Selected Activity
-              </Button>
+                          <BodyTableCell align="left">{row.team}</BodyTableCell>
+                          <BodyTableCell align="left">{row.location}</BodyTableCell>
+                          <BodyTableCell align="left">
+                            {row.warderobe}
+                          </BodyTableCell>
+                          <BodyTableCell
+                            className={`${row.activity === "Match" &&
+                              classes.matched}`}
+                            align="left"
+                          >
+                            {row.activity}
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            <Button color="info" style={{maxWidth: "100%", margin: "auto", display: "block", }} onClick={()=>handleEditActivity(1)}>Edit</Button>
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            <Checkbox style={{ color: "#00acc1" }} onChange={handleCheckBox} />
+                          </BodyTableCell>
+                        </StyledTableRow>
+                      ))}
+                      {rowsexpand.map((row) => (
+                        <StyledTableRow
+                          className={classes.bottomTableRow}
+                          key={row.awayfield}
+                        >
+                          <BodyTableCell scope="row"></BodyTableCell>
+                          <BodyTableCell align="left"></BodyTableCell>
+                          <BodyTableCell className={classes.label} align="left">
+                            {row.awayfield}
+                          </BodyTableCell>
+                          <BodyTableCell align="left">{row.awaydata}</BodyTableCell>
+                          <BodyTableCell align="left">
+                            {row.warderobefield}
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            {row.warderobedata}
+                          </BodyTableCell>
+                          {/* <BodyTableCell align="left"></BodyTableCell> */}
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Grid>
             </Grid>
+            {/* <div className="" style={{ textAlign: "center", paddingBottom: "40px" }}>
+              <Button variant="text" style={{backgroundColor: "#0079BC", color: "#ffffff", width: "150px", maxWidth: "100%"}}>See More</Button>
+            </div> */}
+            <div className="" style={{ textAlign: "center", paddingBottom: "40px" }}>
+              <Button color="danger" style={{maxWidth: "100%"}} onclick={handleDeleteAll}>Delete Selected Activities</Button>
+            </div>
           </CardBody>
         </Card>
-      </GridItem>
-      {alert}
-      <Backdrop className={classes.backdrop} open={deleting}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <EditActivityModal
-        open={modalshow}
-        onClose={() => setModalshow(false)}
-        activityId={activityIdForEdit}
-      />
-    </GridContainer>
+      </div>
+    </div>
   );
 };
 
