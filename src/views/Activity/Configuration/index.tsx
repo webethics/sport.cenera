@@ -39,34 +39,47 @@ const Configuration = () => {
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>New York</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        New York
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                     <ListItem className={classes.listItem}>
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>France</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        France
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                     <ListItem className={classes.listItem}>
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>Jaipur</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        Jaipur
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                     <ListItem className={classes.listItem}>
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>Ajmer</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        Ajmer
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                   </List>
                 </CardContent>
                 <CardActions className={classes.cardActions}>
-                  <TextField margin="dense" id="outlined-basic" label="Add New Location" variant="outlined" />
+                  <TextField
+                    margin="dense"
+                    id="outlined-basic"
+                    label="Add New Location"
+                    variant="outlined"
+                  />
                   <Button variant="contained" color="secondary">
                     Add Location
                   </Button>
@@ -86,35 +99,52 @@ const Configuration = () => {
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>New York</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        New York
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                     <ListItem className={classes.listItem}>
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>France</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        France
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                     <ListItem className={classes.listItem}>
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>Jaipur</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        Jaipur
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                     <ListItem className={classes.listItem}>
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>Ajmer</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        Ajmer
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                   </List>
                 </CardContent>
                 <CardActions className={classes.cardActions}>
-                  <TextField margin="dense" id="outlined-basic" label="Add New Location" variant="outlined" />
-                  <Button variant="contained" color="secondary" style={{ backgroundColor: "#00ACC1" }}>
+                  <TextField
+                    margin="dense"
+                    id="outlined-basic"
+                    label="Add New Warderobe"
+                    variant="outlined"
+                  />
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    style={{ backgroundColor: "#00ACC1" }}
+                  >
                     Add Warderobe
                   </Button>
                 </CardActions>
@@ -133,34 +163,47 @@ const Configuration = () => {
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>New York</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        New York
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                     <ListItem className={classes.listItem}>
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>France</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        France
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                     <ListItem className={classes.listItem}>
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>Jaipur</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        Jaipur
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                     <ListItem className={classes.listItem}>
                       <ListItemIcon className={classes.listIcon}>
                         <LocationOnIcon />
                       </ListItemIcon>
-                      <ListItemText className={classes.listItemText}>Ajmer</ListItemText>
+                      <ListItemText className={classes.listItemText}>
+                        Ajmer
+                      </ListItemText>
                       <DeleteOutlineIcon />
                     </ListItem>
                   </List>
                 </CardContent>
                 <CardActions className={classes.cardActions}>
-                  <TextField margin="dense" id="outlined-basic" label="Add New Location" variant="outlined" />
+                  <TextField
+                    margin="dense"
+                    id="outlined-basic"
+                    label="Add New Activity"
+                    variant="outlined"
+                  />
                   <Button variant="contained" color="secondary">
                     Add Activity
                   </Button>

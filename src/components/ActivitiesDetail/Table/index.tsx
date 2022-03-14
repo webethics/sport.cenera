@@ -54,48 +54,48 @@ const BodyTableCell = withStyles(() =>
 function createData(
   startime: string,
   endtime: string,
-  // duration: string,
+  duration: string,
   team: string,
   location: string,
   warderobe: string,
   activity: string
 ) {
-  // return { startime, endtime, duration, team, location, warderobe, activity };
-  return { startime, endtime, team, location, warderobe, activity };
+  return { startime, endtime, duration, team, location, warderobe, activity };
+  // return { startime, endtime, team, location, warderobe, activity };
 }
 
 const rows = [
   createData(
-    "10:00am",
-    "05:00am",
-    // "2:00 hrs", for duration 
+    "12:00",
+    "14:00",
+    "2:00 hrs",
     "Art Boxing Club",
     "United Kingdom",
     "Ingen",
     "Training"
   ),
   createData(
-    "10:00am",
-    "05:00am",
-    // "2:00 hrs",
+    "16:00",
+    "17:00",
+    "1:00 hrs",
     "Monaco",
     "Spain",
     "Ingen",
     "Training"
   ),
   createData(
-    "10:00am",
-    "05:00am",
-    // "2:00 hrs",
+    "17:00",
+    "19:00",
+    "2:00 hrs",
     "Real Soccer",
     "Italy",
     "Ingen",
     "Training"
   ),
   createData(
-    "Cupcake",
-    "05:00am",
-    // "2:00 hrs",
+    "19:00",
+    "21:00",
+    "2:00 hrs",
     "Oxigeno club",
     "Germany",
     "Ingen",
@@ -233,14 +233,15 @@ export default function CustomizedTables() {
               <Table className={classes.table} aria-label="customized table">
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell colSpan={6}>
+                    <StyledTableCell colSpan={7}>
                       Monday march 01, 2022
                     </StyledTableCell>
                   </TableRow>
                   <TableRow className={classes.customeTableRow}>
-                    {/* <StyledTableCell align="left">Duration</StyledTableCell> */}
+              
                     <StyledTableCell >Start time</StyledTableCell>
                     <StyledTableCell align="left">End Time</StyledTableCell>
+                    <StyledTableCell align="left">Duration</StyledTableCell>
 
                     <StyledTableCell align="left">Team</StyledTableCell>
                     <StyledTableCell align="left">Location</StyledTableCell>
@@ -255,7 +256,7 @@ export default function CustomizedTables() {
                         {row.startime}
                       </BodyTableCell>
                       <BodyTableCell align="left">{row.endtime}</BodyTableCell>
-
+                      <BodyTableCell align="left">{row.duration}</BodyTableCell>
                       <BodyTableCell align="left">{row.team}</BodyTableCell>
                       <BodyTableCell align="left">{row.location}</BodyTableCell>
                       <BodyTableCell align="left">
