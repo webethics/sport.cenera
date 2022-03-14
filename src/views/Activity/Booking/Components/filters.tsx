@@ -40,7 +40,7 @@ export default function Filters() {
     <Container className={classes.Container}>
       <Box
         display="flex"
-        sx={{ flexDirection: { xs: "column", sm: "row" } }}
+        sx={{ flexDirection: { xs: "column", lg: "row" } }}
         mx={0}
         mb={2}
       >

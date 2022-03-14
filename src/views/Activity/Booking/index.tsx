@@ -591,7 +591,13 @@ export const Booking: FC = () => {
         </GridItem>
       </GridContainer>
       {alert}
-      <UpcomingActivities />
+
+      <GridContainer>
+        <GridItem xs={11} sm={11} md={11} xl={8} className={classes.container}>
+        <UpcomingActivities />
+          </GridItem>
+          </GridContainer>
+  
       <Backdrop className={classes.backdrop} open={formik.isSubmitting}>
         <CircularProgress color="inherit" />
       </Backdrop>

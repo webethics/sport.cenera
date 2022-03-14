@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { GridContainer } from "@cenera/components/Grid";
+// import { GridContainer } from "@cenera/components/Grid";
 import Grid from "@material-ui/core/Grid";
 import { CardHeader, Card, CardBody } from "@cenera/components/Card";
 import { makeStyles } from "@material-ui/core";
 import { styles } from "./styles";
-import {Backdrop, CircularProgress } from "@material-ui/core";
+import { Backdrop, CircularProgress } from "@material-ui/core";
 import { Button } from "@cenera/components/Button/Button";
 import { useShowConfirmDialog } from "@cenera/common/hooks/confirmDialog";
 import EditActivityModal from "./EditActivityModal";
 import Checkbox from "@material-ui/core/Checkbox";
 
-import {withStyles, Theme, createStyles} from "@material-ui/core/styles";
+import { withStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -70,7 +70,7 @@ const rows = [
   createData(
     "10:00am",
     "05:00am",
-    // "2:00 hrs", for duration 
+    // "2:00 hrs", for duration
     "Art Boxing Club",
     "United Kingdom",
     "Ingen",
@@ -119,9 +119,8 @@ const rowsexpand = [
   createDataExpand("Referee:", "", "Warderobe C", "Room 3"),
 ];
 
-
 // const useStyles = makeStyles({
-  
+
 // });
 
 const useStyles = makeStyles(styles as any);
@@ -130,7 +129,9 @@ const UpcomingActivities = () => {
   const classes = useStyles();
   const [deleting, setDeleting] = useState(false);
   const [modalshow, setModalshow] = useState(false);
-  const [activityIdForEdit, setActivityIdForEdit] = useState<number | null>(null);
+  const [activityIdForEdit, setActivityIdForEdit] = useState<number | null>(
+    null
+  );
   const [activityIdForDelete, setActivityIdForDelete] = useState(null);
   const [bookedList, setBookedList] = useState([]);
 
@@ -234,14 +235,16 @@ const UpcomingActivities = () => {
 
   return (
     <div className="parent">
-      <GridContainer>
-        {alert}
-        <Backdrop className={classes.backdrop} open={deleting}>
-          <CircularProgress color="inherit" />
-        </Backdrop>
-        <EditActivityModal open={modalshow} onClose={() => setModalshow(false)} activityId={activityIdForEdit} />
-      </GridContainer>
-      <div className={classes.Container}>
+      {alert}
+      <Backdrop className={classes.backdrop} open={deleting}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <EditActivityModal
+        open={modalshow}
+        onClose={() => setModalshow(false)}
+        activityId={activityIdForEdit}
+      />
+
         <Card>
           <CardHeader>
             <h4>Upcoming Activities</h4>
@@ -257,7 +260,10 @@ const UpcomingActivities = () => {
                   component={Paper}
                   className={classes.tableContainer}
                 >
-                  <Table className={classes.table} aria-label="customized table">
+                  <Table
+                    className={classes.table}
+                    aria-label="customized table"
+                  >
                     <TableHead>
                       <TableRow>
                         <StyledTableCell colSpan={8}>
@@ -266,12 +272,14 @@ const UpcomingActivities = () => {
                       </TableRow>
                       <TableRow className={classes.customeTableRow}>
                         {/* <StyledTableCell align="left">Duration</StyledTableCell> */}
-                        <StyledTableCell >Start time</StyledTableCell>
+                        <StyledTableCell>Start time</StyledTableCell>
                         <StyledTableCell align="left">End Time</StyledTableCell>
 
                         <StyledTableCell align="left">Team</StyledTableCell>
                         <StyledTableCell align="left">Location</StyledTableCell>
-                        <StyledTableCell align="left">Warderobe</StyledTableCell>
+                        <StyledTableCell align="left">
+                          Warderobe
+                        </StyledTableCell>
                         <StyledTableCell align="left">Activity</StyledTableCell>
                         <StyledTableCell align="left"></StyledTableCell>
                         <StyledTableCell align="left"></StyledTableCell>
@@ -283,10 +291,14 @@ const UpcomingActivities = () => {
                           <BodyTableCell scope="row">
                             {row.startime}
                           </BodyTableCell>
-                          <BodyTableCell align="left">{row.endtime}</BodyTableCell>
+                          <BodyTableCell align="left">
+                            {row.endtime}
+                          </BodyTableCell>
 
                           <BodyTableCell align="left">{row.team}</BodyTableCell>
-                          <BodyTableCell align="left">{row.location}</BodyTableCell>
+                          <BodyTableCell align="left">
+                            {row.location}
+                          </BodyTableCell>
                           <BodyTableCell align="left">
                             {row.warderobe}
                           </BodyTableCell>
@@ -298,10 +310,23 @@ const UpcomingActivities = () => {
                             {row.activity}
                           </BodyTableCell>
                           <BodyTableCell align="left">
-                            <Button color="info" style={{maxWidth: "100%", margin: "auto", display: "block", }} onClick={()=>handleEditActivity(1)}>Edit</Button>
+                            <Button
+                              color="info"
+                              style={{
+                                maxWidth: "100%",
+                                margin: "auto",
+                                display: "block",
+                              }}
+                              onClick={() => handleEditActivity(1)}
+                            >
+                              Edit
+                            </Button>
                           </BodyTableCell>
                           <BodyTableCell align="left">
-                            <Checkbox style={{ color: "#00acc1" }} onChange={handleCheckBox} />
+                            <Checkbox
+                              style={{ color: "#00acc1" }}
+                              onChange={handleCheckBox}
+                            />
                           </BodyTableCell>
                         </StyledTableRow>
                       ))}
@@ -315,7 +340,9 @@ const UpcomingActivities = () => {
                           <BodyTableCell className={classes.label} align="left">
                             {row.awayfield}
                           </BodyTableCell>
-                          <BodyTableCell align="left">{row.awaydata}</BodyTableCell>
+                          <BodyTableCell align="left">
+                            {row.awaydata}
+                          </BodyTableCell>
                           <BodyTableCell align="left">
                             {row.warderobefield}
                           </BodyTableCell>
@@ -333,13 +360,21 @@ const UpcomingActivities = () => {
             {/* <div className="" style={{ textAlign: "center", paddingBottom: "40px" }}>
               <Button variant="text" style={{backgroundColor: "#0079BC", color: "#ffffff", width: "150px", maxWidth: "100%"}}>See More</Button>
             </div> */}
-            <div className="" style={{ textAlign: "center", paddingBottom: "40px" }}>
-              <Button color="danger" style={{maxWidth: "100%"}} onclick={handleDeleteAll}>Delete Selected Activities</Button>
+            <div
+              className=""
+              style={{ textAlign: "center", paddingBottom: "40px" }}
+            >
+              <Button
+                color="danger"
+                style={{ maxWidth: "100%" }}
+                onclick={handleDeleteAll}
+              >
+                Delete Selected Activities
+              </Button>
             </div>
           </CardBody>
         </Card>
       </div>
-    </div>
   );
 };
 
