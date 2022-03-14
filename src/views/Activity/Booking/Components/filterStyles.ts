@@ -4,17 +4,18 @@ export const filtersStyle = (theme: Theme) => ({
   // filterWrap: {
   //   padding: "0 15px",
   // },
-  Container: {
-    "@media (min-width: 1280px)": {
-      // maxWidth: "66.666667%",
-      // flexBasis: "66.666667%",
-      padding: "0",
-    },
-  },
+
   formGroup: {
     width: "100%",
     [theme.breakpoints.up("sm")]: {
       maxWidth: 260,
+    },
+    [theme.breakpoints.down("lg")]: {
+      width: "50%",
+      maxWidth: "100%",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
     },
   },
   formControl: {
@@ -58,7 +59,11 @@ export const filtersStyle = (theme: Theme) => ({
     marginLeft: "auto",
     display: "flex",
     alignSelf: "center",
-    alignItems: "center", 
-    minWidth:'200px',
+    alignItems: "center",
+    minWidth: "200px",
+
+    [theme.breakpoints.down("lg")]: {
+      marginLeft: "0",
+    },
   },
 });

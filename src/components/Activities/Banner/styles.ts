@@ -32,7 +32,7 @@ export const bannerStyle = () => ({
     position: "absolute",
     height: 56,
     width: "100%",
-    bottom: 0,
+    bottom: "-1px",
     left: 0,
     transform: "scaleY(-1)",
     "& img": {

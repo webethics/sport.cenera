@@ -26,6 +26,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
       backgroundColor: "#0079BC",
       color: theme.palette.common.white,
       textTransform: "uppercase",
+      whiteSpace: "nowrap",
     },
     body: {
       fontSize: 14,
@@ -49,6 +50,7 @@ const BodyTableCell = withStyles(() =>
   createStyles({
     root: {
       color: "#767676",
+      whiteSpace: "nowrap",
     },
   })
 )(TableCell);
@@ -105,19 +107,11 @@ const rows = [
   ),
 ];
 
-function createDataExpand(
-  awayfield: string,
-  awaydata: string,
-  warderobefield: string,
-  warderobedata: string
-) {
+function createDataExpand(awayfield: string, awaydata: string, warderobefield: string, warderobedata: string) {
   return { awayfield, awaydata, warderobefield, warderobedata };
 }
 
-const rowsexpand = [
-  createDataExpand("Away Team:", "Dataserver", "Warderobe B", "Room 2"),
-  createDataExpand("Referee:", "", "Warderobe C", "Room 3"),
-];
+const rowsexpand = [createDataExpand("Away Team:", "Dataserver", "Warderobe B", "Room 2"), createDataExpand("Referee:", "", "Warderobe C", "Room 3")];
 
 // const useStyles = makeStyles({
 
@@ -129,9 +123,7 @@ const UpcomingActivities = () => {
   const classes = useStyles();
   const [deleting, setDeleting] = useState(false);
   const [modalshow, setModalshow] = useState(false);
-  const [activityIdForEdit, setActivityIdForEdit] = useState<number | null>(
-    null
-  );
+  const [activityIdForEdit, setActivityIdForEdit] = useState<number | null>(null);
   const [activityIdForDelete, setActivityIdForDelete] = useState(null);
   const [bookedList, setBookedList] = useState([]);
 
@@ -221,9 +213,7 @@ const UpcomingActivities = () => {
     setBookedList(temp);
 
     const newArr = [...bookedList];
-    const itemToBeDelte = newArr.filter(
-      (response) => response.checked === true
-    );
+    const itemToBeDelte = newArr.filter((response) => response.checked === true);
     setActivityIdForDelete(itemToBeDelte);
   };
 
@@ -239,142 +229,97 @@ const UpcomingActivities = () => {
       <Backdrop className={classes.backdrop} open={deleting}>
         <CircularProgress color="inherit" />
       </Backdrop>
-      <EditActivityModal
-        open={modalshow}
-        onClose={() => setModalshow(false)}
-        activityId={activityIdForEdit}
-      />
+      <EditActivityModal open={modalshow} onClose={() => setModalshow(false)} activityId={activityIdForEdit} />
 
-        <Card>
-          <CardHeader>
-            <h4>Upcoming Activities</h4>
-          </CardHeader>
+      <Card>
+        <CardHeader>
+          <h4>Upcoming Activities</h4>
+        </CardHeader>
 
-          <CardBody>
-            <Grid container>
-              <Grid item xs={12}>
-                <Filters />
-              </Grid>
-              <Grid item xs={12}>
-                <TableContainer
-                  component={Paper}
-                  className={classes.tableContainer}
-                >
-                  <Table
-                    className={classes.table}
-                    aria-label="customized table"
-                  >
-                    <TableHead>
-                      <TableRow>
-                        <StyledTableCell colSpan={8}>
-                          Monday march 01, 2022
-                        </StyledTableCell>
-                      </TableRow>
-                      <TableRow className={classes.customeTableRow}>
-                        {/* <StyledTableCell align="left">Duration</StyledTableCell> */}
-                        <StyledTableCell>Start time</StyledTableCell>
-                        <StyledTableCell align="left">End Time</StyledTableCell>
-
-                        <StyledTableCell align="left">Team</StyledTableCell>
-                        <StyledTableCell align="left">Location</StyledTableCell>
-                        <StyledTableCell align="left">
-                          Warderobe
-                        </StyledTableCell>
-                        <StyledTableCell align="left">Activity</StyledTableCell>
-                        <StyledTableCell align="left"></StyledTableCell>
-                        <StyledTableCell align="left"></StyledTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows.map((row) => (
-                        <StyledTableRow key={row.startime}>
-                          <BodyTableCell scope="row">
-                            {row.startime}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            {row.endtime}
-                          </BodyTableCell>
-
-                          <BodyTableCell align="left">{row.team}</BodyTableCell>
-                          <BodyTableCell align="left">
-                            {row.location}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            {row.warderobe}
-                          </BodyTableCell>
-                          <BodyTableCell
-                            className={`${row.activity === "Match" &&
-                              classes.matched}`}
-                            align="left"
-                          >
-                            {row.activity}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            <Button
-                              color="info"
-                              style={{
-                                maxWidth: "100%",
-                                margin: "auto",
-                                display: "block",
-                              }}
-                              onClick={() => handleEditActivity(1)}
-                            >
-                              Edit
-                            </Button>
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            <Checkbox
-                              style={{ color: "#00acc1" }}
-                              onChange={handleCheckBox}
-                            />
-                          </BodyTableCell>
-                        </StyledTableRow>
-                      ))}
-                      {rowsexpand.map((row) => (
-                        <StyledTableRow
-                          className={classes.bottomTableRow}
-                          key={row.awayfield}
-                        >
-                          <BodyTableCell scope="row"></BodyTableCell>
-                          <BodyTableCell align="left"></BodyTableCell>
-                          <BodyTableCell className={classes.label} align="left">
-                            {row.awayfield}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            {row.awaydata}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            {row.warderobefield}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            {row.warderobedata}
-                          </BodyTableCell>
-                          {/* <BodyTableCell align="left"></BodyTableCell> */}
-                        </StyledTableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
+        <CardBody>
+          <Grid container>
+            <Grid item xs={12}>
+              <Filters />
             </Grid>
-            {/* <div className="" style={{ textAlign: "center", paddingBottom: "40px" }}>
+            <Grid item xs={12}>
+              <TableContainer component={Paper} className={classes.tableContainer}>
+                <Table className={classes.table} aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell colSpan={8}>Monday march 01, 2022</StyledTableCell>
+                    </TableRow>
+                    <TableRow className={classes.customeTableRow}>
+                      {/* <StyledTableCell align="left">Duration</StyledTableCell> */}
+                      <StyledTableCell>Start time</StyledTableCell>
+                      <StyledTableCell align="left">End Time</StyledTableCell>
+
+                      <StyledTableCell align="left">Team</StyledTableCell>
+                      <StyledTableCell align="left">Location</StyledTableCell>
+                      <StyledTableCell align="left">Warderobe</StyledTableCell>
+                      <StyledTableCell align="left">Activity</StyledTableCell>
+                      <StyledTableCell align="left"></StyledTableCell>
+                      <StyledTableCell align="left"></StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row) => (
+                      <StyledTableRow key={row.startime}>
+                        <BodyTableCell scope="row">{row.startime}</BodyTableCell>
+                        <BodyTableCell align="left">{row.endtime}</BodyTableCell>
+
+                        <BodyTableCell align="left">{row.team}</BodyTableCell>
+                        <BodyTableCell align="left">{row.location}</BodyTableCell>
+                        <BodyTableCell align="left">{row.warderobe}</BodyTableCell>
+                        <BodyTableCell className={`${row.activity === "Match" && classes.matched}`} align="left">
+                          {row.activity}
+                        </BodyTableCell>
+                        <BodyTableCell align="left">
+                          <Button
+                            color="info"
+                            style={{
+                              maxWidth: "100%",
+                              margin: "auto",
+                              display: "block",
+                            }}
+                            onClick={() => handleEditActivity(1)}
+                          >
+                            Edit
+                          </Button>
+                        </BodyTableCell>
+                        <BodyTableCell align="left">
+                          <Checkbox style={{ color: "#00acc1" }} onChange={handleCheckBox} />
+                        </BodyTableCell>
+                      </StyledTableRow>
+                    ))}
+                    {rowsexpand.map((row) => (
+                      <StyledTableRow className={classes.bottomTableRow} key={row.awayfield}>
+                        <BodyTableCell scope="row"></BodyTableCell>
+                        <BodyTableCell align="left"></BodyTableCell>
+                        <BodyTableCell className={classes.label} align="left">
+                          {row.awayfield}
+                        </BodyTableCell>
+                        <BodyTableCell align="left">{row.awaydata}</BodyTableCell>
+                        <BodyTableCell align="left">{row.warderobefield}</BodyTableCell>
+                        <BodyTableCell align="left">{row.warderobedata}</BodyTableCell>
+                        {/* <BodyTableCell align="left"></BodyTableCell> */}
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          </Grid>
+          {/* <div className="" style={{ textAlign: "center", paddingBottom: "40px" }}>
               <Button variant="text" style={{backgroundColor: "#0079BC", color: "#ffffff", width: "150px", maxWidth: "100%"}}>See More</Button>
             </div> */}
-            <div
-              className=""
-              style={{ textAlign: "center", paddingBottom: "40px" }}
-            >
-              <Button
-                color="danger"
-                style={{ maxWidth: "100%" }}
-                onclick={handleDeleteAll}
-              >
-                Delete Selected Activities
-              </Button>
-            </div>
-          </CardBody>
-        </Card>
-      </div>
+          <div className="" style={{ textAlign: "center", paddingBottom: "40px" }}>
+            <Button color="danger" style={{ maxWidth: "100%" }} onclick={handleDeleteAll}>
+              Delete Selected Activities
+            </Button>
+          </div>
+        </CardBody>
+      </Card>
+    </div>
   );
 };
 
