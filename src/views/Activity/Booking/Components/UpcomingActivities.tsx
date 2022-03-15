@@ -72,25 +72,17 @@ const rows = [
   createData(
     "12:00",
     "14:00",
-    "2:00 hrs",
+    "2:00",
     "Art Boxing Club",
     "United Kingdom",
     "Ingen",
     "Training"
   ),
-  createData(
-    "16:00",
-    "17:00",
-    "2:00 hrs",
-    "Monaco",
-    "Spain",
-    "Ingen",
-    "Training"
-  ),
+  createData("16:00", "17:00", "2:00", "Monaco", "Spain", "Ingen", "Training"),
   createData(
     "17:00",
     "19:00",
-    "2:00 hrs",
+    "2:00",
     "Real Soccer",
     "Italy",
     "Ingen",
@@ -99,7 +91,7 @@ const rows = [
   createData(
     "19:00",
     "21:00",
-    "2:00 hrs",
+    "2:00",
     "Oxigeno club",
     "Germany",
     "Ingen",
