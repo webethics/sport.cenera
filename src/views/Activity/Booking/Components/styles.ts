@@ -94,5 +94,11 @@ export const modalStyle = {
   boxShadow: 24,
   transition: 'all',
   p: 4, 
+  overflow: "scroll",
+  height: "95%",
+
+  '@media (max-width: 1280px)': {
+    width:"80%"
+  },
 }
 

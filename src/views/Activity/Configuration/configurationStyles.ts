@@ -1,4 +1,5 @@
-export const configurationStyle = () => ({
+import { Theme } from '@material-ui/core';
+export const configurationStyle = (theme: Theme) => ({
   bullet: {
     display: "inline-block",
     margin: "0 2px",
@@ -37,6 +38,23 @@ export const configurationStyle = () => ({
     },
   },
 
+  deleteButton: {
+    cursor: "pointer",
+    "&:hover":{
+      transform:" scale(1.2)",
+      transition: "all 0.1s ease-in-out"
+    }
+  },
+
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+  
+  errorColor:{
+    color:"#FF0000"
+  },
+  
   cardActions: {
     display: ["-webkit-box", "-ms-flexbox", "flex"],
     borderTop: "1px solid #ececec",
