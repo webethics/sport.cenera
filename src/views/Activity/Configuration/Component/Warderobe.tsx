@@ -59,16 +59,16 @@ const Warderobe = () => {
       const formik = useFormik({
         initialValues: { warderobe: "" },
         validationSchema: Yup.object({
-          location: Yup.string()
+          warderobe: Yup.string()
             .matches(/[a-z]/, "only letters not allowed")
             .required("required"),
         }),
         onSubmit: (values) => {
-          const newLocation = {id:warderobe[warderobe.length-1].id+1 ,warderobe:values.warderobe}
-          setWarderobe([...warderobe,newLocation])
+          const newWarderobe = {id:warderobe[warderobe.length-1].id+1 ,warderobe:values.warderobe}
+          setWarderobe([...warderobe,newWarderobe])
         },
       });
-    
+     
      
       const {values, handleChange,handleSubmit} = formik;
 
