@@ -7,7 +7,7 @@ import Select from "@material-ui/core/Select";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import { makeStyles } from "@material-ui/core/styles";
-import { filtersStyle } from "./filterStyles";
+import { filtersStyle } from "./styles";
 import FilterListIcon from "@material-ui/icons/FilterList";
 
 const useStyles = makeStyles(filtersStyle as any);
