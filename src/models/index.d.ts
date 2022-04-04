@@ -6,3 +6,4 @@ export * from './player';
 export * from './appTypes';
 export * from './game';
 export * from "./awayTeam"
+export * from "./location"

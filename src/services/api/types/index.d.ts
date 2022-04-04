@@ -7,3 +7,8 @@ export * from './player';
 export * from './misc';
 export * from './game';
 export * from "./awayTeam"
+export * from "./Locations"
+
+
+
+

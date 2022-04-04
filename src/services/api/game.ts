@@ -127,11 +127,9 @@ const getGameAwayTeam = (access_token: string , team_id:number):any => {
       },
     };
   }
-  
 };
 
 const updateGameAwayTeam = (awayInfo: any) => {
-  console.log('hit');
   return axios.post<GameInfoUpdateReqResponse>(`${configs.app.api}/updateGameAwayTeam`, {
     
     access_token:awayInfo.access_token,
@@ -166,17 +164,12 @@ const updateGameAwayTeam = (awayInfo: any) => {
 };
 
 const deleteGameAwayTeam =(access_token:any,team_id:any) => {
-  console.log('hit');  
-  console.log(team_id,access_token);
   return axios.post<GameInfoUpdateReqResponse>(`${configs.app.api}/updateGameAwayTeam`, {
     access_token,
     team_id:team_id,  
     updateType: 'delete',
   });
 };
-
-
-
 
 
 export const GameService = {
