@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { listingStyle } from "./styles";
@@ -8,39 +8,44 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import SportClub from "./sportsClubData";
 import { Link } from "react-router-dom";
-import {useFetchPublicClubs} from "@cenera/common/hooks/api-hooks/activity";
-
+import { ActivityService } from "@cenera/services/api/activity";
 
 const useStyles = makeStyles(listingStyle as any);
 
 export default function Listing() {
+  const { GetPublicClubs } = ActivityService;
+  const [publicClubs, setPublicClubs] = useState([]);
+  const fetchPublicClubs = async () => {
+    const { data } = await GetPublicClubs();
+    if (data) {
+      setPublicClubs(data);
+    }
+  };
 
-  const {clubsData, loading,error,revalidate}   = useFetchPublicClubs();
-  console.log(clubsData, loading,error,revalidate)
+  console.log(publicClubs); 
+
+  useEffect(() => {
+    fetchPublicClubs();
+  }, []);
 
   const classes = useStyles();
-  // const { clubs, loading, error, revalidate } = useFetchClubs();
-
-
-  // console.log(clubs,loading,error,revalidate)
 
   return (
     <div className={classes.listing}>
       <Container className={classes.listingContainer}>
         <Grid container alignItems="center" spacing={5}>
-          {SportClub &&
-            SportClub.sort((a: any, b: any) =>
-              a.club.localeCompare(b.club)
-            ).map((res, index) => (
-              <Grid item lg={3} md={4} sm={6} key={index}>
+          {publicClubs &&
+            publicClubs.map((res) => (
+              <Grid item lg={3} md={4} sm={6} key={res.club_id}>
                 <Card className={classes.card}>
                   <CardActionArea>
                     <Link to="/activitiesdetail">
                       <CardMedia
                         className={classes.media}
-                        image={res.clubImage}
+                        image={
+                          `${process.env.REACT_APP_SERVER_IMAGE_URL}/`+res.club_image
+                        }
                         title="Club Image"
                       />
                       <CardContent>
@@ -50,15 +55,7 @@ export default function Listing() {
                           variant="h6"
                           component="h2"
                         >
-                          {res.club}
-                        </Typography>
-                        <Typography
-                          className={classes.cardDecription}
-                          variant="body2"
-                          color="textSecondary"
-                          component="p"
-                        >
-                          {res.clubDescription}
+                          {res.club_name}
                         </Typography>
                       </CardContent>
                     </Link>
