@@ -1,5 +1,4 @@
-import axios from 'axios';
-
+import axios, { AxiosRequestConfig } from 'axios';
 import configs from '@cenera/configs';
 // import { Club } from '@cenera/models';
 // import { ClubUpdateReqResponse } from './types';
@@ -40,6 +39,14 @@ import configs from '@cenera/configs';
 
 
 
+
+const GetPublicClubs = ():any =>{
+  return {
+    url: `${configs.app.api}/api/booking/getClubsPublic`,
+    method: 'get',
+  };
+}
+
 const GetLocations = (access_token: string): any => {
     return {
       url: `${configs.app.api}/booking/getLocations`,
@@ -74,6 +81,28 @@ const deleteLocation = (access_token: string,club_id:number ,location_id: number
     } )
   };
   
+  //Wardrobes
+  const getWardrobes = (access_token: string): AxiosRequestConfig => {
+    return {
+      url: `${configs.app.api}/booking/getWardrobes`,
+      method: 'post',
+      data: {
+        access_token,
+      },
+    };
+  };
+  
+  const createWardrobes = (access_token: string,club_id:number) => {
+    return axios.post(`${configs.app.api}/booking/updateWardrobes`, {
+      access_token,
+      club_id:club_id,
+      updateType: "create",
+      wardrobe_id: "",
+      wardrobe_name: " ",
+      wardrobe_maxCapacity: " ",
+      wardrobe_description: " "
+    });
+  };
 
 
 
@@ -82,7 +111,12 @@ const deleteLocation = (access_token: string,club_id:number ,location_id: number
 export const ActivityService = {
   // createOrEditClub,
   // deleteClub,
+  GetPublicClubs,
   GetLocations,
   UpdateLocation,
-  deleteLocation
+  deleteLocation,
+  getWardrobes,
+  createWardrobes,
+  
+
 };

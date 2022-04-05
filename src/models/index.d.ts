@@ -7,3 +7,4 @@ export * from './appTypes';
 export * from './game';
 export * from "./awayTeam"
 export * from "./location"
+export * from "./wardrobes"

@@ -10,13 +10,17 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import SportClub from "./sportsClubData";
 import { Link } from "react-router-dom";
-// import { useFetchClubs } from '@cenera/common/hooks/api-hooks';
+import {useFetchPublicClubs} from "@cenera/common/hooks/api-hooks/activity";
+
 
 const useStyles = makeStyles(listingStyle as any);
 
 export default function Listing() {
-  const classes = useStyles();
 
+  const {clubsData, loading,error,revalidate}   = useFetchPublicClubs();
+  console.log(clubsData, loading,error,revalidate)
+
+  const classes = useStyles();
   // const { clubs, loading, error, revalidate } = useFetchClubs();
 
 

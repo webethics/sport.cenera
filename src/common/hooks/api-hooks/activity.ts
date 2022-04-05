@@ -21,6 +21,25 @@ export const useFetchGetLocations= () => {
 };
 
 
+export const useFetchPublicClubs=() => { 
+  const { GetPublicClubs } = ActivityService;
+  const swr = useRequest<any>(GetPublicClubs());
+
+  return {
+    clubsData: swr.data && swr.data,
+    loading: !swr.data && !swr.error,
+    error: getErrorMessage(swr.error),
+    isValidating: swr.isValidating,
+    revalidate: swr.revalidate,
+  };
+};
+
+
+
+
+
+
+
 
 
 

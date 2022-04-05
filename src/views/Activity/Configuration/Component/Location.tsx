@@ -17,7 +17,7 @@ import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import { useShowConfirmDialog } from "@cenera/common/hooks/confirmDialog";
 import Typography from "@material-ui/core/Typography";
 import { useFormik } from "formik";
-import { useFetchGetLocations } from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
 import { ActivityService } from "@cenera/services/api/activity";
 import { useAppContext } from "@cenera/app-context";
 import * as Yup from "yup";
@@ -29,6 +29,7 @@ const Location = () => {
   const [appState] = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
   const {locationData, loading,error,revalidate}   = useFetchGetLocations();
+  
   const {UpdateLocation,deleteLocation} = ActivityService;
 
   const [deleteConfig, setDeleteConfig] = useState(false);
