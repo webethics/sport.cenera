@@ -431,8 +431,6 @@ export const Booking: FC = () => {
                       }
                       label={values.show_public?"Your Activity will show in Public page" : ""}
                     />
-
-            
                   </GridItem>
 
 
