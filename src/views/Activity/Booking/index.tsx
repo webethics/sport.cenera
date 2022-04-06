@@ -54,6 +54,7 @@ export const Booking: FC = () => {
     away_team: "",
     away_team_wardrobe: "",
     referee_wardrobe: "",
+    show_public:true
   };
 
   const formik = useFormik({
@@ -414,6 +415,26 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                     />
                   </GridItem>
+
+                  <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
+                    <h5 style={{ fontSize: "14px" }}>Show Activity In Public</h5>
+                  </GridItem>
+                  <GridItem xs="12" sm="10" style={{ marginBottom: "15px" }}>
+                  <FormControlLabel
+                      control={
+                        <Checkbox
+                          id="show_public"
+                          checked={values.show_public}
+                          style={{ color: "#00acc1" }}
+                          onChange={handleChange}
+                        />
+                      }
+                      label={values.show_public?"Your Activity will show in Public page" : ""}
+                    />
+
+            
+                  </GridItem>
+
 
                   {values.activity == "Match" && (
                     <>

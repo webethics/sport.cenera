@@ -40,7 +40,7 @@ export default function Listing() {
               <Grid item lg={3} md={4} sm={6} key={res.club_id}>
                 <Card className={classes.card}>
                   <CardActionArea>
-                    <Link to="/activitiesdetail">
+                    <Link to={`/activitiesdetail/${res.club_id}`}>
                       <CardMedia
                         className={classes.media}
                         image={
