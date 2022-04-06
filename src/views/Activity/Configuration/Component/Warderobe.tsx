@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles, CircularProgress, Backdrop } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
@@ -17,6 +17,9 @@ import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import { useShowConfirmDialog } from "@cenera/common/hooks/confirmDialog";
 import Typography from "@material-ui/core/Typography";
 import {useFormik} from "formik"
+import { useFetchWardrobes} from "@cenera/common/hooks/api-hooks/activity";
+import { ActivityService } from "@cenera/services/api/activity";
+import { useAppContext } from "@cenera/app-context";
 import * as Yup from "yup";
 
 
@@ -26,36 +29,68 @@ const useStyles = makeStyles(configurationStyle as any);
 const Warderobe = () => {
 
     const classes = useStyles();
+    const [appState] = useAppContext();
     const { enqueueSnackbar } = useSnackbar();
-    
+    const {Wardrobesdata, loading,error,revalidate}   = useFetchWardrobes();
+    const {createWardrobes,deleteWardrobes} = ActivityService;
+    const [adding , setAdding] = useState(false)
     const [deleteConfig, setDeleteConfig] = useState(false);
-    const [warderobe, setWarderobe] = useState([
-        { id: 1, warderobe: "Wrderobe 1" },
-        { id: 2, warderobe: "Wrderobe 2" },
-        { id: 3, warderobe: "Wrderobe 3" },
-      ]);
+
+    const [warderobe, setWarderobe] = useState([]);
 
 
-      const handleDelete = (id:any) => {
+      const addWardrobes = async(values:any)=>{
+        setAdding(true)
+        try{
+          let WardrobesAdded = warderobe.some(res=>res.wardrobe_name===values.warderobe)
+
+          if(!WardrobesAdded){
+            const resposne = await createWardrobes(appState.authentication.accessToken,appState.user.club_id,values.warderobe)
+          
+            if(resposne.data.message){
+              await revalidate();
+              setAdding(false)
+              enqueueSnackbar("Wardrobes Added Successfully",  { variant: 'success' })
+            }
+          }else{
+            enqueueSnackbar("Wardrobes Already Exist",  { variant: 'warning' })
+            setAdding(false)
+          }
+        }catch(err){
+          setAdding(false)
+          enqueueSnackbar(err, { variant: 'error' })
+        }
+      }
+
+
+      const handleDelete = async(wardrobe_id:any) => {
         setDeleteConfig(true)
-   
-        setTimeout(() => {
-            setWarderobe(prev=>(prev.filter(res=>res.id !==id[0])))
-           enqueueSnackbar("Wrderobe Deleted Successfully",  { variant: 'success' })
-           setDeleteConfig(false)
-        },1500)
+           try{
+          const response = await deleteWardrobes(appState.authentication.accessToken,appState.user.club_id,wardrobe_id[0])
+          if(response){
+            await revalidate();
+            enqueueSnackbar("Wardrobes Deleted Successfully",  { variant: 'success' })
+            setDeleteConfig(false)
+  
+          }
+        }catch(err){
+          enqueueSnackbar("SomeThing Went Wront",  { variant: 'error' })
+          setDeleteConfig(false)
+        }
    
      };
+
+
 
       const { alert, showConfirmDialog } = useShowConfirmDialog({
         onDeleteConfirmed: (id)=>{
             handleDelete(id)
         },
-        successMessage: "Location deleted successfully",
-        confirmMessage: "Location will be deleted for good!",
+        successMessage: "Wardrobe deleted successfully",
+        confirmMessage: "Wardrobe will be deleted for good!",
       });
+
     
-  
       const formik = useFormik({
         initialValues: { warderobe: "" },
         validationSchema: Yup.object({
@@ -63,14 +98,21 @@ const Warderobe = () => {
             .matches(/[a-z]/, "only letters not allowed")
             .required("required"),
         }),
-        onSubmit: (values) => {
-          const newWarderobe = {id:warderobe[warderobe.length-1].id+1 ,warderobe:values.warderobe}
-          setWarderobe([...warderobe,newWarderobe])
+        onSubmit: async(values) => {
+          addWardrobes(values)
+          
         },
       });
      
+      useEffect(()=>{
+        if(Wardrobesdata){
+          setWarderobe(Wardrobesdata)
+        }else if(error){
+         enqueueSnackbar("SomeThing Went Wront",  { variant: 'error' })
+        }
+      },[Wardrobesdata])
      
-      const {values, handleChange,handleSubmit} = formik;
+      const { values, handleChange, handleSubmit ,errors} = formik;
 
 
   return (
@@ -109,6 +151,7 @@ const Warderobe = () => {
                     value={values.warderobe}
                     onChange={handleChange}
                   />
+                  {errors.warderobe && <span className={classes.errorColor}>{errors.warderobe}</span>}
                   <Button
                     type="submit"
                     variant="contained"
@@ -122,7 +165,7 @@ const Warderobe = () => {
             </Paper>
     </form>
     {alert} 
-      <Backdrop className={classes.backdrop} open={deleteConfig}>
+      <Backdrop className={classes.backdrop} open={deleteConfig ||loading || adding}>
         <CircularProgress color="inherit" />
       </Backdrop>
   </>
