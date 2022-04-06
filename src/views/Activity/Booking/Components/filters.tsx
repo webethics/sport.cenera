@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@material-ui/core/Box";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -9,17 +9,20 @@ import SearchIcon from "@material-ui/icons/Search";
 import { makeStyles } from "@material-ui/core/styles";
 import { filtersStyle } from "./styles";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import { useSnackbar } from "notistack";
+import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
 
 const useStyles = makeStyles(filtersStyle as any);
 
 export default function Filters() {
   const classes = useStyles();
-  const [team, setTeam] = React.useState("10");
+  const [team, setTeam] = React.useState("");
   const handleChange1 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setTeam(event.target.value as string);
   };
 
-  const [location, setLocation] = React.useState("10");
+  const [location, setLocation] = React.useState("");
   const handleChange2 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLocation(event.target.value as string);
   };
@@ -33,7 +36,26 @@ export default function Filters() {
   const handleChange4 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setActivity(event.target.value as string);
   };
+  const { enqueueSnackbar } = useSnackbar();
+  const {locationData,error}   = useFetchGetLocations();
+  const [locations, setLocations] = useState([]);
+  const { teams} = useFetchTeams(); 
+  const [teamsList, setTeamsList] = useState([]); 
 
+  useEffect(()=>{
+    if(locationData){
+      const newArr = locationData.map((res:any)=>({id:res.location_id , name:res.location_name}))
+      setLocations(newArr)
+    }else if(error){
+     enqueueSnackbar("SomeThing Went Wront",  { variant: 'error' })
+    }
+    if(teams) {
+      const newTeam = teams.map((res:any)=>({id:res.team_id, name:res.team_name}))
+      setTeamsList(newTeam);
+    }
+  },[locationData,teams])
+
+  
   return (
     <div className={classes.filterWrap}>
       <Box display="flex" sx={{ flexDirection: { xs: "column", sm: "row" }, flexWrap: { lg: "nowrap", sm: "wrap" } }} mx={-1} mb={2}>
@@ -41,9 +63,11 @@ export default function Filters() {
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">Team</InputLabel>
             <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={team} onChange={handleChange1} label="Team">
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {teamsList.map((res)=>(
+                  <MenuItem value={res.id}>{res.name} </MenuItem>
+              ))}
+          
+
             </Select>
           </FormControl>
         </Box>
@@ -51,9 +75,10 @@ export default function Filters() {
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">Location</InputLabel>
             <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={location} onChange={handleChange2} label="Team">
-              <MenuItem value={10}>sydney </MenuItem>
-              <MenuItem value={20}>New York</MenuItem>
-              <MenuItem value={30}>Melbourne </MenuItem>
+              {locations.map((res)=>(
+                  <MenuItem value={res.id}>{res.name} </MenuItem>
+              ))}
+      
             </Select>
           </FormControl>
         </Box>

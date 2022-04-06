@@ -45,7 +45,7 @@ export default function ItemPicker(props: any) {
               root: classes.selectMenuItem,
               selected: classes.selectMenuItemSelected,
             }}
-            value={res.name}
+            value={res.id}
           >
             {res.name}
           </MenuItem>

@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import configs from '@cenera/configs';
 // import { Club } from '@cenera/models';
 // import { ClubUpdateReqResponse } from './types';
@@ -108,27 +108,46 @@ const deleteLocation = (access_token: string,club_id:number ,location_id: number
   };
   
   //Wardrobes
-  const getWardrobes = (access_token: string): AxiosRequestConfig => {
-    return {
-      url: `${configs.app.api}/booking/getWardrobes`,
-      method: 'post',
-      data: {
-        access_token,
-      },
-    };
-  };
-  
-  const createWardrobes = (access_token: string,club_id:number) => {
-    return axios.post(`${configs.app.api}/booking/updateWardrobes`, {
+ //Wardrobes
+ const getWardrobes = (access_token: string): any => {
+  return {
+    url: `${configs.app.api}/booking/getWardrobes`,
+    method: 'post',
+    data: {
       access_token,
-      club_id:club_id,
-      updateType: "create",
-      wardrobe_id: "",
-      wardrobe_name: " ",
-      wardrobe_maxCapacity: " ",
-      wardrobe_description: " "
-    });
+    },
   };
+};
+
+
+
+const createWardrobes = (access_token: string,club_id:number,wardrobe_name: string) => {
+  console.log(access_token,'token',club_id,'clubid')
+  return axios.post<any>(`${configs.app.api}/booking/updateWardrobes` , {
+
+    access_token: access_token,
+    club_id:club_id,
+    updateType: "create",
+    wardrobe_id: "",
+    wardrobe_name: wardrobe_name,
+    wardrobe_maxCapacity: "field",
+    wardrobe_description: ""
+  })
+};
+
+
+
+  
+
+const deleteWardrobes = (access_token: string,club_id:number ,wardrobe_id: number) => {
+  return axios.post<any>(`${configs.app.api}/booking/updateLocation` ,{
+          access_token: access_token,
+          club_id:club_id,
+          updateType:"delete",
+          wardrobe_id: wardrobe_id,
+    } )
+  };
+
 
 
 
@@ -143,7 +162,9 @@ export const ActivityService = {
   deleteLocation,
   getWardrobes,
   createWardrobes,
-  addActivity
+  addActivity,
+  deleteWardrobes
+
   
 
 };

@@ -13,13 +13,42 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { useSnackbar } from "notistack";
 import axios from "axios";
+import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
+import { useAppContext } from "@cenera/app-context";
+
 const useStyles = makeStyles(styles as any);
 
 export const Booking: FC = () => {
   const classes = useStyles();
+  const [appState] = useAppContext();
   const [selectedDate, SetselectedDate] = useState(new Date());
   const { enqueueSnackbar } = useSnackbar();
+  const {locationData,error}   = useFetchGetLocations();
+  const [locations, setLocations] = useState([]);
+  const { teams} = useFetchTeams(); 
+  const [teamsList, setTeamsList] = useState([]); 
+
+  useEffect(()=>{
+    if(locationData){
+      const newArr = locationData.map((res:any)=>({id:res.location_id , name:res.location_name}))
+      setLocations(newArr)
   
+    }else if(error){
+     enqueueSnackbar("SomeThing Went Wront",  { variant: 'error' })
+    }
+
+    if(teams) {
+      const newTeam = teams.map((res:any)=>({id:res.team_id, name:res.team_name}))
+      setTeamsList(newTeam);
+    }
+
+    console.log(appState.user.club_id,'apppp')
+  },[locationData,teams])
+ 
+
+
+
   const handleDateChange = (pickerType: string, value: any) => {
     SetselectedDate(value);
     const formikField = { ...formik.values };
@@ -59,6 +88,7 @@ export const Booking: FC = () => {
   const formik = useFormik({
     initialValues: initialFormValues,
     onSubmit: async (formValues) => {
+
       try{
         let {data} = await axios.post("https://61ad9197d228a9001703ae3b.mockapi.io/detail",{...formValues})
         if(data){
@@ -87,8 +117,7 @@ export const Booking: FC = () => {
     }
   }, [formik.values.activity]);
 
-  const teamsdata = [{ name: "teamA" }, { name: "teamB" }];
-  const locationdata = [{ name: "New york" }, { name: "Torronto" }];
+ 
   const wardrobe = [{ name: "wardrobe 1" }, { name: "wardrobe 2" }];
   const activitydata = [
     { name: "Match" },
@@ -118,12 +147,13 @@ export const Booking: FC = () => {
                     style={{ marginBottom: "15px" }}
                   >
                     <ItemPicker
-                      data={teamsdata}
+                      data={teamsList}
                       onChange={handleChange}
                       value={values.team}
                       disabled={values.orTeam && true}
                       id="team"
                     />
+
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -249,7 +279,7 @@ export const Booking: FC = () => {
                     style={{ marginBottom: "15px" }}
                   >
                     <ItemPicker
-                      data={locationdata}
+                      data={locations}
                       value={values.location}
                       onChange={handleChange}
                       id="location"
