@@ -15,38 +15,37 @@ import { useSnackbar } from "notistack";
 import axios from "axios";
 import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
 import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
-import { useAppContext } from "@cenera/app-context";
+import { useFetchWardrobes} from "@cenera/common/hooks/api-hooks/activity";
 
 const useStyles = makeStyles(styles as any);
 
 export const Booking: FC = () => {
   const classes = useStyles();
-  const [appState] = useAppContext();
   const [selectedDate, SetselectedDate] = useState(new Date());
   const { enqueueSnackbar } = useSnackbar();
-  const {locationData,error}   = useFetchGetLocations();
+  const {locationData}   = useFetchGetLocations();
   const [locations, setLocations] = useState([]);
   const { teams} = useFetchTeams(); 
   const [teamsList, setTeamsList] = useState([]); 
+  const {Wardrobesdata} = useFetchWardrobes();
+  const [wardrobes, setWardrobes] = useState([]);
 
   useEffect(()=>{
     if(locationData){
       const newArr = locationData.map((res:any)=>({id:res.location_id , name:res.location_name}))
       setLocations(newArr)
-  
-    }else if(error){
-     enqueueSnackbar("SomeThing Went Wront",  { variant: 'error' })
     }
-
     if(teams) {
       const newTeam = teams.map((res:any)=>({id:res.team_id, name:res.team_name}))
       setTeamsList(newTeam);
     }
-
-    console.log(appState.user.club_id,'apppp')
-  },[locationData,teams])
- 
-
+    if(Wardrobesdata){
+      const newWardrobes = Wardrobesdata.map((res:any)=>({id:res.wardrobe_id, name:res.wardrobe_name}))
+      setWardrobes(newWardrobes);
+      
+    }
+  },[locationData,teams,Wardrobesdata])
+  console.log(wardrobes)
 
   const handleDateChange = (pickerType: string, value: any) => {
     SetselectedDate(value);
@@ -88,7 +87,7 @@ export const Booking: FC = () => {
   const formik = useFormik({
     initialValues: initialFormValues,
     onSubmit: async (formValues) => {
-
+      
       try{
         let {data} = await axios.post("https://61ad9197d228a9001703ae3b.mockapi.io/detail",{...formValues})
         if(data){
@@ -301,7 +300,7 @@ export const Booking: FC = () => {
                     style={{ marginBottom: "15px" }}
                   >
                     <ItemPicker
-                      data={wardrobe}
+                      data={wardrobes}
                       value={values.warderobe}
                       onChange={handleChange}
                       id="warderobe"
