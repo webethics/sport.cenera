@@ -15,16 +15,14 @@ import { useSnackbar } from "notistack";
 import axios from "axios";
 import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
 import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
-import { useAppContext } from "@cenera/app-context";
 
 const useStyles = makeStyles(styles as any);
 
 export const Booking: FC = () => {
   const classes = useStyles();
-  const [appState] = useAppContext();
   const [selectedDate, SetselectedDate] = useState(new Date());
   const { enqueueSnackbar } = useSnackbar();
-  const {locationData,error}   = useFetchGetLocations();
+  const {locationData}   = useFetchGetLocations();
   const [locations, setLocations] = useState([]);
   const { teams} = useFetchTeams(); 
   const [teamsList, setTeamsList] = useState([]); 
@@ -33,21 +31,14 @@ export const Booking: FC = () => {
     if(locationData){
       const newArr = locationData.map((res:any)=>({id:res.location_id , name:res.location_name}))
       setLocations(newArr)
-  
-    }else if(error){
-     enqueueSnackbar("SomeThing Went Wront",  { variant: 'error' })
     }
-
     if(teams) {
       const newTeam = teams.map((res:any)=>({id:res.team_id, name:res.team_name}))
       setTeamsList(newTeam);
     }
 
-    console.log(appState.user.club_id,'apppp')
   },[locationData,teams])
  
-
-
 
   const handleDateChange = (pickerType: string, value: any) => {
     SetselectedDate(value);
@@ -89,7 +80,7 @@ export const Booking: FC = () => {
   const formik = useFormik({
     initialValues: initialFormValues,
     onSubmit: async (formValues) => {
-
+      
       try{
         let {data} = await axios.post("https://61ad9197d228a9001703ae3b.mockapi.io/detail",{...formValues})
         if(data){

@@ -4,11 +4,19 @@ import useRequest from "@cenera/common/hooks/useRequest";
 import { ActivityService } from "@cenera/services/api/activity";
 import { useAppContext } from "@cenera/app-context";
 import { getErrorMessage } from "@cenera/common/utils/error-helper";
-// import { GetLocationsResponse } from "@cenera/services/api/types"; // new
 
-// import { WardrobesService } from '@cenera/services/api/activitys';
+export const useFetchPublicClubs=() => { 
+  const { GetPublicClubs } = ActivityService;
+  const swr = useRequest<any>(GetPublicClubs());
 
-
+  return {
+    clubsData: swr.data && swr.data,
+    loading: !swr.data && !swr.error,
+    error: getErrorMessage(swr.error),
+    isValidating: swr.isValidating,
+    revalidate: swr.revalidate,
+  };
+};
 
 export const useFetchGetLocations= () => { 
   const { GetLocations } = ActivityService;
@@ -17,20 +25,6 @@ export const useFetchGetLocations= () => {
 
   return {
     locationData: swr.data && swr.data,
-    loading: !swr.data && !swr.error,
-    error: getErrorMessage(swr.error),
-    isValidating: swr.isValidating,
-    revalidate: swr.revalidate,
-  };
-};
-
-
-export const useFetchPublicClubs=() => { 
-  const { GetPublicClubs } = ActivityService;
-  const swr = useRequest<any>(GetPublicClubs());
-
-  return {
-    clubsData: swr.data && swr.data,
     loading: !swr.data && !swr.error,
     error: getErrorMessage(swr.error),
     isValidating: swr.isValidating,

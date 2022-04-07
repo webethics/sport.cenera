@@ -47,7 +47,6 @@ const addActivity = (access_token: string,club_id:number,activity_id:number,
   team_id:number,team_text:string, away_team_text:string ,wardrobe_id:number,
   wardrobe_id_away:number , wardrobe_id_referee :number,wardrobe_extra_time:number,
   description:string
-  
   ):any =>{
   return axios.post<any>(`${configs.app.api}/booking/updateActivity` ,{
     access_token: access_token,
@@ -106,9 +105,7 @@ const deleteLocation = (access_token: string,club_id:number ,location_id: number
           location_id: location_id,
     } )
   };
-  
-  //Wardrobes
- //Wardrobes
+
  const getWardrobes = (access_token: string): any => {
   return {
     url: `${configs.app.api}/booking/getWardrobes`,
@@ -118,7 +115,6 @@ const deleteLocation = (access_token: string,club_id:number ,location_id: number
     },
   };
 };
-
 
 
 const createWardrobes = (access_token: string,club_id:number,wardrobe_name: string) => {
@@ -137,7 +133,6 @@ const createWardrobes = (access_token: string,club_id:number,wardrobe_name: stri
 
 
 
-  
 
 const deleteWardrobes = (access_token: string,club_id:number ,wardrobe_id: number) => {
   return axios.post<any>(`${configs.app.api}/booking/updateLocation` ,{

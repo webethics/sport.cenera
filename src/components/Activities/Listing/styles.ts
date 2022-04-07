@@ -40,7 +40,12 @@ export const listingStyle = (theme: any) => ({
       zIndex: -1,
     },
   },
-
+  
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+  
   card: {
     borderRadius: "11px 11px 0 0",
     boxShadow: "0px 4px 60px rgba(0, 0, 0, 0.07)",

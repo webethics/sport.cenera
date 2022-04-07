@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, CircularProgress, Backdrop } from "@material-ui/core";
 import { listingStyle } from "./styles";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
@@ -16,9 +16,13 @@ const useStyles = makeStyles(listingStyle as any);
 export default function Listing() {
   const { GetPublicClubs } = ActivityService;
   const [publicClubs, setPublicClubs] = useState([]);
+  const [loading , setLoading] = useState(false);
+
   const fetchPublicClubs = async () => {
+    setLoading(true);
     const { data } = await GetPublicClubs();
     if (data) {
+      setLoading(false);
       setPublicClubs(data);
     }
   };
@@ -65,6 +69,12 @@ export default function Listing() {
             ))}
         </Grid>
       </Container>
+      <Backdrop
+        className={classes.backdrop}
+        open={loading}
+      >
+       <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 }

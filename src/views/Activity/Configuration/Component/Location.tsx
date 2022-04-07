@@ -17,7 +17,7 @@ import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import { useShowConfirmDialog } from "@cenera/common/hooks/confirmDialog";
 import Typography from "@material-ui/core/Typography";
 import { useFormik } from "formik";
-import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchGetLocations } from "@cenera/common/hooks/api-hooks/activity";
 import { ActivityService } from "@cenera/services/api/activity";
 import { useAppContext } from "@cenera/app-context";
 import * as Yup from "yup";
@@ -28,89 +28,93 @@ const Location = () => {
   const classes = useStyles();
   const [appState] = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
-  const {locationData, loading,error,revalidate}   = useFetchGetLocations();
-  
-  const {UpdateLocation,deleteLocation} = ActivityService;
+  const { locationData, loading, error, revalidate } = useFetchGetLocations();
+  const { UpdateLocation, deleteLocation } = ActivityService;
 
   const [deleteConfig, setDeleteConfig] = useState(false);
-  const [adding , setAdding] = useState(false)
+  const [adding, setAdding] = useState(false);
   const [locations, setLocations] = useState([]);
 
-
-  const handleDelete = async (location_id:any) => {
-    console.log(location_id)
-     setDeleteConfig(true)
-      try{
-        const response = await deleteLocation(appState.authentication.accessToken,appState.user.club_id,location_id[0])
-        if(response){
-          await revalidate();
-          enqueueSnackbar("Location Deleted Successfully",  { variant: 'success' })
-          setDeleteConfig(false)
-
-        }
-      }catch(err){
-        enqueueSnackbar("SomeThing Went Wront",  { variant: 'error' })
-        setDeleteConfig(false)
+  const handleDelete = async (location_id: any) => {
+    console.log(location_id);
+    setDeleteConfig(true);
+    try {
+      const response = await deleteLocation(
+        appState.authentication.accessToken,
+        appState.user.club_id,
+        location_id[0]
+      );
+      if (response) {
+        await revalidate();
+        enqueueSnackbar("Location Deleted Successfully", {
+          variant: "success",
+        });
+        setDeleteConfig(false);
       }
+    } catch (err) {
+      enqueueSnackbar("SomeThing Went Wront", { variant: "error" });
+      setDeleteConfig(false);
+    }
   };
 
-
-  const addLocation = async(values:any)=>{
-    setAdding(true)
-    try{
-      let isLocationAdded = locations.some(res=>res.location_name===values.location)
-      if(!isLocationAdded){
-        const resposne = await UpdateLocation(appState.authentication.accessToken,appState.user.club_id,values.location)
-        if(resposne.data.message){
+  const addLocation = async (values: any) => {
+    setAdding(true);
+    try {
+      let isLocationAdded = locations.some(
+        (res) => res.location_name === values.location
+      );
+      if (!isLocationAdded) {
+        const resposne = await UpdateLocation(
+          appState.authentication.accessToken,
+          appState.user.club_id,
+          values.location
+        );
+        if (resposne.data.message) {
           await revalidate();
-          setAdding(false)
-          enqueueSnackbar("Location Added Successfully",  { variant: 'success' })
+          setAdding(false);
+          enqueueSnackbar("Location Added Successfully", {
+            variant: "success",
+          });
         }
-      }else{
-        enqueueSnackbar("Location Already Exist",  { variant: 'warning' })
-        setAdding(false)
+      } else {
+        enqueueSnackbar("Location Already Exist", { variant: "warning" });
+        setAdding(false);
       }
-    }catch(err){
-      setAdding(false)
-      enqueueSnackbar(err, { variant: 'error' })
+    } catch (err) {
+      setAdding(false);
+      enqueueSnackbar(err, { variant: "error" });
     }
-  }
-
-
+  };
 
   const { alert, showConfirmDialog } = useShowConfirmDialog({
-    onDeleteConfirmed: (id)=>{
-        handleDelete(id)
+    onDeleteConfirmed: (id) => {
+      handleDelete(id);
     },
     successMessage: "Location deleted successfully",
     confirmMessage: "Location will be deleted for good!",
   });
-  
-
 
   const formik = useFormik({
     initialValues: { location: "" },
     validationSchema: Yup.object({
       location: Yup.string()
         .matches(/[a-z]/, "only letters not allowed")
-        .required("required"),
+        .required("Location is Required"),
     }),
-    onSubmit: async(values) => {
-       addLocation(values)
+    onSubmit: async (values) => {
+      addLocation(values);
     },
   });
-   
 
-   useEffect(()=>{
-     if(locationData){
-      setLocations(locationData)
-     }else if(error){
-      enqueueSnackbar("SomeThing Went Wront",  { variant: 'error' })
-     }
-   },[locationData])
+  useEffect(() => {
+    if (locationData) {
+      setLocations(locationData);
+    } else if (error) {
+      enqueueSnackbar("SomeThing Went Wront", { variant: "error" });
+    }
+  }, [locationData]);
 
-
-  const { values, handleChange, handleSubmit ,errors} = formik;
+  const { values, handleChange, handleSubmit, errors } = formik;
 
   return (
     <>
@@ -122,7 +126,7 @@ const Location = () => {
                 Location
               </Typography>
               <List>
-                {locations.map(res => (
+                {locations.map((res) => (
                   <ListItem className={classes.listItem} key={res.location_id}>
                     <ListItemIcon className={classes.listIcon}>
                       <LocationOnIcon />
@@ -147,7 +151,9 @@ const Location = () => {
                 value={values.location}
                 onChange={handleChange}
               />
-              {errors.location && <span className={classes.errorColor}>{errors.location}</span>}
+              {errors.location && (
+                <span className={classes.errorColor}>{errors.location}</span>
+              )}
               <Button type="submit" variant="contained" color="secondary">
                 Add Location
               </Button>
@@ -156,7 +162,10 @@ const Location = () => {
         </Paper>
       </form>
       {alert}
-      <Backdrop className={classes.backdrop} open={deleteConfig||loading || adding}>
+      <Backdrop
+        className={classes.backdrop}
+        open={deleteConfig || loading || adding}
+      >
         <CircularProgress color="inherit" />
       </Backdrop>
     </>
