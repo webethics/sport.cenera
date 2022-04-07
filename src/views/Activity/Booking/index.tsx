@@ -48,7 +48,6 @@ export const Booking: FC = () => {
  
 
 
-
   const handleDateChange = (pickerType: string, value: any) => {
     SetselectedDate(value);
     const formikField = { ...formik.values };
