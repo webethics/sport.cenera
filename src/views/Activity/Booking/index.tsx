@@ -12,14 +12,18 @@ import UpcomingActivities from "./Components/UpcomingActivities";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { useSnackbar } from "notistack";
-import axios from "axios";
+// import axios from "axios";
 import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
 import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
 import { useFetchWardrobes} from "@cenera/common/hooks/api-hooks/activity";
+import { ActivityService } from "@cenera/services/api/activity";
+import { useAppContext } from "@cenera/app-context";
+import moment from "moment"
 
 const useStyles = makeStyles(styles as any);
 
 export const Booking: FC = () => {
+  const [appState] = useAppContext();
   const classes = useStyles();
   const [selectedDate, SetselectedDate] = useState(new Date());
   const { enqueueSnackbar } = useSnackbar();
@@ -29,6 +33,7 @@ export const Booking: FC = () => {
   const [teamsList, setTeamsList] = useState([]); 
   const {Wardrobesdata} = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
+  const {addActivity} = ActivityService;
 
   useEffect(()=>{
     if(locationData){
@@ -45,8 +50,7 @@ export const Booking: FC = () => {
       
     }
   },[locationData,teams,Wardrobesdata])
-  console.log(wardrobes)
-
+ 
   const handleDateChange = (pickerType: string, value: any) => {
     SetselectedDate(value);
     const formikField = { ...formik.values };
@@ -83,13 +87,39 @@ export const Booking: FC = () => {
     referee_wardrobe: "",
     show_public:true
   };
+  
+
 
   const formik = useFormik({
     initialValues: initialFormValues,
-    onSubmit: async (formValues) => {
-      
+    onSubmit: async (formValues) => { 
+      const {start_date , start_time,end_date ,end_time } = formValues;
+      const newStartTime = moment(start_date).format('YYYY-MM-d') + moment(start_time).format("HH:mm");
+      const newEndTime = moment(end_date).format('YYYY-MM-d') + moment(end_time).format("HH:mm");
+      const  newobj = {
+              access_token: appState.authentication.accessToken,
+              updateType: "create",
+              club_id: appState.user.club_id,
+              activity_id: "3",
+              startTime: newStartTime,
+              endTime:  newEndTime,
+              location_id:formValues.location,
+              activity_type: "training",
+              recurring_item: "", ////not added in form 
+              recurring_details:"", //not added in form 
+              recurring_exceptions:"", //not added in form 
+              team_id: "", 
+              team_text:"",
+              away_team_text:"",
+              wardrobe_id: "",
+              wardrobe_id_away: "",
+              wardrobe_id_referee: "",
+              wardrobe_extra_time: formValues.extWarBef15 || formValues.extWarBef30 || formValues.extWarAf15 || formValues.extWarAf30,
+              description:"",
+              isPublic: formValues.show_public //not added in front end
+            }
       try{
-        let {data} = await axios.post("https://61ad9197d228a9001703ae3b.mockapi.io/detail",{...formValues})
+        let {data} = await addActivity(newobj);
         if(data){
         enqueueSnackbar("Activity Added Successfully",  { variant: 'success' })
         }
@@ -100,6 +130,7 @@ export const Booking: FC = () => {
     },
   });
 
+  
   useEffect(() => {
     if (formik.values.activity === "Match") {
       formik.setValues({
@@ -119,12 +150,13 @@ export const Booking: FC = () => {
  
   const wardrobe = [{ name: "wardrobe 1" }, { name: "wardrobe 2" }];
   const activitydata = [
-    { name: "Match" },
-    { name: "Training" },
-    { name: "Maintenance" },
+    { name: "Match",id:1 },
+    { name: "Training",id:2 },
+    { name: "Maintenance",id:3 },
   ];
 
   const { values, handleChange } = formik;
+ 
   return (
     <div>
       <GridContainer>
@@ -461,10 +493,12 @@ export const Booking: FC = () => {
                     />
                   </GridItem>
 
-
-                  {values.activity == "Match" && (
+                  
+                  {Number(values.activity) == 1 && (
+                   
                     <>
                       {/* for away team */}
+                      
                       <Divider
                         style={{
                           width: "100%",

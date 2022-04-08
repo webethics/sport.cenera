@@ -30,7 +30,7 @@ const AdminPage = (props: any) => {
   const { club, loading: clubLoading } = useFetchClub(appState.user.club_id);
   
   
-  console.log(club);
+ 
 
   // Get app types (Sports Types, team types, user types)
   useGetTypes();

@@ -115,7 +115,7 @@ const Warderobe = () => {
         }
       },[Wardrobesdata])
      
-      const { values, handleChange, handleSubmit ,errors} = formik;
+    const { values, handleChange, handleSubmit ,errors} = formik;
 
 
   return (
