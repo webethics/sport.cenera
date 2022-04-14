@@ -1,4 +1,5 @@
-export const activitiesDetailStyle = () => ({
+import { Theme } from '@material-ui/core';
+export const activitiesDetailStyle = (theme:Theme) => ({
   wrapper: {
     minHeight: "100vh",
     display: "flex",
@@ -30,8 +31,10 @@ export const activitiesDetailStyle = () => ({
       objectFit: "cover",
     },
   },
-  
-
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
   footer: {
     backgroundColor: "#0079BC",
     padding: "20px 0",
