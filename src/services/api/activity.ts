@@ -72,6 +72,28 @@ const addActivity = (access_token: string,club_id:number,activity_id:number,
 } )
 }
 
+
+const GetActivities = (data:any): any => {
+  return {
+    url: `${configs.app.api}/booking/getActivities`,
+    method: 'post',
+    data: data
+      // access_token: access_token,
+      // club_id: club_id,
+      // team_id: team_id,
+      // location_id: 1,
+      // activity_type: 5,
+      // wardrobe_id: 1,
+      // // activity_id_list: [1,2,3],
+      // text_search:"value",
+      // startTime: "2022-03-29T14:00",
+      // endTime: "2022-03-29T15:00"
+  };
+};
+
+
+
+
 const GetLocations = (access_token: string): any => {
     return {
       url: `${configs.app.api}/booking/getLocations`,
@@ -158,6 +180,7 @@ export const ActivityService = {
   getWardrobes,
   createWardrobes,
   addActivity,
+  GetActivities,
   deleteWardrobes
 
   

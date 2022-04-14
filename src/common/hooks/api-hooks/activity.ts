@@ -18,6 +18,24 @@ export const useFetchPublicClubs=() => {
   };
 };
 
+export const useFetchGetActivites=(data:any) => { 
+  const { GetActivities } = ActivityService;
+  const swr = useRequest<any>(GetActivities(data));
+  const data1 =[swr.data];
+  console.log(data1[0])
+
+  return {
+    acitivityData: swr.data && swr.data,
+    loading: !swr.data && !swr.error,
+    error: getErrorMessage(swr.error),
+    isValidating: swr.isValidating,
+    revalidate: swr.revalidate,
+  };
+};
+
+
+
+
 export const useFetchGetLocations= () => { 
   const { GetLocations } = ActivityService;
   const [appState] = useAppContext();

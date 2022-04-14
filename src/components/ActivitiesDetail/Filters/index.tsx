@@ -13,11 +13,14 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 
 const useStyles = makeStyles(filtersStyle as any);
 
-export default function Filters() {
+export default function Filters({onFilter}:{onFilter:any}) {
+  
   const classes = useStyles();
+
   const [team, setTeam] = React.useState("10");
   const handleChange1 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setTeam(event.target.value as string);
+    onFilter(event.target.value)
   };
 
   const [location, setLocation] = React.useState("10");

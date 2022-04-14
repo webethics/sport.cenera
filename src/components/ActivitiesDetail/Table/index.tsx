@@ -17,6 +17,7 @@ import Paper from "@material-ui/core/Paper";
 import { blackColor, sectionSpacer } from "@cenera/common/styles/common-styles";
 import dotpattrenV from "@cenera/assets/images/dotpattren-v.svg";
 import Button from "@material-ui/core/Button";
+import moment from "moment";
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -74,15 +75,7 @@ const rows = [
     "Ingen",
     "Training"
   ),
-  createData(
-    "16:00",
-    "17:00",
-    "1:00",
-    "Monaco",
-    "Spain",
-    "Ingen",
-    "Training"
-  ),
+  createData("16:00", "17:00", "1:00", "Monaco", "Spain", "Ingen", "Training"),
   createData(
     "17:00",
     "19:00",
@@ -219,7 +212,21 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CustomizedTables() {
+export default function CustomizedTables({
+  activityList,
+}: {
+  activityList: any;
+}) {
+  console.log(activityList);
+
+  const duraiton = (t1:string, t2:string) => {
+    let a = moment(t1);
+    let b = moment(t2);
+    return  b.diff(a , "hours");
+  }
+
+
+
   const classes = useStyles();
   return (
     <div className={classes.bgContainer}>
@@ -230,69 +237,76 @@ export default function CustomizedTables() {
               component={Paper}
               className={classes.tableContainer}
             >
-              <Table className={classes.table} aria-label="customized table">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell colSpan={7}>
-                      Monday march 01, 2022
-                    </StyledTableCell>
-                  </TableRow>
-                  <TableRow className={classes.customeTableRow}>
-              
-                    <StyledTableCell >Start time</StyledTableCell>
-                    <StyledTableCell align="left">End Time</StyledTableCell>
-                    <StyledTableCell align="left">Duration</StyledTableCell>
+              {activityList.map((res: any) => (
+                <Table className={classes.table} aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell colSpan={7}>
+                        Monday march 01, 2022
+                      </StyledTableCell>
+                    </TableRow>
+                    <TableRow className={classes.customeTableRow}>
+                      <StyledTableCell>Start Time</StyledTableCell>
+                      <StyledTableCell align="left">End Time</StyledTableCell>
+                      <StyledTableCell align="left">Duration</StyledTableCell>
 
-                    <StyledTableCell align="left">Team</StyledTableCell>
-                    <StyledTableCell align="left">Location</StyledTableCell>
-                    <StyledTableCell align="left">Warderobe</StyledTableCell>
-                    <StyledTableCell align="left">Activity</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map((row) => (
-                    <StyledTableRow key={row.startime}>
-                      <BodyTableCell scope="row">
-                        {row.startime}
-                      </BodyTableCell>
-                      <BodyTableCell align="left">{row.endtime}</BodyTableCell>
-                      <BodyTableCell align="left">{row.duration}</BodyTableCell>
-                      <BodyTableCell align="left">{row.team}</BodyTableCell>
-                      <BodyTableCell align="left">{row.location}</BodyTableCell>
-                      <BodyTableCell align="left">
-                        {row.warderobe}
-                      </BodyTableCell>
-                      <BodyTableCell
-                        className={`${row.activity === "Match" &&
-                          classes.matched}`}
-                        align="left"
+                      <StyledTableCell align="left">Team</StyledTableCell>
+                      <StyledTableCell align="left">Location</StyledTableCell>
+                      <StyledTableCell align="left">Warderobe</StyledTableCell>
+                      <StyledTableCell align="left">Activity</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row) => (
+                      <StyledTableRow key={row.startime}>
+                        <BodyTableCell scope="row">
+                          {moment(res.startTime).format("HH:mm")}
+                        </BodyTableCell>
+                        <BodyTableCell align="left">
+                          {moment(res.endTime).format("HH:mm")}
+                        </BodyTableCell> 
+                        <BodyTableCell align="left">{duraiton(res.startTime,res.endTime)}</BodyTableCell>
+                        <BodyTableCell align="left">{row.team}</BodyTableCell>
+                        <BodyTableCell align="left">
+                          {row.location}
+                        </BodyTableCell>
+                        <BodyTableCell align="left">
+                          {row.warderobe}
+                        </BodyTableCell>
+                        <BodyTableCell
+                          className={`${row.activity === "Match" &&
+                            classes.matched}`}
+                          align="left"
+                        >
+                          {row.activity}
+                        </BodyTableCell>
+                      </StyledTableRow>
+                    ))}
+                    {rowsexpand.map((row) => (
+                      <StyledTableRow
+                        className={classes.bottomTableRow}
+                        key={row.awayfield}
                       >
-                        {row.activity}
-                      </BodyTableCell>
-                    </StyledTableRow>
-                  ))}
-                  {rowsexpand.map((row) => (
-                    <StyledTableRow
-                      className={classes.bottomTableRow}
-                      key={row.awayfield}
-                    >
-                      <BodyTableCell scope="row"></BodyTableCell>
-                      <BodyTableCell align="left"></BodyTableCell>
-                      <BodyTableCell className={classes.label} align="left">
-                        {row.awayfield}
-                      </BodyTableCell>
-                      <BodyTableCell align="left">{row.awaydata}</BodyTableCell>
-                      <BodyTableCell align="left">
-                        {row.warderobefield}
-                      </BodyTableCell>
-                      <BodyTableCell align="left">
-                        {row.warderobedata}
-                      </BodyTableCell>
-                      {/* <BodyTableCell align="left"></BodyTableCell> */}
-                    </StyledTableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                        <BodyTableCell scope="row"></BodyTableCell>
+                        <BodyTableCell align="left"></BodyTableCell>
+                        <BodyTableCell className={classes.label} align="left">
+                          {row.awayfield}
+                        </BodyTableCell>
+                        <BodyTableCell align="left">
+                          {row.awaydata}
+                        </BodyTableCell>
+                        <BodyTableCell align="left">
+                          {row.warderobefield}
+                        </BodyTableCell>
+                        <BodyTableCell align="left">
+                          {row.warderobedata}
+                        </BodyTableCell>
+                        {/* <BodyTableCell align="left"></BodyTableCell> */}
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ))}
             </TableContainer>
           </Grid>
         </Grid>
