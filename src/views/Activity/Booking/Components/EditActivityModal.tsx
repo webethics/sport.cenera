@@ -1,5 +1,5 @@
 import React, { useEffect , useState } from "react";
-import axios from "axios"
+// import axios from "axios"
 import {
   Modal,
   Box,
@@ -19,13 +19,52 @@ import CloseIcon from "@material-ui/icons/Close";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { useSnackbar } from "notistack";
-
+import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
+import { useFetchWardrobes} from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchEditActivities} from "@cenera/common/hooks/api-hooks/activity";
+import { useAppContext } from "@cenera/app-context";
+import { ActivityService } from "@cenera/services/api/activity";
+import moment from "moment"
 const useStyles = makeStyles(styles as any);
 
 export default function EditActivityModal(props: any) {
+  // const [locationname,setLocationname]= useState();
+  const [appState] = useAppContext();
   const classes = useStyles();
   const [selectedDate, SetselectedDate] = useState(new Date());
   const { enqueueSnackbar } = useSnackbar();
+  const {locationData}   = useFetchGetLocations();
+  const [locations, setLocations] = useState([]);
+  const { teams} = useFetchTeams(); 
+  const [teamsList, setTeamsList] = useState([]); 
+  const {Wardrobesdata} = useFetchWardrobes();
+  const [wardrobes, setWardrobes] = useState([]);
+  // const[currenteditactivity,setCurrenteditactivity] = useState(null)
+  //data
+  const editActivity = props.activityId;
+  const { EditActivitydata }  = useFetchEditActivities(editActivity);
+ 
+  const {addActivity} = ActivityService;
+
+
+    // console.log(locationname,'locationname')
+
+  useEffect(()=>{
+    if(locationData){
+      const newArr = locationData.map((res:any)=>({id:res.location_id , name:res.location_name}))
+      setLocations(newArr)
+    }
+    if(teams) {
+      const newTeam = teams.map((res:any)=>({id:res.team_id, name:res.team_name}))
+      setTeamsList(newTeam);
+    }
+    if(Wardrobesdata){
+      const newWardrobes = Wardrobesdata.map((res:any)=>({id:res.wardrobe_id, name:res.wardrobe_name}))
+      setWardrobes(newWardrobes);
+      
+    }
+  },[locationData,teams,Wardrobesdata])
 
   const handleDateChange = (pickerType: string, value: any) => {
     SetselectedDate(value);
@@ -43,23 +82,23 @@ export default function EditActivityModal(props: any) {
   };
 
  
-  const editActivityData = async ()=>{
-   await  axios.get(`https://61ad9197d228a9001703ae3b.mockapi.io/detail/${props.activityId}`)
-    .then(res=>{
-      if(res.data){
-        formik.setValues(res.data)
-      }
-    })
-  }
+  // const editActivityData = async ()=>{
+  //  await  axios.get(`https://61ad9197d228a9001703ae3b.mockapi.io/detail/`)
+  //   .then(res=>{
+  //     if(res.data){
+  //       formik.setValues(res.data)
+  //     }
+  //   })
+  // || EditActivitydata && teamsList.find(res=>res.team_id===EditActivitydata[0].team_id)
 
     const initialFormValues = {
-      team:  "",
+      team: "",
       orTeam: "",
-      start_date:  selectedDate,
+      start_date:  selectedDate ,
       start_time:   selectedDate,
       end_date:selectedDate,
       end_time: selectedDate,
-      location: "",
+      location: "" ,
       warderobe: "",
       extWarBef15:  false,
       extWarBef30:  false,
@@ -70,34 +109,57 @@ export default function EditActivityModal(props: any) {
       away_team:"",
       away_team_wardrobe: "",
       referee_wardrobe:"",
+      show_public:true
     };
 
   const formik = useFormik({
     initialValues: initialFormValues,
     onSubmit: async (formValues) => {
-
-        await axios.put(`https://61ad9197d228a9001703ae3b.mockapi.io/detail/${props.activityId}` , {...formValues})
-         .then(res=>{
-           if(res.data){
-            props.onClose();
-            enqueueSnackbar("Activity Edited Successfully",  { variant: 'success' })
-            props.callUpcomingActivity();
-           }
-         }).catch(err=>{
-          enqueueSnackbar(err,  { variant: 'error' })
-         })
+      const {start_date , start_time, end_date, end_time} = formValues;
+      const newStartTime = moment(start_date).format('YYYY-MM-DDT')+moment(start_time).format("HH:MM");
+      const newEndTime = moment(end_date).format('YYYY-MM-DDT')+moment(end_time).format("HH:MM"); 
+        const  newobj = {
+        "access_token": appState.authentication.accessToken,
+        "updateType": "update",
+        "club_id": appState.user.club_id,
+        "activity_id": props.activityId,
+        "startTime": newStartTime,
+        "endTime":  newEndTime,
+        "location_id":formValues.location,
+        "activity_type": "training",
+        "recurring_item": "", ////not added in form 
+        "recurring_details":"", //not added in form 
+        "recurring_exceptions":"", //not added in form 
+        "team_id": formValues.team, 
+        "team_text":formValues.team || formValues.orTeam,
+        "away_team_text":formValues.away_team,
+        "wardrobe_id": formValues.warderobe,
+        "wardrobe_id_away": formValues.away_team_wardrobe,
+        "wardrobe_id_referee": formValues.referee_wardrobe,
+        "wardrobe_extra_time": "",
+        "description":formValues.description,
+        "isPublic": formValues.show_public //not added in front end+
+        };
+        let res =  addActivity(newobj);
+        if(res){
+              props.onClose();
+              enqueueSnackbar("Activity Edited Successfully",  { variant: 'success' })
+              props.callUpcomingActivity();
+             }
+             else{
+              enqueueSnackbar('err',  { variant: 'error' })
+             }
     }
   });
  
-  const teamsdata = [{ name: "teamA" }, { name: "teamB" }];
-  const locationdata = [{ name: "New york" }, { name: "Torronto" }];
-  const wardrobe = [{ name: "wardrobe 1" }, { name: "wardrobe 2" }];
+
   const activitydata = [
-    { name: "Match" },
-    { name: "Training" },
-    { name: "Maintenance" },
+    { name: "Match",id:1 },
+    { name: "Training",id:2 },
+    { name: "Maintenance",id:3 },
   ];
 
+  
   useEffect(() => {
     if (formik.values.activity === "Match") {
       formik.setValues({
@@ -112,11 +174,30 @@ export default function EditActivityModal(props: any) {
         extWarAf30: false,
       });
     }
+     
+    //  if(teamsList && EditActivitydata && EditActivitydata.length>0){
+    //    const teamName = teamsList.find(res=>res.id===EditActivitydata[0].team_id)
+    //    formik.setValues({...formik.values,team:teamName.team_id})
+
+    //  } teamsList,EditActivitydata
+     
+   
   }, [formik.values.activity]);
+ 
 
   useEffect(()=>{
-    editActivityData();
-  },[props.activityId])
+    if(teamsList && EditActivitydata && EditActivitydata.length>0){
+      const teamName = teamsList.find(res=>res.id===EditActivitydata[0].team_id)
+      console.log(teamsList,EditActivitydata,'nameeee')
+      if(teamName){
+        formik.setValues({...formik.values,team:teamName.id})
+      }
+      
+
+    } 
+  },[teamsList,EditActivitydata])
+
+console.log(EditActivitydata,'ffffff')
 
   const { values, handleChange } = formik;
 
@@ -140,7 +221,7 @@ export default function EditActivityModal(props: any) {
               </GridItem>
               <GridItem xs="12" sm="5" md="3" style={{ marginBottom: "15px" }}>
                 <ItemPicker
-                  data={teamsdata}
+                  data={teamsList}
                   onChange={handleChange}
                   value={values.team}
                   id="team"
@@ -243,7 +324,7 @@ export default function EditActivityModal(props: any) {
               </GridItem>
               <GridItem xs="12" sm="5" md="3" style={{ marginBottom: "15px" }}>
                 <ItemPicker
-                  data={locationdata}
+                  data={locations}
                   value={values.location}
                   onChange={handleChange}
                   id="location"
@@ -260,7 +341,7 @@ export default function EditActivityModal(props: any) {
               </GridItem>
               <GridItem xs="12" sm="5" md="3" style={{ marginBottom: "15px" }}>
                 <ItemPicker
-                  data={wardrobe}
+                  data={wardrobes}
                   value={values.warderobe}
                   onChange={handleChange}
                   id="warderobe"
@@ -391,6 +472,24 @@ export default function EditActivityModal(props: any) {
                 />
               </GridItem>
 
+
+                  <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
+                    <h5 style={{ fontSize: "14px" }}>Show Activity In Public</h5>
+                  </GridItem>
+                  <GridItem xs="12" sm="10" style={{ marginBottom: "15px" }}>
+                  <FormControlLabel
+                      control={
+                        <Checkbox
+                          id="show_public"
+                          checked={values.show_public}
+                          style={{ color: "#00acc1" }}
+                          onChange={handleChange}
+                        />
+                      }
+                      label={values.show_public?"Your Activity will show in Public page" : ""}
+                    />
+                  </GridItem>
+
               {values.activity == "Match" && (
                 <>
                   <Divider
@@ -419,7 +518,7 @@ export default function EditActivityModal(props: any) {
                   <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                     <ItemPicker
                       className="datepicker"
-                      data={wardrobe}
+                      data={wardrobes}
                       value={values.away_team_wardrobe}
                       onChange={handleChange}
                       id="away_team_wardrobe"
@@ -442,7 +541,7 @@ export default function EditActivityModal(props: any) {
                   </GridItem>
                   <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                     <ItemPicker
-                      data={wardrobe}
+                      data={wardrobes}
                       value={values.referee_wardrobe}
                       onChange={handleChange}
                       id="referee_wardrobe"

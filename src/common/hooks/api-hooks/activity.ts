@@ -47,11 +47,11 @@ export const useFetchWardrobes = () => {
   };
 };
 
-export const useFetchActivities = (team_id="",location_id="",startTime="",endTime="",wardrobe_id="",activity_type="") => {
+export const useFetchActivities = (startTime="",endTime="") => {
   const { getUpcomingActivities } = ActivityService;
   const [appState] = useAppContext();
   
-  const result = useRequest<any>(getUpcomingActivities(appState.authentication.accessToken,appState.user.club_id,team_id,location_id,startTime,endTime,wardrobe_id,activity_type));
+  const result = useRequest<any>(getUpcomingActivities(appState.authentication.accessToken,appState.user.club_id,startTime,endTime));
 
   return {
     Activitydata: result.data ? result.data : [],
@@ -61,6 +61,19 @@ export const useFetchActivities = (team_id="",location_id="",startTime="",endTim
   };
 };
 
+export const useFetchEditActivities = (activity_id_list:any) => {
+  const { getEditActivities } = ActivityService;
+  const [appState] = useAppContext();
+  
+  const result = useRequest<any>(getEditActivities(appState.authentication.accessToken,appState.user.club_id,activity_id_list));
+
+  return {
+    EditActivitydata: result.data ? result.data : [],
+    loading: !result.data && !result.error,
+    error: getErrorMessage(result.error),
+    revalidate: result.revalidate,
+  };
+};
 
 
 

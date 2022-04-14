@@ -19,6 +19,8 @@ import { useFetchWardrobes} from "@cenera/common/hooks/api-hooks/activity";
 import { ActivityService } from "@cenera/services/api/activity";
 import { useAppContext } from "@cenera/app-context";
 import moment from "moment"
+import * as Yup from "yup";
+
 
 const useStyles = makeStyles(styles as any);
 
@@ -27,13 +29,14 @@ export const Booking: FC = () => {
   const classes = useStyles();
   const [selectedDate, SetselectedDate] = useState(new Date());
   const { enqueueSnackbar } = useSnackbar();
-  const {locationData}   = useFetchGetLocations();
+  const {locationData,revalidate}   = useFetchGetLocations();
+  
   const [locations, setLocations] = useState([]);
   const { teams} = useFetchTeams(); 
   const [teamsList, setTeamsList] = useState([]); 
   const {Wardrobesdata} = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
-  const {addActivity} = ActivityService;
+  const {addActivity } = ActivityService;
 
   useEffect(()=>{
     if(locationData){
@@ -89,38 +92,72 @@ export const Booking: FC = () => {
   };
   
 
-
   const formik = useFormik({
     initialValues: initialFormValues,
+      validationSchema: Yup.object({
+        location: Yup.string()
+        .required("Location is Required"),
+          start_date: Yup.date(),
+          end_date: Yup.date().min(
+              Yup.ref('start_date'),
+              "End date can't be before start date"
+            ),
+            start_time: Yup.date(),
+            end_time: Yup.date().min(
+                Yup.ref('start_time'),
+                "End time can't be before start time"
+              )
+
+      }),
+    
     onSubmit: async (formValues) => { 
-      const {start_date , start_time,end_date ,end_time } = formValues;
-      const newStartTime = moment(start_date).format('YYYY-MM-d') + moment(start_time).format("HH:mm");
-      const newEndTime = moment(end_date).format('YYYY-MM-d') + moment(end_time).format("HH:mm");
+      const {start_date , start_time, end_date, end_time} = formValues;
+      const newStartTime = moment(start_date).format('YYYY-MM-DDT')+moment(start_time).format("HH:mm");
+      const newEndTime = moment(end_date).format('YYYY-MM-DDT')+moment(end_time).format("HH:mm"); 
+
+       const recurringstartdate = moment(start_date).format('YYYY-MM-DD')
+       const recurringenddate = moment(end_date).format('YYYY-MM-DD')
+      
+    
+      var getDaysBetweenDates = function(startDate:any, endDate:any) {
+        var now = moment(startDate).clone(),dates = [];
+        while (now.isSameOrBefore(endDate)) {
+            dates.push(now.format('YYYY-MM-DD'));
+            now.add(1, 'days');
+        }
+        return dates.toString();
+    };
+ 
+    let recuringDateList:any=false
+    if(recurringstartdate !== recurringenddate){
+      recuringDateList = getDaysBetweenDates(recurringstartdate, recurringenddate);
+    }
+
       const  newobj = {
-              access_token: appState.authentication.accessToken,
-              updateType: "create",
-              club_id: appState.user.club_id,
-              activity_id: "3",
-              startTime: newStartTime,
-              endTime:  newEndTime,
-              location_id:formValues.location,
-              activity_type: "training",
-              recurring_item: "", ////not added in form 
-              recurring_details:"", //not added in form 
-              recurring_exceptions:"", //not added in form 
-              team_id: "", 
-              team_text:"",
-              away_team_text:"",
-              wardrobe_id: "",
-              wardrobe_id_away: "",
-              wardrobe_id_referee: "",
-              wardrobe_extra_time: formValues.extWarBef15 || formValues.extWarBef30 || formValues.extWarAf15 || formValues.extWarAf30,
-              description:"",
-              isPublic: formValues.show_public //not added in front end
-            }
+              "access_token": appState.authentication.accessToken,
+              "updateType": "create",
+              "club_id": appState.user.club_id,
+              "startTime": newStartTime,
+              "endTime":  newEndTime,
+              "location_id":formValues.location,
+              "activity_type": "training",
+              "recurring_item": recuringDateList.length>0? false : "", ////not added in form 
+              "recurring_details":"", //not added in form 
+              "recurring_exceptions":recuringDateList? recuringDateList : "", 
+              "team_id": formValues.team, 
+              "team_text":formValues.team,
+              "away_team_text":formValues.away_team,
+              "wardrobe_id": formValues.warderobe,
+              "wardrobe_id_away": formValues.away_team_wardrobe,
+              "wardrobe_id_referee": formValues.referee_wardrobe,
+              "wardrobe_extra_time": "",
+              "description":formValues.description,
+              "isPublic": formValues.show_public //not added in front end+
+            };
       try{
-        let {data} = await addActivity(newobj);
-        if(data){
+        let res = await addActivity(newobj);
+        if(res){
+        revalidate();
         enqueueSnackbar("Activity Added Successfully",  { variant: 'success' })
         }
       }catch(err){
@@ -148,14 +185,14 @@ export const Booking: FC = () => {
   }, [formik.values.activity]);
 
  
-  const wardrobe = [{ name: "wardrobe 1" }, { name: "wardrobe 2" }];
+  // const wardrobe = [{ name: "wardrobe 1" }, { name: "wardrobe 2" }];
   const activitydata = [
     { name: "Match",id:1 },
     { name: "Training",id:2 },
     { name: "Maintenance",id:3 },
   ];
 
-  const { values, handleChange } = formik;
+  const { values, handleChange, errors ,touched} = formik;
  
   return (
     <div>
@@ -236,7 +273,9 @@ export const Booking: FC = () => {
                       onChange={(e) => handleDateChange("start_date", e)}
                       animateYearScrolling
                       id="start_date"
+                      
                     />
+                    
                   </GridItem>
                   <GridItem
                     xs="6"
@@ -251,6 +290,8 @@ export const Booking: FC = () => {
                       value={values.start_time}
                       onChange={(e) => handleDateChange("start_time", e)}
                       id="start_time"
+                      
+                     
                     />
                   </GridItem>
                   <GridItem
@@ -278,7 +319,10 @@ export const Booking: FC = () => {
                       animateYearScrolling
                       id="end_date"
                     />
+                    {errors.end_date && <span className={classes.errorColor} style={{color:'red',display: 'inline-block'}}>{errors.end_date}</span>}
+
                   </GridItem>
+        
                   <GridItem
                     xs="6"
                     sm="5"
@@ -293,6 +337,7 @@ export const Booking: FC = () => {
                       onChange={(e) => handleDateChange("end_time", e)}
                       id="end_time"
                     />
+                     {errors.end_time && <span className={classes.errorColor} style={{color:'red',display: 'inline-block'}}>{errors.end_time}</span>}
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -314,7 +359,9 @@ export const Booking: FC = () => {
                       value={values.location}
                       onChange={handleChange}
                       id="location"
+
                     />
+                    {errors.location && touched.location && <span className={classes.errorColor} style={{color:'red'}}>{errors.location}</span>}
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -525,7 +572,7 @@ export const Booking: FC = () => {
                       <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                         <ItemPicker
                           className="datepicker"
-                          data={wardrobe}
+                          data={wardrobes}
                           value={values.away_team_wardrobe}
                           onChange={handleChange}
                           id="away_team_wardrobe"
@@ -550,7 +597,7 @@ export const Booking: FC = () => {
                       </GridItem>
                       <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                         <ItemPicker
-                          data={wardrobe}
+                          data={wardrobes}
                           value={values.referee_wardrobe}
                           onChange={handleChange}
                           id="referee_wardrobe"
