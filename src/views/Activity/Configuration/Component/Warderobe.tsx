@@ -64,9 +64,11 @@ const Warderobe = () => {
 
 
       const handleDelete = async(wardrobe_id:any) => {
+        // console.log(wardrobe_id,'delete')
         setDeleteConfig(true)
            try{
           const response = await deleteWardrobes(appState.authentication.accessToken,appState.user.club_id,wardrobe_id[0])
+          
           if(response){
             await revalidate();
             enqueueSnackbar("Wardrobes Deleted Successfully",  { variant: 'success' })
@@ -85,6 +87,7 @@ const Warderobe = () => {
       const { alert, showConfirmDialog } = useShowConfirmDialog({
         onDeleteConfirmed: (id)=>{
             handleDelete(id)
+
         },
         successMessage: "Wardrobe deleted successfully",
         confirmMessage: "Wardrobe will be deleted for good!",
@@ -112,7 +115,7 @@ const Warderobe = () => {
         }
       },[Wardrobesdata])
      
-      const { values, handleChange, handleSubmit ,errors} = formik;
+    const { values, handleChange, handleSubmit ,errors} = formik;
 
 
   return (
@@ -126,17 +129,17 @@ const Warderobe = () => {
                     Warderobe
                   </Typography>
                   <List>
-                    {warderobe.map((res: { id: number; warderobe: string }) => (
-                      <ListItem className={classes.listItem} key={res.id}>
+                    {warderobe.map((res: { wardrobe_id: number; wardrobe_name: string }) => (
+                      <ListItem className={classes.listItem} key={res.wardrobe_id}>
                         <ListItemIcon className={classes.listIcon}>
                           <LocationOnIcon />
                         </ListItemIcon>
                         <ListItemText className={classes.listItemText}>
-                          {res.warderobe}
+                          {res.wardrobe_name}
                         </ListItemText>
                         <DeleteOutlineIcon 
                         className = {classes.deleteButton}
-                        onClick={() => showConfirmDialog(res.id)}
+                        onClick={() => showConfirmDialog(res.wardrobe_id)}
                         />
                       </ListItem>
                     ))}

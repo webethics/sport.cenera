@@ -48,7 +48,7 @@ export default function Listing() {
                       <CardMedia
                         className={classes.media}
                         image={
-                          `${process.env.REACT_APP_SERVER_IMAGE_URL}/`+res.club_image
+                          `${process.env.REACT_APP_SERVER_IMAGE_URL}`+res.club_image
                         }
                         title="Club Image"
                       />

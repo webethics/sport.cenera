@@ -57,7 +57,22 @@ export const useFetchWardrobes = () => {
   const result = useRequest<any>(getWardrobes(appState.authentication.accessToken));
 
   return {
+    
     Wardrobesdata: result.data ? result.data : [],
+    loading: !result.data && !result.error,
+    error: getErrorMessage(result.error),
+    revalidate: result.revalidate,
+  };
+};
+
+export const useFetchActivities = (team_id="",location_id="",startTime="",endTime="",wardrobe_id="",activity_type="") => {
+  const { getUpcomingActivities } = ActivityService;
+  const [appState] = useAppContext();
+  
+  const result = useRequest<any>(getUpcomingActivities(appState.authentication.accessToken,appState.user.club_id,team_id,location_id,startTime,endTime,wardrobe_id,activity_type));
+
+  return {
+    Activitydata: result.data ? result.data : [],
     loading: !result.data && !result.error,
     error: getErrorMessage(result.error),
     revalidate: result.revalidate,

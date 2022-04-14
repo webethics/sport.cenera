@@ -115,6 +115,10 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
     }
   };
 
+  const publishedActivity = () => {
+      console.log('activity published')
+  };
+
   const handleCheckBoxForDelete = (id:number)=>{
      const newArr = [...acitivityList]
      newArr.forEach((res,index)=>{
@@ -179,10 +183,12 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
   
                            <StyledTableRow>
                              <BodyTableCell scope="row">
-                               {res.start_time}
+                               {/* {res.start_time} */}
+                               {moment(res["start_time"]).format("hh:mm A")}
                              </BodyTableCell>
                              <BodyTableCell align="left">
-                               {res.end_time}
+                               {/* {res.end_time} */}
+                               {moment(res["end_time"]).format("hh:mm A")}
                              </BodyTableCell>
                              <BodyTableCell align="left">
                                {/* {row.duration} */}
@@ -268,6 +274,13 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
                 onClick={handleDeleteSelected}
               >
                 Delete Selected Activities
+              </Button>
+              <Button
+                color="danger"
+                style={{ maxWidth: "100%" }}
+                onClick={publishedActivity}
+              >
+                Published  Selected Activities
               </Button>
             </div>
           </CardBody>
