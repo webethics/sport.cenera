@@ -48,7 +48,6 @@ const addActivity = (newobj:any):any =>{
 return axios.post<any>(`${configs.app.api}/booking/updateActivity`,newobj)}
 
 
-<<<<<<< HEAD
 //Get activity
 const getUpcomingActivities = (access_token: string,club_id:number | string,startTime:number | string,endTime:number | string): any => {
   return {
@@ -72,8 +71,8 @@ const getEditActivities = (access_token: string,club_id:number,activity_id_list:
       club_id: club_id,
       activity_id_list: [activity_id_list]
     },
-=======
-
+  }
+}
 const GetActivities = (data:any): any => {
   return {
     url: `${configs.app.api}/booking/getActivities`,
@@ -89,26 +88,20 @@ const GetActivities = (data:any): any => {
       // text_search:"value",
       // startTime: "2022-03-29T14:00",
       // endTime: "2022-03-29T15:00"
->>>>>>> a6f393d0881fc0920e6b3772a86cfe48fc6445d5
-  };
+  }
 };
 
 
-<<<<<<< HEAD
 const deleteMultipleActivities = (access_token: string,club_id: number,activity_id_list: any) => {
   return axios.post<any>(`${configs.app.api}/booking/multiDeleteActivities` ,{
     access_token: access_token,
     club_id:club_id,
     activity_id_list: activity_id_list,
 
-    } )
-  };
+  } )
+};
 
 //lOCATION
-=======
-
-
->>>>>>> a6f393d0881fc0920e6b3772a86cfe48fc6445d5
 const GetLocations = (access_token: string): any => {
     return {
       url: `${configs.app.api}/booking/getLocations`,
@@ -182,8 +175,6 @@ const deleteWardrobes = (access_token: string,club_id:number ,wardrobe_id: numbe
 
 
 
-
-
   const setActivitiesPublished = (access_token: string,club_id:number,activity_id_list: number) => {
     return axios.post<any>(`${configs.app.api}/booking/setActivitiesPublishedState`, {
     access_token: access_token,
@@ -208,6 +199,6 @@ export const ActivityService = {
   getUpcomingActivities,
   deleteMultipleActivities,
   setActivitiesPublished,
-  getEditActivities
-
-};
+  getEditActivities,
+  GetActivities
+}
