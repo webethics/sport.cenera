@@ -111,6 +111,7 @@ export const Booking: FC = () => {
       }),
     
     onSubmit: async (formValues) => { 
+      console.log(formValues,'formvalue')
       const {start_date , start_time, end_date, end_time} = formValues;
       const newStartTime = moment(start_date).format('YYYY-MM-DDT')+moment(start_time).format("HH:mm");
       const newEndTime = moment(end_date).format('YYYY-MM-DDT')+moment(end_time).format("HH:mm"); 
@@ -145,7 +146,7 @@ export const Booking: FC = () => {
               "recurring_details":"", //not added in form 
               "recurring_exceptions":recuringDateList? recuringDateList : "", 
               "team_id": formValues.team, 
-              "team_text":formValues.team,
+              "team_text":formValues.orTeam,
               "away_team_text":formValues.away_team,
               "wardrobe_id": formValues.warderobe,
               "wardrobe_id_away": formValues.away_team_wardrobe,

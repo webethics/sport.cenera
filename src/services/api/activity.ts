@@ -44,25 +44,26 @@ const GetPublicClubs = ():any =>{
 
 //Create activity
 const addActivity = (newobj:any):any =>{
- 
 return axios.post<any>(`${configs.app.api}/booking/updateActivity`,newobj)}
 
 
+
 //Get activity
-const getUpcomingActivities = (access_token: string,club_id:number | string,startTime:number | string,endTime:number | string): any => {
+
+const getUpcomingActivities = (newobj:any): any => {
   return {
     url: `${configs.app.api}/booking/getActivities`,
     method: 'post',
-    data: {
-      access_token,
-      club_id: club_id,
-      startTime: startTime,
-      endTime: endTime
-    },
+    data: 
+      newobj
+  
+    ,
   };
 };
 
+
 const getEditActivities = (access_token: string,club_id:number,activity_id_list: Array<Number> ): any => {
+  
   return {
     url: `${configs.app.api}/booking/getActivities`,
     method: 'post',

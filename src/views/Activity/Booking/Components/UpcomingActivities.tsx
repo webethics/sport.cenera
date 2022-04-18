@@ -64,20 +64,36 @@ const useStyles = makeStyles(styles as any);
 
 const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boolean}) => {
 
+ const[filterdate,setFilterdate] = useState(7);
+//  const[filterlocation,setFilterlocation] = useState();
+ const[searchtext,setSearchtext] = useState("");
+
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const [deleting, setDeleting] = useState(false);
   const [modalshow, setModalshow] = useState(false);
   const [activityIdForEdit, setActivityIdForEdit] = useState(null);
   const [acitivityList, setAcitivityList] = useState([]);
- 
+  const [appState] = useAppContext();
   var date = new Date();
-  date.setDate(date.getDate() +70);
+  // const enddate = 70; getActivities getActivities
+  date.setDate(date.getDate() + filterdate);
   const nextdate = moment(date).format('YYYY-MM-DDTHH:MM');
   const currentdate =   moment(Date()).format('YYYY-MM-DDTHH:MM');
-
-  const {Activitydata,loading,revalidate}  = useFetchActivities(currentdate,nextdate);
-   const [appState] = useAppContext();
+// console.log(filterdate,'filterrrrrrrrrrrrrrr')
+  const  newobj = {
+    "access_token": appState.authentication.accessToken,
+    "club_id": appState.user.club_id,
+    // "team_id": "",
+    // "location_id": "",
+    // "activity_type": "",
+    // "wardrobe_id": "",
+    "text_search":searchtext,
+    "startTime": currentdate,
+    "endTime": nextdate
+  };
+  
+  const {Activitydata,loading,revalidate}  = useFetchActivities(newobj);
   const {deleteMultipleActivities,} = ActivityService;
   const deleteActivity = () => {
     const itemDelete = acitivityList.filter(res=>res.isSelected).map((res)=>res.activity_id)
@@ -86,16 +102,12 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
         setDeleting(true);
         const response = deleteMultipleActivities(appState.authentication.accessToken,appState.user.club_id,itemDelete)
         if(response){
-              revalidate();
-              enqueueSnackbar("Activity Deleted Successfully",  { variant: 'success' })
-              setDeleting(false);
-            }
-
+            revalidate();
+            enqueueSnackbar("Activity Deleted Successfully",  { variant: 'success' })
+            setDeleting(false);
+        }
       }
-   
-    
   };
-
 
 
   const { alert, showConfirmDialog } = useShowConfirmDialog({
@@ -115,7 +127,7 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
     }
 
     
-  },[loadUpcomingActivities,deleting,Activitydata,loading])
+  },[loadUpcomingActivities,deleting,Activitydata,loading,nextdate,searchtext])
 
 
 
@@ -169,7 +181,7 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
   }
 
 
-
+ 
   if(acitivityList.length>0){
     return (
       <div className="parent">
@@ -192,18 +204,32 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
           <CardBody>
             <Grid container>
               <Grid item xs={12}>
-                <Filters />
+              {acitivityList && acitivityList.length>0 &&
+                (<>
+                <Filters onFilter={(res:any)=>{
+                 setFilterdate(res);
+                }} 
+
+                 searchingtext={(res:any)=>{
+                  setSearchtext(res)
+                 }}
+                 Filterdate={filterdate}
+                 Textvalue={searchtext}
+                
+                 />
+                </>) }
               </Grid>
               <Grid item xs={12}>
                 <TableContainer
                   component={Paper}
                   className={classes.tableContainer}
                 >
-{/* {Activitydata
-    .filter((res:any) => res.startTime !== res.endTime)
-    .map((res:any) => (
-          <h1>{res.recurring_exceptions}</h1>
-        ))} */}
+  {/* {Activitydata  searchingtext
+      .filter((res:any) => res.startTime !== res.endTime)
+      .map((res:any) => (
+            <h1>{res.recurring_exceptions}</h1>
+          ))} */} 
+          {acitivityList.length===0 &&  <h1>no dataaaa</h1>}
                   {acitivityList.map((res:any)=>(
                     
                        <Table className={classes.table} aria-label="customized table">
@@ -338,7 +364,7 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
       </div>
     );
   }else{
-    return null
+    return null;
   }
 };
 

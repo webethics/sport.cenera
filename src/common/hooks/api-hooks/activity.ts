@@ -35,7 +35,6 @@ export const useFetchGetActivites=(data:any) => {
 
 
 
-
 export const useFetchGetLocations= () => { 
   const { GetLocations } = ActivityService;
   const [appState] = useAppContext();
@@ -65,11 +64,11 @@ export const useFetchWardrobes = () => {
   };
 };
 
-export const useFetchActivities = (startTime="",endTime="") => {
+export const useFetchActivities = (newobj:any) => {
   const { getUpcomingActivities } = ActivityService;
-  const [appState] = useAppContext();
+  // const [appState] = useAppContext();
   
-  const result = useRequest<any>(getUpcomingActivities(appState.authentication.accessToken,appState.user.club_id,startTime,endTime));
+  const result = useRequest<any>(getUpcomingActivities(newobj));
 
   return {
     Activitydata: result.data ? result.data : [],
@@ -78,6 +77,8 @@ export const useFetchActivities = (startTime="",endTime="") => {
     revalidate: result.revalidate,
   };
 };
+
+
 
 export const useFetchEditActivities = (activity_id_list:any) => {
   const { getEditActivities } = ActivityService;

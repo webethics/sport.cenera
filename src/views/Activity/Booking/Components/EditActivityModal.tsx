@@ -48,7 +48,7 @@ export default function EditActivityModal(props: any) {
   const {addActivity} = ActivityService;
 
 
-    // console.log(locationname,'locationname')
+  // console.log(locationname,'locationname')
 
   useEffect(()=>{
     if(locationData){
@@ -197,7 +197,7 @@ export default function EditActivityModal(props: any) {
     } 
   },[teamsList,EditActivitydata])
 
-console.log(EditActivitydata,'ffffff')
+
 
   const { values, handleChange } = formik;
 

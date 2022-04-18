@@ -15,9 +15,15 @@ import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
 
 const useStyles = makeStyles(filtersStyle as any);
 
-export default function Filters() {
+export default function Filters({onFilter,searchingtext,Filterdate,Textvalue}:{onFilter:any,searchingtext:any,Filterdate:any,Textvalue:any}) {
+
   const classes = useStyles();
+  const [text, setText] = useState("");
   const [team, setTeam] = React.useState("");
+  const [filter, setfilter] = React.useState(7);
+  const [activity, setActivity] = React.useState("");
+  // const [searchtext, setSearchtext] = React.useState("");
+
   const handleChange1 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setTeam(event.target.value as string);
   };
@@ -25,17 +31,32 @@ export default function Filters() {
   const [location, setLocation] = React.useState("");
   const handleChange2 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLocation(event.target.value as string);
+
   };
 
-  const [filter, setfilter] = React.useState("30");
   const handleChange3 = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setfilter(event.target.value as string);
+    setfilter(event.target.value as number);
+    onFilter(event.target.value);
   };
+ 
 
-  const [activity, setActivity] = React.useState("30");
   const handleChange4 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setActivity(event.target.value as string);
   };
+
+
+
+  const changeText = (e:any) => {
+    setText(e.target.value);
+  };
+
+
+  const handleChange5 = () => {
+    searchingtext(text)
+  };
+ 
+
+
   const { enqueueSnackbar } = useSnackbar();
   const {locationData,error}   = useFetchGetLocations();
   const [locations, setLocations] = useState([]);
@@ -53,7 +74,14 @@ export default function Filters() {
       const newTeam = teams.map((res:any)=>({id:res.team_id, name:res.team_name}))
       setTeamsList(newTeam);
     }
-  },[locationData,teams])
+    if(Filterdate){
+      setfilter(Filterdate)
+    }
+    if(Textvalue){
+      setText(Textvalue)
+    }
+    
+  },[locationData,teams,Filterdate,Textvalue])
 
   
   return (
@@ -94,8 +122,9 @@ export default function Filters() {
         </Box>
         <Box p={1} className={classes.formGroup}>
           <div className={classes.search}>
-            <div className={classes.searchIcon}>
+            <div className={classes.searchIcon} >
               <SearchIcon />
+                         
             </div>
             <InputBase
               placeholder="Search…"
@@ -104,19 +133,24 @@ export default function Filters() {
                 input: classes.inputInput,
               }}
               inputProps={{ "aria-label": "search" }}
+              value={text}
+              onChange={changeText}
+              onClick={handleChange5}
+              // onKeyPress={(event:any) => {event.key === 'Enter' && searchingtext(text)}}
             />
           </div>
+
         </Box>
         <Box p={1} className={classes.filters}>
           <FilterListIcon style={{ fontSize: 40, color: "black", marginRight: "10px" }} />
 
           <FormControl variant="outlined" className={classes.formControl}>
             <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={filter} onChange={handleChange3}>
-              <MenuItem value={10}>Today </MenuItem>
-              <MenuItem value={20}>Next 3 days</MenuItem>
-              <MenuItem value={30}>Next 7 days</MenuItem>
-              <MenuItem value={40}>This Month</MenuItem>
-              <MenuItem value={50}>All</MenuItem>
+              <MenuItem value={1}>Today </MenuItem>
+              <MenuItem value={3}>Next 3 days</MenuItem>
+              <MenuItem value={7}>Next 7 days</MenuItem>
+              <MenuItem value={30}>This Month</MenuItem>
+              <MenuItem value={500}>All</MenuItem>
             </Select>
           </FormControl>
         </Box>

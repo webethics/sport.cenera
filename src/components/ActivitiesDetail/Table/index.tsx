@@ -219,10 +219,30 @@ export default function CustomizedTables({
 }) {
   console.log(activityList);
 
-  const duraiton = (t1:string, t2:string) => {
+  const duraiton = (t1:any, t2:any) => {
     let a = moment(t1);
     let b = moment(t2);
-    return  b.diff(a , "hours");
+
+    const milliseconds =  b.diff(a);
+    const  minutes =  (milliseconds / (1000*60)) % 60;
+    const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
+    return  `${hours}:${minutes} h`
+    
+  }
+
+  const  showDuration = (start:string,end:string) =>{
+    let startDate = moment(start).format("YYYY-MM-DD");
+    let endDate = moment(end).format("YYYY-MM-DD");
+
+    let endTime=moment(end).format("HH:mm");
+    let finalEndTime = moment(startDate + " " + endTime);
+    
+    if(startDate===endDate){
+     return  duraiton(start,end)
+    }else{
+     return duraiton(start,finalEndTime)
+    }
+                                  
   }
 
 
@@ -265,7 +285,7 @@ export default function CustomizedTables({
                         <BodyTableCell align="left">
                           {moment(res.endTime).format("HH:mm")}
                         </BodyTableCell> 
-                        <BodyTableCell align="left">{duraiton(res.startTime,res.endTime)}</BodyTableCell>
+                        <BodyTableCell align="left">{showDuration(res.startTime,res.endTime)}</BodyTableCell>
                         <BodyTableCell align="left">{row.team}</BodyTableCell>
                         <BodyTableCell align="left">
                           {row.location}
