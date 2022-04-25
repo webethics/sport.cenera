@@ -17,7 +17,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Filters from "./filters";
-// import axios from "axios"
+// import axios from "axios" 
 import moment from "moment"
 
 import { useFetchActivities} from "@cenera/common/hooks/api-hooks/activity";
@@ -62,58 +62,82 @@ const BodyTableCell = withStyles(() =>
 
 const useStyles = makeStyles(styles as any);
 
-const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boolean}) => {
+const UpcomingActivities = ({fetchupcomingactivity}:{fetchupcomingactivity:any}) => {
 
  const[filterdate,setFilterdate] = useState(7);
-//  const[filterlocation,setFilterlocation] = useState();
+ const[successedit,setsuccessedit] =useState(true);
+ const[data,setdata]=useState(null);
  const[searchtext,setSearchtext] = useState("");
+ const[searchteam,setsearchteam] = useState(null);
+ const[searchlocation,setsearchlocation]= useState();
 
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const [deleting, setDeleting] = useState(false);
+  const [publish, setpublish] = useState(false);
   const [modalshow, setModalshow] = useState(false);
   const [activityIdForEdit, setActivityIdForEdit] = useState(null);
   const [acitivityList, setAcitivityList] = useState([]);
   const [appState] = useAppContext();
+  const[revaldatestate,setrevaldate]=useState(null)
   var date = new Date();
-  // const enddate = 70; getActivities getActivities
   date.setDate(date.getDate() + filterdate);
   const nextdate = moment(date).format('YYYY-MM-DDTHH:MM');
   const currentdate =   moment(Date()).format('YYYY-MM-DDTHH:MM');
-// console.log(filterdate,'filterrrrrrrrrrrrrrr')
   const  newobj = {
     "access_token": appState.authentication.accessToken,
     "club_id": appState.user.club_id,
-    // "team_id": "",
-    // "location_id": "",
-    // "activity_type": "",
-    // "wardrobe_id": "",
+    "team_id": searchteam,
+    "location_id": searchlocation,
     "text_search":searchtext,
     "startTime": currentdate,
     "endTime": nextdate
   };
-  
+
   const {Activitydata,loading,revalidate}  = useFetchActivities(newobj);
-  const {deleteMultipleActivities,} = ActivityService;
-  const deleteActivity = () => {
+  const {deleteMultipleActivities,setActivitiesPublished} = ActivityService;
+
+  const deleteActivity = async () => {
     const itemDelete = acitivityList.filter(res=>res.isSelected).map((res)=>res.activity_id)
-  
+   
       if(itemDelete){
         setDeleting(true);
-        const response = deleteMultipleActivities(appState.authentication.accessToken,appState.user.club_id,itemDelete)
+        const response = await deleteMultipleActivities(appState.authentication.accessToken,appState.user.club_id,itemDelete)
         if(response){
-            revalidate();
+           await revalidate();
+           setrevaldate(1)
             enqueueSnackbar("Activity Deleted Successfully",  { variant: 'success' })
             setDeleting(false);
         }
       }
   };
 
+  const publishActivity = async () => {
+    const itempublish = acitivityList.filter(res=>res.isSelected).map((res)=>res.activity_id)
+
+      if(itempublish){
+        setpublish(true);
+        const response = await setActivitiesPublished(appState.authentication.accessToken,appState.user.club_id,itempublish)
+        console.log(response,"dataaa")
+        if(response){
+           await revalidate();
+           setrevaldate(1)
+            enqueueSnackbar("Activity Publish Successfully",  { variant: 'success' })
+            setpublish(false);
+        }
+       
+      }
+  };
 
   const { alert, showConfirmDialog } = useShowConfirmDialog({
     onDeleteConfirmed: deleteActivity,
     successMessage: "Activity deleted successfully",
     confirmMessage: "Activity will be deleted for good!",
+  });
+  const { alert:alertPublic, showConfirmDialog:showPublicDialoge } = useShowConfirmDialog({
+    onDeleteConfirmed: publishActivity,
+    successMessage: "Activity publish successfully",
+    confirmMessage: "Activity will be publish for good!",
   });
 
   const handleEditActivity = (id: number) => {
@@ -124,12 +148,28 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
   useEffect(()=>{
     if(Activitydata){
       setAcitivityList(Activitydata)
+    } 
+    if(fetchupcomingactivity==1 && Activitydata){
+      revalidate();
+      setdata(2)
     }
 
-    
-  },[loadUpcomingActivities,deleting,Activitydata,loading,nextdate,searchtext])
+  },[revaldatestate,deleting,loading,nextdate,searchtext,searchteam,fetchupcomingactivity,searchlocation])
+  
+  useEffect(()=>{
+    if(data==2){
+      setAcitivityList(Activitydata)
+    } 
+    if(successedit===false){
+      revalidate();
+      setAcitivityList(Activitydata)
+    } 
+
+  },[Activitydata,data,successedit])
+  
 
 
+// console.log(acitivityList,'fetchupcomingactivity989898')
 
   const handleDeleteSelected = () => {
     let isSelectedForDelete = acitivityList.some(res=>res.isSelected===true);
@@ -140,7 +180,10 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
   };
 
   const publishedActivity = () => {
-  
+    let isSelectedForpublish = acitivityList.some(res=>res.isSelected===true);
+    if(isSelectedForpublish){
+      showPublicDialoge();
+    }
   };
 
   const handleCheckBoxForDelete = (id:number)=>{
@@ -180,22 +223,21 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
                                   
   }
 
-
- 
-  if(acitivityList.length>0){
     return (
       <div className="parent">
         {alert}
-        <Backdrop className={classes.backdrop} open={deleting || loading}> 
+        {alertPublic}
+  
+        <Backdrop className={classes.backdrop} open={deleting || loading || publish}> 
           <CircularProgress color="inherit" />
         </Backdrop> 
         <EditActivityModal
           open={modalshow}
           onClose={() => setModalshow(false)}
           activityId={activityIdForEdit}
-          // callUpcomingActivity={()=>fetchUpcomingBookins()}
+          callUpcomingActivity={()=> setsuccessedit(false)}
         />
-  
+
         <Card>
           <CardHeader>
             <h4>Upcoming Activities</h4>
@@ -204,7 +246,7 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
           <CardBody>
             <Grid container>
               <Grid item xs={12}>
-              {acitivityList && acitivityList.length>0 &&
+              {acitivityList  &&
                 (<>
                 <Filters onFilter={(res:any)=>{
                  setFilterdate(res);
@@ -213,6 +255,14 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
                  searchingtext={(res:any)=>{
                   setSearchtext(res)
                  }}
+                 setteamid={(res:any)=>{
+                   setsearchteam(res)
+                 }}
+
+                 setlocationid={(res:any)=>{
+                  setsearchlocation(res)
+                 }}
+
                  Filterdate={filterdate}
                  Textvalue={searchtext}
                 
@@ -229,8 +279,8 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
       .map((res:any) => (
             <h1>{res.recurring_exceptions}</h1>
           ))} */} 
-          {acitivityList.length===0 &&  <h1>no dataaaa</h1>}
-                  {acitivityList.map((res:any)=>(
+          {acitivityList.length===0 && <h5 style={{color:"red",textAlign: "center"}}>No Activities Found</h5>}
+                  {acitivityList && acitivityList.map((res:any)=>(
                     
                        <Table className={classes.table} aria-label="customized table">
                        <TableHead>
@@ -324,7 +374,7 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
                                    Warderobe
                                 </BodyTableCell>
                                 <BodyTableCell align="left">
-                                  {res.away_team_wardrobe}
+                                  {res.away_team_text}
                                 </BodyTableCell>
                                 {/* <BodyTableCell align="left"></BodyTableCell> */}
                               </StyledTableRow>
@@ -340,32 +390,31 @@ const UpcomingActivities = ({loadUpcomingActivities}:{loadUpcomingActivities:boo
             {/* <div className="" style={{ textAlign: "center", paddingBottom: "40px" }}>
                 <Button variant="text" style={{backgroundColor: "#0079BC", color: "#ffffff", width: "150px", maxWidth: "100%"}}>See More</Button>
               </div> */}
-            <div
-              className=""
-              style={{ textAlign: "center", paddingBottom: "40px" }}
-            >
-              <Button
-                color="danger"
-                style={{ maxWidth: "100%" }}
-                onClick={handleDeleteSelected}
-              >
-                Delete Selected Activities
-              </Button>
-              <Button
-                color="danger"
-                style={{ maxWidth: "100%" }}
-                onClick={publishedActivity}
-              >
-                Published  Selected Activities
-              </Button>
-            </div>
+              {acitivityList.length >0 &&
+                <div
+                  className=""
+                  style={{ textAlign: "center", paddingBottom: "40px" }}
+                >
+                  <Button
+                    color="danger"
+                    style={{ maxWidth: "100%" }}
+                    onClick={handleDeleteSelected}
+                  >
+                    Delete Selected Activities
+                  </Button>
+                  <Button
+                    color="danger"
+                    style={{ maxWidth: "100%" }}
+                    onClick={publishedActivity}
+                  >
+                    Published  Selected Activities
+                  </Button>
+                </div>
+              }
           </CardBody>
         </Card>
       </div>
     );
-  }else{
-    return null;
-  }
 };
 
 export default UpcomingActivities;

@@ -56,7 +56,7 @@ export const useShowConfirmDialog = ({
           onCancel={() => setAlert(null)}
           confirmBtnCssClass={classes.button + ' ' + classes.success}
           cancelBtnCssClass={classes.button + ' ' + classes.danger}
-          confirmBtnText={confirmText || 'Yes, delete it!'}
+          confirmBtnText={confirmText || 'Yes'}
           cancelBtnText={cancelText || 'Cancel'}
           showCancel={true}>
           {confirmMessage || 'Are you sure?'}

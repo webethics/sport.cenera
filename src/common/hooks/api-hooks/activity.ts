@@ -33,8 +33,6 @@ export const useFetchGetActivites=(data:any) => {
   };
 };
 
-
-
 export const useFetchGetLocations= () => { 
   const { GetLocations } = ActivityService;
   const [appState] = useAppContext();
@@ -69,6 +67,7 @@ export const useFetchActivities = (newobj:any) => {
   // const [appState] = useAppContext();
   
   const result = useRequest<any>(getUpcomingActivities(newobj));
+  
 
   return {
     Activitydata: result.data ? result.data : [],

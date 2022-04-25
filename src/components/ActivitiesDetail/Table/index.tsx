@@ -52,49 +52,49 @@ const BodyTableCell = withStyles(() =>
   })
 )(TableCell);
 
-function createData(
-  startime: string,
-  endtime: string,
-  duration: string,
-  team: string,
-  location: string,
-  warderobe: string,
-  activity: string
-) {
-  return { startime, endtime, duration, team, location, warderobe, activity };
-  // return { startime, endtime, team, location, warderobe, activity };
-}
+// function createData(
+//   startime: string,
+//   endtime: string,
+//   duration: string,
+//   team: string,
+//   location: string,
+//   warderobe: string,
+//   activity: string
+// ) {
+//   return { startime, endtime, duration, team, location, warderobe, activity };
+//   // return { startime, endtime, team, location, warderobe, activity };
+// }
 
-const rows = [
-  createData(
-    "12:00",
-    "14:00",
-    "2:00",
-    "Art Boxing Club",
-    "United Kingdom",
-    "Ingen",
-    "Training"
-  ),
-  createData("16:00", "17:00", "1:00", "Monaco", "Spain", "Ingen", "Training"),
-  createData(
-    "17:00",
-    "19:00",
-    "2:00",
-    "Real Soccer",
-    "Italy",
-    "Ingen",
-    "Training"
-  ),
-  createData(
-    "19:00",
-    "21:00",
-    "2:00",
-    "Oxigeno club",
-    "Germany",
-    "Ingen",
-    "Match"
-  ),
-];
+// const rows = [
+//   createData(
+//     "12:00",
+//     "14:00",
+//     "2:00",
+//     "Art Boxing Club",
+//     "United Kingdom",
+//     "Ingen",
+//     "Training"
+//   ),
+//   createData("16:00", "17:00", "1:00", "Monaco", "Spain", "Ingen", "Training"),
+//   createData(
+//     "17:00",
+//     "19:00",
+//     "2:00",
+//     "Real Soccer",
+//     "Italy",
+//     "Ingen",
+//     "Training"
+//   ),
+//   createData(
+//     "19:00",
+//     "21:00",
+//     "2:00",
+//     "Oxigeno club",
+//     "Germany",
+//     "Ingen",
+//     "Match"
+//   ),
+// ];
 
 function createDataExpand(
   awayfield: string,
@@ -217,7 +217,7 @@ export default function CustomizedTables({
 }: {
   activityList: any;
 }) {
-  console.log(activityList);
+  console.log(activityList,'list');
 
   const duraiton = (t1:any, t2:any) => {
     let a = moment(t1);
@@ -277,8 +277,8 @@ export default function CustomizedTables({
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row) => (
-                      <StyledTableRow key={row.startime}>
+               
+                      <StyledTableRow>
                         <BodyTableCell scope="row">
                           {moment(res.startTime).format("HH:mm")}
                         </BodyTableCell>
@@ -286,22 +286,22 @@ export default function CustomizedTables({
                           {moment(res.endTime).format("HH:mm")}
                         </BodyTableCell> 
                         <BodyTableCell align="left">{showDuration(res.startTime,res.endTime)}</BodyTableCell>
-                        <BodyTableCell align="left">{row.team}</BodyTableCell>
+                        <BodyTableCell align="left">{res.team} {res.team_text}</BodyTableCell>
                         <BodyTableCell align="left">
-                          {row.location}
+                           {res.location_name}
                         </BodyTableCell>
                         <BodyTableCell align="left">
-                          {row.warderobe}
+                           {res.wardrobe_name}
                         </BodyTableCell>
                         <BodyTableCell
-                          className={`${row.activity === "Match" &&
+                          className={`${res.activity === "Match" &&
                             classes.matched}`}
                           align="left"
                         >
-                          {row.activity}
+                          {res.activity_type_name}
                         </BodyTableCell>
                       </StyledTableRow>
-                    ))}
+             
                     {rowsexpand.map((row) => (
                       <StyledTableRow
                         className={classes.bottomTableRow}

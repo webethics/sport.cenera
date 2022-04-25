@@ -49,8 +49,11 @@ const Warderobe = () => {
           
             if(resposne.data.message){
               await revalidate();
+
               setAdding(false)
+              formik.setValues({warderobe: ""});
               enqueueSnackbar("Wardrobes Added Successfully",  { variant: 'success' })
+   
             }
           }else{
             enqueueSnackbar("Wardrobes Already Exist",  { variant: 'warning' })
@@ -101,8 +104,9 @@ const Warderobe = () => {
             .matches(/[a-z]/, "only letters not allowed")
             .required("required"),
         }),
-        onSubmit: async(values) => {
+        onSubmit: async(values:any,{resetForm}) => {
           addWardrobes(values)
+          resetForm({values:""})
           
         },
       });
@@ -115,7 +119,7 @@ const Warderobe = () => {
         }
       },[Wardrobesdata])
      
-    const { values, handleChange, handleSubmit ,errors} = formik;
+    const { values, handleChange, handleSubmit ,errors,touched} = formik;
 
 
   return (
@@ -154,7 +158,7 @@ const Warderobe = () => {
                     value={values.warderobe}
                     onChange={handleChange}
                   />
-                  {errors.warderobe && <span className={classes.errorColor}>{errors.warderobe}</span>}
+                  {errors.warderobe && touched.warderobe && <span className={classes.errorColor}>{errors.warderobe}</span>}
                   <Button
                     type="submit"
                     variant="contained"

@@ -15,7 +15,7 @@ import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
 
 const useStyles = makeStyles(filtersStyle as any);
 
-export default function Filters({onFilter,searchingtext,Filterdate,Textvalue}:{onFilter:any,searchingtext:any,Filterdate:any,Textvalue:any}) {
+export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,setteamid,setlocationid}:{onFilter:any,searchingtext:any,Filterdate:any,Textvalue:any,setteamid:any,setlocationid:any}) {
 
   const classes = useStyles();
   const [text, setText] = useState("");
@@ -26,11 +26,13 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue}:{o
 
   const handleChange1 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setTeam(event.target.value as string);
+    setteamid(event.target.value)
   };
-
+ 
   const [location, setLocation] = React.useState("");
   const handleChange2 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLocation(event.target.value as string);
+    setlocationid(event.target.value)
 
   };
 
@@ -47,14 +49,28 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue}:{o
 
 
   const changeText = (e:any) => {
-    setText(e.target.value);
+      setText(e.target.value);
+    
   };
 
 
-  const handleChange5 = () => {
+  const getText = (event:any) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+       searchingtext(text)
+       console.log('pressenterkey')
+    } else {
+      console.log('Noenterkey')
+    }
+ };
+
+
+  const handleChange5 = (event:any) => {
+    event.preventDefault()
     searchingtext(text)
   };
- 
+
+
 
 
   const { enqueueSnackbar } = useSnackbar();
@@ -81,7 +97,7 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue}:{o
       setText(Textvalue)
     }
     
-  },[locationData,teams,Filterdate,Textvalue])
+  },[locationData,teams,Filterdate])
 
   
   return (
@@ -121,25 +137,28 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue}:{o
           </FormControl>
         </Box>
         <Box p={1} className={classes.formGroup}>
-          <div className={classes.search}>
-            <div className={classes.searchIcon} >
-              <SearchIcon />
-                         
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-              value={text}
-              onChange={changeText}
-              onClick={handleChange5}
-              // onKeyPress={(event:any) => {event.key === 'Enter' && searchingtext(text)}}
-            />
-          </div>
-
+          <form onSubmit={handleChange5}>
+              <div className={classes.search} >
+                <div className={classes.searchIcon} >
+                  <SearchIcon type="submit"/>        
+                </div>
+                <InputBase
+                type="search"
+                  placeholder="Search…"
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ "aria-label": "search" }}
+                  value={text}
+                  onKeyPress={(e) => getText(e)}
+                  onChange={changeText}
+                  // onClick={handleChange5}
+                  
+                //onKeyPress={(event:any) => {event.key === 'Enter' && shandleChange5}}
+                />
+              </div>
+          </form>
         </Box>
         <Box p={1} className={classes.filters}>
           <FilterListIcon style={{ fontSize: 40, color: "black", marginRight: "10px" }} />

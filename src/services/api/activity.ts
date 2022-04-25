@@ -175,8 +175,7 @@ const deleteWardrobes = (access_token: string,club_id:number ,wardrobe_id: numbe
   };
 
 
-
-  const setActivitiesPublished = (access_token: string,club_id:number,activity_id_list: number) => {
+  const setActivitiesPublished = (access_token: string,club_id:number,activity_id_list: any) => {
     return axios.post<any>(`${configs.app.api}/booking/setActivitiesPublishedState`, {
     access_token: access_token,
     club_id:club_id,

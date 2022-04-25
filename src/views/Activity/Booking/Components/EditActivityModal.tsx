@@ -23,12 +23,15 @@ import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
 import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
 import { useFetchWardrobes} from "@cenera/common/hooks/api-hooks/activity";
 import { useFetchEditActivities} from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchActivities} from "@cenera/common/hooks/api-hooks/activity";
 import { useAppContext } from "@cenera/app-context";
 import { ActivityService } from "@cenera/services/api/activity";
 import moment from "moment"
+import * as Yup from "yup";
 const useStyles = makeStyles(styles as any);
 
 export default function EditActivityModal(props: any) {
+  const editActivity = props.activityId;
   // const [locationname,setLocationname]= useState();
   const [appState] = useAppContext();
   const classes = useStyles();
@@ -40,17 +43,30 @@ export default function EditActivityModal(props: any) {
   const [teamsList, setTeamsList] = useState([]); 
   const {Wardrobesdata} = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
+  const [acitivityList, setAcitivityList] = useState([]);
+
+
+  const  newobj = {
+    "access_token": appState.authentication.accessToken,
+    "club_id": appState.user.club_id,
+    "activity_id_list": [editActivity]
+  };
+ 
+  const {Activitydata}  = useFetchActivities(newobj);
+
   // const[currenteditactivity,setCurrenteditactivity] = useState(null)
   //data
-  const editActivity = props.activityId;
   const { EditActivitydata }  = useFetchEditActivities(editActivity);
- 
   const {addActivity} = ActivityService;
 
 
-  // console.log(locationname,'locationname')
+ 
 
   useEffect(()=>{
+    if(Activitydata){
+      setAcitivityList(Activitydata)
+    }
+ 
     if(locationData){
       const newArr = locationData.map((res:any)=>({id:res.location_id , name:res.location_name}))
       setLocations(newArr)
@@ -64,7 +80,11 @@ export default function EditActivityModal(props: any) {
       setWardrobes(newWardrobes);
       
     }
-  },[locationData,teams,Wardrobesdata])
+  },[Activitydata,locationData,teams,Wardrobesdata])
+
+
+
+  
 
   const handleDateChange = (pickerType: string, value: any) => {
     SetselectedDate(value);
@@ -102,8 +122,8 @@ export default function EditActivityModal(props: any) {
       warderobe: "",
       extWarBef15:  false,
       extWarBef30:  false,
-      extWarAf15:   false,
-      extWarAf30:  false,
+      // extWarAf15:   false,
+      // extWarAf30:  false,
       activity: "",
       description:  "",
       away_team:"",
@@ -114,6 +134,17 @@ export default function EditActivityModal(props: any) {
 
   const formik = useFormik({
     initialValues: initialFormValues,
+    validationSchema: Yup.object({
+            location: Yup.string()
+            .required("Location is Required"),
+              start_date: Yup.date(),
+              end_date: Yup.date().min(
+                  Yup.ref('start_date'),
+                  "End date can't be before start date"
+                )
+    
+          }),
+
     onSubmit: async (formValues) => {
       const {start_date , start_time, end_date, end_time} = formValues;
       const newStartTime = moment(start_date).format('YYYY-MM-DDT')+moment(start_time).format("HH:MM");
@@ -136,10 +167,11 @@ export default function EditActivityModal(props: any) {
         "wardrobe_id": formValues.warderobe,
         "wardrobe_id_away": formValues.away_team_wardrobe,
         "wardrobe_id_referee": formValues.referee_wardrobe,
-        "wardrobe_extra_time": "",
+        "wardrobe_extra_time": formValues.extWarBef15 && 15 ||formValues.extWarBef30 && 30,
         "description":formValues.description,
         "isPublic": formValues.show_public //not added in front end+
         };
+  
         let res =  addActivity(newobj);
         if(res){
               props.onClose();
@@ -164,14 +196,14 @@ export default function EditActivityModal(props: any) {
     if (formik.values.activity === "Match") {
       formik.setValues({
         ...formik.values,
-        extWarBef30: true,
-        extWarAf30: true,
+        extWarBef30: true
+        // extWarAf30: true,
       });
     } else {
       formik.setValues({
         ...formik.values,
-        extWarBef30: false,
-        extWarAf30: false,
+        extWarBef30: false
+        // extWarAf30: false,
       });
     }
      
@@ -197,9 +229,30 @@ export default function EditActivityModal(props: any) {
     } 
   },[teamsList,EditActivitydata])
 
+  useEffect(()=>{
+
+    if(acitivityList[0]){
+      formik.setValues({
+        ...formik.values,
+        warderobe: acitivityList[0].wardrobe_id,
+        location: acitivityList[0].location_id,
+        team: acitivityList[0].team_id,
+        description: acitivityList[0].description,
+        away_team: acitivityList[0].away_team_text,
+        away_team_wardrobe: acitivityList[0].wardrobe_id_away,
+        referee_wardrobe: acitivityList[0].wardrobe_id_referee,
+        start_date: acitivityList[0].startTime,
+        end_date: acitivityList[0].endTime,
+        start_time: acitivityList[0].startTime,
+        end_time: acitivityList[0].endTime,
+        extWarBef15: acitivityList[0].wardrobe_extra_time==15 && true,
+        extWarBef30:  acitivityList[0].wardrobe_extra_time==30 && true
+      })
+    }
+  },[acitivityList])
 
 
-  const { values, handleChange } = formik;
+  const { values, handleChange, errors, touched } = formik;
 
   return (
     <div>
@@ -215,6 +268,7 @@ export default function EditActivityModal(props: any) {
           <Divider style={{ width: "100%", marginBottom: "15px" }} />
 
           <form onSubmit={formik.handleSubmit}>
+            
             <GridContainer>
               <GridItem xs="12" sm="2" sx={{ mb: 3 }}>
                 <h5 style={{ fontSize: "14px" }}>Team</h5>
@@ -271,6 +325,8 @@ export default function EditActivityModal(props: any) {
                   animateYearScrolling
                   id="start_date"
                 />
+                {errors.end_date && <span className={classes.errorColor} style={{color:'red',display: 'inline-block'}}>{errors.end_date}</span>}
+
               </GridItem>
               <GridItem xs="6" sm="5" md="3" style={{ marginBottom: "15px" }}>
                 <TimePicker
@@ -329,6 +385,7 @@ export default function EditActivityModal(props: any) {
                   onChange={handleChange}
                   id="location"
                 />
+                {errors.location && touched.location && <span className={classes.errorColor} style={{color:'red',display: 'inline-block'}}>{errors.location}</span>}
               </GridItem>
               <GridItem
                 xs="12"
@@ -358,7 +415,7 @@ export default function EditActivityModal(props: any) {
                 <h5 style={{ fontSize: "14px" }}>Extra Warderobe Time</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="3" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Before</h5>
+                {/* <h5 style={{ fontSize: "14px" }}>Before</h5> */}
 
                 <FormControlLabel
                   control={
@@ -398,8 +455,9 @@ export default function EditActivityModal(props: any) {
               </GridItem>
 
               <GridItem xs="12" sm="5" md="3" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>After</h5>
-                <FormControlLabel
+     
+                {/* <h5 style={{ fontSize: "14px" }}>After</h5> */}
+                {/* <FormControlLabel
                   control={
                     <Checkbox
                       id="extWarAf15"
@@ -415,8 +473,8 @@ export default function EditActivityModal(props: any) {
                     />
                   }
                   label="15 Min"
-                />
-
+                /> */}
+{/* 
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -433,7 +491,7 @@ export default function EditActivityModal(props: any) {
                     />
                   }
                   label="30 Min"
-                />
+                /> */}
               </GridItem>
               {/* extra wadrobe time end here */}
               <GridItem
@@ -490,7 +548,7 @@ export default function EditActivityModal(props: any) {
                     />
                   </GridItem>
 
-              {values.activity == "Match" && (
+                  {Number(values.activity) == 1 && (
                 <>
                   <Divider
                     style={{

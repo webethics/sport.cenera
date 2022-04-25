@@ -29,7 +29,7 @@ export const Booking: FC = () => {
   const classes = useStyles();
   const [selectedDate, SetselectedDate] = useState(new Date());
   const { enqueueSnackbar } = useSnackbar();
-  const {locationData,revalidate}   = useFetchGetLocations();
+  const {locationData}   = useFetchGetLocations();
   
   const [locations, setLocations] = useState([]);
   const { teams} = useFetchTeams(); 
@@ -37,8 +37,11 @@ export const Booking: FC = () => {
   const {Wardrobesdata} = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
   const {addActivity } = ActivityService;
+  const[fetchupcoming,setFetchupcoming]=useState(0)
+
 
   useEffect(()=>{
+
     if(locationData){
       const newArr = locationData.map((res:any)=>({id:res.location_id , name:res.location_name}))
       setLocations(newArr)
@@ -106,18 +109,17 @@ export const Booking: FC = () => {
             end_time: Yup.date().min(
                 Yup.ref('start_time'),
                 "End time can't be before start time"
-              )
+            )
 
       }),
     
     onSubmit: async (formValues) => { 
-      console.log(formValues,'formvalue')
+ 
       const {start_date , start_time, end_date, end_time} = formValues;
       const newStartTime = moment(start_date).format('YYYY-MM-DDT')+moment(start_time).format("HH:mm");
       const newEndTime = moment(end_date).format('YYYY-MM-DDT')+moment(end_time).format("HH:mm"); 
-
-       const recurringstartdate = moment(start_date).format('YYYY-MM-DD')
-       const recurringenddate = moment(end_date).format('YYYY-MM-DD')
+      const recurringstartdate = moment(start_date).format('YYYY-MM-DD')
+      const recurringenddate = moment(end_date).format('YYYY-MM-DD')
       
     
       var getDaysBetweenDates = function(startDate:any, endDate:any) {
@@ -143,7 +145,7 @@ export const Booking: FC = () => {
               "location_id":formValues.location,
               "activity_type": "training",
               "recurring_item": recuringDateList.length>0? false : "", ////not added in form 
-              "recurring_details":"", //not added in form 
+              "recurring_details":"weekly: monday, thursday", //not added in form 
               "recurring_exceptions":recuringDateList? recuringDateList : "", 
               "team_id": formValues.team, 
               "team_text":formValues.orTeam,
@@ -151,15 +153,16 @@ export const Booking: FC = () => {
               "wardrobe_id": formValues.warderobe,
               "wardrobe_id_away": formValues.away_team_wardrobe,
               "wardrobe_id_referee": formValues.referee_wardrobe,
-              "wardrobe_extra_time": "",
+              "wardrobe_extra_time": formValues.extWarBef15 && 15 ||formValues.extWarBef30 && 30,
               "description":formValues.description,
-              "isPublic": formValues.show_public //not added in front end+
+              "isPublic": formValues.show_public, //not added in front end+,
+              "fetchupcoming": fetchupcoming
             };
       try{
         let res = await addActivity(newobj);
         if(res){
-        revalidate();
         enqueueSnackbar("Activity Added Successfully",  { variant: 'success' })
+        setFetchupcoming(1)
         }
       }catch(err){
         enqueueSnackbar("Failed to Add Activity",  { variant: 'error' })
@@ -186,7 +189,6 @@ export const Booking: FC = () => {
   }, [formik.values.activity]);
 
  
-  // const wardrobe = [{ name: "wardrobe 1" }, { name: "wardrobe 2" }];
   const activitydata = [
     { name: "Match",id:1 },
     { name: "Training",id:2 },
@@ -362,7 +364,7 @@ export const Booking: FC = () => {
                       id="location"
 
                     />
-                    {errors.location && touched.location && <span className={classes.errorColor} style={{color:'red'}}>{errors.location}</span>}
+                    {errors.location && touched.location && <span className={classes.errorColor} style={{color:'red',display: 'inline-block'}}>{errors.location}</span>}
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -403,7 +405,7 @@ export const Booking: FC = () => {
                     md="3"
                     style={{ marginBottom: "15px" }}
                   >
-                    <h5 style={{ fontSize: "14px" }}>Before</h5>
+                    {/* <h5 style={{ fontSize: "14px" }}>Before</h5> */}
 
                     <FormControlLabel
                       control={
@@ -447,8 +449,8 @@ export const Booking: FC = () => {
                     md="3"
                     style={{ marginBottom: "15px" }}
                   >
-                    <h5 style={{ fontSize: "14px" }}>After</h5>
-                    <FormControlLabel
+                    {/* <h5 style={{ fontSize: "14px" }}>After</h5> */}
+                    {/* <FormControlLabel
                       control={
                         <Checkbox
                           id="extWarAf15"
@@ -481,7 +483,7 @@ export const Booking: FC = () => {
                         />
                       }
                       label="30 Min"
-                    />
+                    /> */}
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -626,7 +628,7 @@ export const Booking: FC = () => {
 
       <GridContainer>
         <GridItem xs={11} sm={11} md={11} xl={8} className={classes.container}>
-          <UpcomingActivities loadUpcomingActivities={formik.isSubmitting} />
+          <UpcomingActivities fetchupcomingactivity={fetchupcoming} />
         </GridItem>
       </GridContainer>
 

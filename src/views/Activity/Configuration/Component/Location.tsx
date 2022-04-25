@@ -75,6 +75,9 @@ const Location = () => {
           enqueueSnackbar("Location Added Successfully", {
             variant: "success",
           });
+          formik.setValues({
+            location: "" 
+          });
         }
       } else {
         enqueueSnackbar("Location Already Exist", { variant: "warning" });
@@ -101,9 +104,11 @@ const Location = () => {
         .matches(/[a-z]/, "only letters not allowed")
         .required("Location is Required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values:any,{resetForm}) => {
       addLocation(values);
+      resetForm({values:""})
     },
+
   });
 
   useEffect(() => {
@@ -114,8 +119,8 @@ const Location = () => {
     }
   }, [locationData]);
 
-  const { values, handleChange, handleSubmit, errors } = formik;
-
+  const { values, handleChange, handleSubmit, errors,touched } = formik;
+  
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -151,7 +156,7 @@ const Location = () => {
                 value={values.location}
                 onChange={handleChange}
               />
-              {errors.location && (
+              {errors.location && touched.location && (
                 <span className={classes.errorColor}>{errors.location}</span>
               )}
               <Button type="submit" variant="contained" color="secondary">
