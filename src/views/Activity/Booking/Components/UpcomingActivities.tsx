@@ -68,8 +68,9 @@ const UpcomingActivities = ({fetchupcomingactivity}:{fetchupcomingactivity:any})
  const[successedit,setsuccessedit] =useState(true);
  const[data,setdata]=useState(null);
  const[searchtext,setSearchtext] = useState("");
- const[searchteam,setsearchteam] = useState(null);
- const[searchlocation,setsearchlocation]= useState();
+ const[searchteam,setsearchteam] = useState(0);
+
+ const[searchlocation,setsearchlocation]= useState(0);
 
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
@@ -87,9 +88,9 @@ const UpcomingActivities = ({fetchupcomingactivity}:{fetchupcomingactivity:any})
   const  newobj = {
     "access_token": appState.authentication.accessToken,
     "club_id": appState.user.club_id,
-    "team_id": searchteam,
-    "location_id": searchlocation,
-    "text_search":searchtext,
+    ...(searchteam!==0 && {"team_id": searchteam}),
+    ...(searchlocation!==0 && {"location_id": searchlocation}),
+    "text_search":searchtext && searchtext,
     "startTime": currentdate,
     "endTime": nextdate
   };
@@ -153,7 +154,6 @@ const UpcomingActivities = ({fetchupcomingactivity}:{fetchupcomingactivity:any})
       revalidate();
       setdata(2)
     }
-
   },[revaldatestate,deleting,loading,nextdate,searchtext,searchteam,fetchupcomingactivity,searchlocation])
   
   useEffect(()=>{
@@ -256,11 +256,17 @@ const UpcomingActivities = ({fetchupcomingactivity}:{fetchupcomingactivity:any})
                   setSearchtext(res)
                  }}
                  setteamid={(res:any)=>{
-                   setsearchteam(res)
+                  
+                   if(res===0){
+                    setsearchteam(0)
+                   }else{setsearchteam(res)}
+                  
                  }}
 
                  setlocationid={(res:any)=>{
-                  setsearchlocation(res)
+                   if(res===0){
+                    setsearchlocation(0)
+                   }else{setsearchlocation(res)}
                  }}
 
                  Filterdate={filterdate}

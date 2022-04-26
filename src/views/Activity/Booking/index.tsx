@@ -6,7 +6,7 @@ import { CardHeader, Card, CardBody } from "@cenera/components/Card";
 import { Button } from "@cenera/components/Button/Button";
 import { styles } from "./styles";
 import ItemPicker from "./Components/ItemPicker";
-import { DatePicker, TimePicker } from "@material-ui/pickers";
+import { DatePicker } from "@material-ui/pickers";
 import { TextField, Divider } from "@material-ui/core";
 import UpcomingActivities from "./Components/UpcomingActivities";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -20,6 +20,8 @@ import { ActivityService } from "@cenera/services/api/activity";
 import { useAppContext } from "@cenera/app-context";
 import moment from "moment"
 import * as Yup from "yup";
+import { Input } from '@mui/material';
+
 
 
 const useStyles = makeStyles(styles as any);
@@ -28,6 +30,8 @@ export const Booking: FC = () => {
   const [appState] = useAppContext();
   const classes = useStyles();
   const [selectedDate, SetselectedDate] = useState(new Date());
+
+  // const[selecttime,Setselecttime] = useState({start_time:"13:30",end_time:"20:30"})
   const { enqueueSnackbar } = useSnackbar();
   const {locationData}   = useFetchGetLocations();
   
@@ -58,7 +62,9 @@ export const Booking: FC = () => {
   },[locationData,teams,Wardrobesdata])
  
   const handleDateChange = (pickerType: string, value: any) => {
+  
     SetselectedDate(value);
+    
     const formikField = { ...formik.values };
     if (pickerType === "start_date") {
       formikField["start_date"] = value;
@@ -72,14 +78,15 @@ export const Booking: FC = () => {
     formik.setValues(formikField);
   };
 
+  
 
   const initialFormValues = {
     team: "",
     orTeam: "",
     start_date: selectedDate,
-    start_time: selectedDate,
+    start_time: "13:30",
     end_date: selectedDate,
-    end_time: selectedDate,
+    end_time: "18:30",
     location: "",
     warderobe: "",
     extWarBef15: false,
@@ -93,7 +100,7 @@ export const Booking: FC = () => {
     referee_wardrobe: "",
     show_public:true
   };
-  
+
 
   const formik = useFormik({
     initialValues: initialFormValues,
@@ -105,19 +112,15 @@ export const Booking: FC = () => {
               Yup.ref('start_date'),
               "End date can't be before start date"
             ),
-            start_time: Yup.date(),
-            end_time: Yup.date().min(
-                Yup.ref('start_time'),
-                "End time can't be before start time"
-            )
+
 
       }),
     
     onSubmit: async (formValues) => { 
- 
+      console.log(formValues,'formValues')
       const {start_date , start_time, end_date, end_time} = formValues;
-      const newStartTime = moment(start_date).format('YYYY-MM-DDT')+moment(start_time).format("HH:mm");
-      const newEndTime = moment(end_date).format('YYYY-MM-DDT')+moment(end_time).format("HH:mm"); 
+      const newStartTime = moment(start_date).format('YYYY-MM-DDT')+start_time
+      const newEndTime = moment(end_date).format('YYYY-MM-DDT')+end_time 
       const recurringstartdate = moment(start_date).format('YYYY-MM-DD')
       const recurringenddate = moment(end_date).format('YYYY-MM-DD')
       
@@ -145,7 +148,7 @@ export const Booking: FC = () => {
               "location_id":formValues.location,
               "activity_type": "training",
               "recurring_item": recuringDateList.length>0? false : "", ////not added in form 
-              "recurring_details":"weekly: monday, thursday", //not added in form 
+              "recurring_details":"", //not added in form 
               "recurring_exceptions":recuringDateList? recuringDateList : "", 
               "team_id": formValues.team, 
               "team_text":formValues.orTeam,
@@ -157,7 +160,7 @@ export const Booking: FC = () => {
               "description":formValues.description,
               "isPublic": formValues.show_public, //not added in front end+,
               "fetchupcoming": fetchupcoming
-            };
+            };     
       try{
         let res = await addActivity(newobj);
         if(res){
@@ -286,16 +289,25 @@ export const Booking: FC = () => {
                     md="3"
                     style={{ marginBottom: "15px" }}
                   >
-                    <TimePicker
+                    {/* <TimePicker
+                      ampm={false}
                       className="datepicker"
                       autoOk
                       label="Time"
                       value={values.start_time}
                       onChange={(e) => handleDateChange("start_time", e)}
                       id="start_time"
-                      
                      
-                    />
+                      
+                    /> */}
+                     <Input
+                      placeholder="time"
+                      id="start_time"
+                      type="time"
+                      value={values.start_time}
+                      
+                      onChange={handleChange}
+                    /> 
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -332,15 +344,26 @@ export const Booking: FC = () => {
                     md="3"
                     style={{ marginBottom: "15px" }}
                   >
-                    <TimePicker
+                    
+                    {/* <TimePicker
+                      ampm={false}
                       className="datepicker"
                       autoOk
                       label="Time"
                       value={values.end_time}
                       onChange={(e) => handleDateChange("end_time", e)}
                       id="end_time"
-                    />
-                     {errors.end_time && <span className={classes.errorColor} style={{color:'red',display: 'inline-block'}}>{errors.end_time}</span>}
+                    /> */}
+                     <Input
+                      placeholder="time"
+                      id="end_time"
+                      type="time"
+                      value={values.end_time}
+                      onChange={handleChange}
+                    /> 
+                            
+    
+                     {/* {errors.end_time && <span className={classes.errorColor} style={{color:'red',display: 'inline-block'}}>{errors.end_time}</span>} */}
                   </GridItem>
                   <GridItem
                     xs="12"

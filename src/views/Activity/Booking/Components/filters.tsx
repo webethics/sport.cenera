@@ -19,9 +19,9 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,set
 
   const classes = useStyles();
   const [text, setText] = useState("");
-  const [team, setTeam] = React.useState("");
+  const [team, setTeam] = React.useState("0");
   const [filter, setfilter] = React.useState(7);
-  const [activity, setActivity] = React.useState("");
+  const [activity, setActivity] = React.useState("0");
   // const [searchtext, setSearchtext] = React.useState("");
 
   const handleChange1 = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -29,7 +29,7 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,set
     setteamid(event.target.value)
   };
  
-  const [location, setLocation] = React.useState("");
+  const [location, setLocation] = React.useState("0");
   const handleChange2 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLocation(event.target.value as string);
     setlocationid(event.target.value)
@@ -107,6 +107,9 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,set
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">Team</InputLabel>
             <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={team} onChange={handleChange1} label="Team">
+              <MenuItem value={0}>
+                None
+              </MenuItem>
               {teamsList.map((res)=>(
                   <MenuItem value={res.id}>{res.name} </MenuItem>
               ))}
@@ -119,6 +122,9 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,set
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">Location</InputLabel>
             <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={location} onChange={handleChange2} label="Team">
+              <MenuItem value={0}>
+                None
+              </MenuItem>
               {locations.map((res)=>(
                   <MenuItem value={res.id}>{res.name} </MenuItem>
               ))}
@@ -130,6 +136,9 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,set
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">Activity</InputLabel>
             <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={activity} onChange={handleChange4} label="Team">
+              <MenuItem value={0}>
+                None
+              </MenuItem>
               <MenuItem value={10}>Match </MenuItem>
               <MenuItem value={20}>Training</MenuItem>
               <MenuItem value={30}>Maintainance</MenuItem>

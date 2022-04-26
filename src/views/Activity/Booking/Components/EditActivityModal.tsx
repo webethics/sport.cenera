@@ -13,7 +13,7 @@ import { Button } from "@cenera/components/Button/Button";
 import { styles } from "../styles";
 import { modalStyle } from "./styles";
 import ItemPicker from "./ItemPicker";
-import { DatePicker, TimePicker } from "@material-ui/pickers";
+import { DatePicker } from "@material-ui/pickers";
 import { TextField, Divider } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -28,6 +28,7 @@ import { useAppContext } from "@cenera/app-context";
 import { ActivityService } from "@cenera/services/api/activity";
 import moment from "moment"
 import * as Yup from "yup";
+import { Input } from '@mui/material';
 const useStyles = makeStyles(styles as any);
 
 export default function EditActivityModal(props: any) {
@@ -115,9 +116,9 @@ export default function EditActivityModal(props: any) {
       team: "",
       orTeam: "",
       start_date:  selectedDate ,
-      start_time:   selectedDate,
+      start_time:   "13:30",
       end_date:selectedDate,
-      end_time: selectedDate,
+      end_time: "17:30",
       location: "" ,
       warderobe: "",
       extWarBef15:  false,
@@ -147,8 +148,8 @@ export default function EditActivityModal(props: any) {
 
     onSubmit: async (formValues) => {
       const {start_date , start_time, end_date, end_time} = formValues;
-      const newStartTime = moment(start_date).format('YYYY-MM-DDT')+moment(start_time).format("HH:MM");
-      const newEndTime = moment(end_date).format('YYYY-MM-DDT')+moment(end_time).format("HH:MM"); 
+      const newStartTime = moment(start_date).format('YYYY-MM-DDT')+start_time;
+      const newEndTime = moment(end_date).format('YYYY-MM-DDT')+end_time;
         const  newobj = {
         "access_token": appState.authentication.accessToken,
         "updateType": "update",
@@ -220,7 +221,7 @@ export default function EditActivityModal(props: any) {
   useEffect(()=>{
     if(teamsList && EditActivitydata && EditActivitydata.length>0){
       const teamName = teamsList.find(res=>res.id===EditActivitydata[0].team_id)
-      console.log(teamsList,EditActivitydata,'nameeee')
+      
       if(teamName){
         formik.setValues({...formik.values,team:teamName.id})
       }
@@ -232,6 +233,12 @@ export default function EditActivityModal(props: any) {
   useEffect(()=>{
 
     if(acitivityList[0]){
+      const starttime = acitivityList[0].startTime;
+      const mstarttime = moment(starttime).format('HH:mm')
+      const endtime = acitivityList[0].endTime;
+      const mendtime = moment(endtime).format('HH:mm')
+
+      console.log(mstarttime,mendtime,"starttime")
       formik.setValues({
         ...formik.values,
         warderobe: acitivityList[0].wardrobe_id,
@@ -243,14 +250,18 @@ export default function EditActivityModal(props: any) {
         referee_wardrobe: acitivityList[0].wardrobe_id_referee,
         start_date: acitivityList[0].startTime,
         end_date: acitivityList[0].endTime,
-        start_time: acitivityList[0].startTime,
-        end_time: acitivityList[0].endTime,
+        start_time: mstarttime,
+        end_time: mendtime,
         extWarBef15: acitivityList[0].wardrobe_extra_time==15 && true,
         extWarBef30:  acitivityList[0].wardrobe_extra_time==30 && true
       })
     }
   },[acitivityList])
-
+  if(acitivityList[0]){
+    console.log('current')
+  }
+//startTime
+//moment(res.startTime).format("HH:mm")
 
   const { values, handleChange, errors, touched } = formik;
 
@@ -329,14 +340,13 @@ export default function EditActivityModal(props: any) {
 
               </GridItem>
               <GridItem xs="6" sm="5" md="3" style={{ marginBottom: "15px" }}>
-                <TimePicker
-                  className="datepicker"
-                  autoOk
-                  label="Time"
-                  value={values.start_time}
-                  onChange={(e) => handleDateChange("start_time", e)}
-                  id="start_time"
-                />
+                    <Input
+                      placeholder="time"
+                      id="start_time"
+                      type="time"
+                      value={values.start_time}
+                      onChange={handleChange}
+                    /> 
               </GridItem>
               <GridItem
                 xs="12"
@@ -360,14 +370,13 @@ export default function EditActivityModal(props: any) {
                 />
               </GridItem>
               <GridItem xs="6" sm="5" md="3" style={{ marginBottom: "15px" }}>
-                <TimePicker
-                  className="datepicker"
-                  autoOk
-                  label="Time"
-                  value={values.end_time}
-                  onChange={(e) => handleDateChange("end_time", e)}
-                  id="end_time"
-                />
+                   <Input
+                      placeholder="time"
+                      id="end_time"
+                      type="time"
+                      value={values.end_time}
+                      onChange={handleChange}
+                    /> 
               </GridItem>
               <GridItem
                 xs="12"

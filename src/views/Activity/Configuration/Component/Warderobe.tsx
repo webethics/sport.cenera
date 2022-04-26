@@ -101,8 +101,8 @@ const Warderobe = () => {
         initialValues: { warderobe: "" },
         validationSchema: Yup.object({
           warderobe: Yup.string()
-            .matches(/[a-z]/, "only letters not allowed")
-            .required("required"),
+           
+            .required("Wardrobe is required"),
         }),
         onSubmit: async(values:any,{resetForm}) => {
           addWardrobes(values)
