@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@material-ui/core/Box";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -10,16 +10,17 @@ import { makeStyles } from "@material-ui/core/styles";
 import { filtersStyle } from "./styles";
 import Container from "@material-ui/core/Container";
 import FilterListIcon from "@material-ui/icons/FilterList";
-// import { useFetchGetActivites} from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchGetActivites} from "@cenera/common/hooks/api-hooks/activity";
 
 const useStyles = makeStyles(filtersStyle as any);
 
-export default function Filters({onFilter,Activitylist,filterTeam,filterLocation,searchingtext}:{onFilter:any,Activitylist:any,filterTeam:any,filterLocation:any,searchingtext:any}) {
+export default function Filters({onFilter,filterTeam,filterLocation,searchingtext,clubid}:{onFilter:any,filterTeam:any,filterLocation:any,searchingtext:any,clubid:any}) {
 
-  // const id = 5;
+  const[locationdata,setlocationdata] = React.useState([]);
+  const[teamdata,setTeamdata] = React.useState([]);
   const classes = useStyles();
-  // const {acitivityData} = useFetchGetActivites({"club_id":id}); 
-  // console.log(acitivityData,"acitivityDatafilter")
+  const {acitivityData} = useFetchGetActivites({"club_id":clubid}); 
+
   const [text, setText] = React.useState("");
   const [team, setTeam] = React.useState("0");
   const handleChange1 = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -59,7 +60,21 @@ const getText = (event:any) => {
     }
  };
 
+ useEffect(() => {
+ if(acitivityData){
 
+  const filterLocations = acitivityData.map((res:any)=>({location_name:res.location_name, location_id:res.location_id}))
+  setlocationdata(filterLocations)
+  const filterTeam = acitivityData.map((res:any)=>({team_text:res.team_text, team_id:res.team_id}))
+  setTeamdata(filterTeam);
+ }
+
+}, [acitivityData]);
+
+
+if(acitivityData){
+console.log(acitivityData,'mmmmmmmmm')
+}
 // const handleChange5 = (event:any) => {
 //   event.preventDefault()
 //   searchingtext(text)
@@ -91,7 +106,7 @@ const getText = (event:any) => {
               <MenuItem value={0}>
                 None
               </MenuItem>
-              {Activitylist && Activitylist.map((res:any)=>(
+              {teamdata && teamdata.map((res:any)=>(
                   <MenuItem value={res.team_id}>{res.team_text} </MenuItem>
               ))}
               {/* <MenuItem value={10}>Ten</MenuItem>
@@ -118,7 +133,7 @@ const getText = (event:any) => {
                 None
               </MenuItem>
 
-              {Activitylist && Activitylist.map((res:any)=>(
+              {locationdata && locationdata.map((res:any)=>(
                   <MenuItem value={res.location_id}>{res.location_name} </MenuItem>
               ))}
               {/* <MenuItem value={10}>sydney </MenuItem>

@@ -262,7 +262,7 @@ export default function CustomizedTables({
                   <TableHead>
                     <TableRow>
                       <StyledTableCell colSpan={7}>
-                        Monday march 01, 2022
+                        {moment(res.startTime).format('dddd MMMM DD, YYYY')}
                       </StyledTableCell>
                     </TableRow>
                     <TableRow className={classes.customeTableRow}>

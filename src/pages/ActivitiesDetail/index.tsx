@@ -29,15 +29,23 @@ export default function ActivitiesDetail() {
 
   const classes = useStyles();
   const {id} = useParams<any>();
+
   const data = {
     "club_id":id,
     ...(filterteam!==0 && {"team_id": filterteam}),
     ...(filterlocation!==0 && {"location_id": filterlocation}),
-    "text_search":searchtext && searchtext,
+    ...(searchtext.length==0 && {"text_search": searchtext}),
     "startTime": currentdate,
     "endTime": nextdate
+  }   
+  
+  const data1 = {
+    "club_id":id
+ 
   }
+  console.log(data1,'dataaaa')
   const {acitivityData,loading,revalidate,error} = useFetchGetActivites(data); 
+  console.log(acitivityData,'dummy')
   const [activityList , setActivityList] = useState(null);
 
  
@@ -48,7 +56,7 @@ export default function ActivitiesDetail() {
    
    },[acitivityData,loading,revalidate,error,searchtext])
 
-   console.log(activityList);
+   console.log(acitivityData,"acitivityData");
 
   return (
     <>
@@ -71,7 +79,7 @@ export default function ActivitiesDetail() {
         {activityList &&
         (<>
          <Filters 
-         Activitylist={activityList}
+         clubid={id}
          searchingtext={(res:any)=>{
           setSearchtext(res)
          }}

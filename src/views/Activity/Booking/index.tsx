@@ -20,7 +20,7 @@ import { ActivityService } from "@cenera/services/api/activity";
 import { useAppContext } from "@cenera/app-context";
 import moment from "moment"
 import * as Yup from "yup";
-import { Input } from '@mui/material';
+
 
 
 
@@ -289,18 +289,8 @@ export const Booking: FC = () => {
                     md="3"
                     style={{ marginBottom: "15px" }}
                   >
-                    {/* <TimePicker
-                      ampm={false}
-                      className="datepicker"
-                      autoOk
-                      label="Time"
-                      value={values.start_time}
-                      onChange={(e) => handleDateChange("start_time", e)}
-                      id="start_time"
-                     
-                      
-                    /> */}
-                     <Input
+
+                     <TextField
                       placeholder="time"
                       id="start_time"
                       type="time"
@@ -345,16 +335,7 @@ export const Booking: FC = () => {
                     style={{ marginBottom: "15px" }}
                   >
                     
-                    {/* <TimePicker
-                      ampm={false}
-                      className="datepicker"
-                      autoOk
-                      label="Time"
-                      value={values.end_time}
-                      onChange={(e) => handleDateChange("end_time", e)}
-                      id="end_time"
-                    /> */}
-                     <Input
+                     <TextField
                       placeholder="time"
                       id="end_time"
                       type="time"
@@ -362,8 +343,6 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                     /> 
                             
-    
-                     {/* {errors.end_time && <span className={classes.errorColor} style={{color:'red',display: 'inline-block'}}>{errors.end_time}</span>} */}
                   </GridItem>
                   <GridItem
                     xs="12"
