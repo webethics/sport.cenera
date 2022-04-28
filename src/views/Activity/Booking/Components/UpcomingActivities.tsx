@@ -285,6 +285,9 @@ const UpcomingActivities = ({fetchupcomingactivity}:{fetchupcomingactivity:any})
       .map((res:any) => (
             <h1>{res.recurring_exceptions}</h1>
           ))} */} 
+
+
+
           {acitivityList.length===0 && <h5 style={{color:"red",textAlign: "center"}}>No Activities Found</h5>}
                   {acitivityList && acitivityList.map((res:any)=>(
                     

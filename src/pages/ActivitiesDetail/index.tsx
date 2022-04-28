@@ -11,15 +11,33 @@ import { makeStyles, CircularProgress, Backdrop } from "@material-ui/core";
 import { activitiesDetailStyle } from "./styles";
 import { Link ,useParams} from "react-router-dom";
 import { useFetchGetActivites} from "@cenera/common/hooks/api-hooks/activity";
-
+import moment from "moment"
 
 const useStyles = makeStyles(activitiesDetailStyle as any);
 
 export default function ActivitiesDetail() {
-  
+
+  const[filterdate,setFilterdate] = useState(7);
+  var date = new Date();
+  date.setDate(date.getDate() + filterdate);
+  const nextdate = moment(date).format('YYYY-MM-DDTHH:MM');
+  const currentdate =   moment(Date()).format('YYYY-MM-DDTHH:MM');
+
+  const[searchtext,setSearchtext] = useState("");
+  const[filterlocation,setfilterlocation]=useState(0);
+  const[filterteam,setfilterteam]=useState(0);
+
   const classes = useStyles();
   const {id} = useParams<any>();
-  const {acitivityData,loading,revalidate,error} = useFetchGetActivites({"club_id":id}); 
+  const data = {
+    "club_id":id,
+    ...(filterteam!==0 && {"team_id": filterteam}),
+    ...(filterlocation!==0 && {"location_id": filterlocation}),
+    "text_search":searchtext && searchtext,
+    "startTime": currentdate,
+    "endTime": nextdate
+  }
+  const {acitivityData,loading,revalidate,error} = useFetchGetActivites(data); 
   const [activityList , setActivityList] = useState(null);
 
  
@@ -28,7 +46,7 @@ export default function ActivitiesDetail() {
       setActivityList(acitivityData);
     }
    
-   },[acitivityData,loading,revalidate,error])
+   },[acitivityData,loading,revalidate,error,searchtext])
 
    console.log(activityList);
 
@@ -50,17 +68,31 @@ export default function ActivitiesDetail() {
         <Banner />
 
         
-        {activityList && activityList.length>0 &&
+        {activityList &&
         (<>
-         <Filters onFilter={(res:any)=>{
-           console.log(res);
-         }} />
+         <Filters 
+         Activitylist={activityList}
+         searchingtext={(res:any)=>{
+          setSearchtext(res)
+         }}
+
+         onFilter={(res:any)=>{
+          setFilterdate(res)
+         }} 
+         filterTeam={(res:any)=>{
+            if(res===0){
+              setfilterteam(0)
+            }else{setfilterteam(res)}
+         }}
+         filterLocation={(res:any)=>{
+            if(res===0){
+              setfilterlocation(0)
+            }else{setfilterlocation(res)}
+         }}
+         />
          <Table activityList={activityList} /> 
         </>) }
 
-         {activityList && activityList.length<1 && "No Activity Found"}
-        
-      
         
         <footer className={classes.footer}>
           <Grid container>

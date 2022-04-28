@@ -46,6 +46,7 @@ export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdi
       ? appState.user.club_id
       : -1,
     user_team: toEditUser ? toEditUser.user_team || -1 : -1,
+    allowBooking: true
   };
 
   const formik = useFormik({

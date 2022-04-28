@@ -10,33 +10,60 @@ import { makeStyles } from "@material-ui/core/styles";
 import { filtersStyle } from "./styles";
 import Container from "@material-ui/core/Container";
 import FilterListIcon from "@material-ui/icons/FilterList";
+// import { useFetchGetActivites} from "@cenera/common/hooks/api-hooks/activity";
 
 const useStyles = makeStyles(filtersStyle as any);
 
-export default function Filters({onFilter}:{onFilter:any}) {
-  
-  const classes = useStyles();
+export default function Filters({onFilter,Activitylist,filterTeam,filterLocation,searchingtext}:{onFilter:any,Activitylist:any,filterTeam:any,filterLocation:any,searchingtext:any}) {
 
-  const [team, setTeam] = React.useState("10");
+  // const id = 5;
+  const classes = useStyles();
+  // const {acitivityData} = useFetchGetActivites({"club_id":id}); 
+  // console.log(acitivityData,"acitivityDatafilter")
+  const [text, setText] = React.useState("");
+  const [team, setTeam] = React.useState("0");
   const handleChange1 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setTeam(event.target.value as string);
-    onFilter(event.target.value)
+    filterTeam(event.target.value)
   };
+ 
 
-  const [location, setLocation] = React.useState("10");
+  const [location, setLocation] = React.useState("0");
   const handleChange2 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLocation(event.target.value as string);
+    filterLocation(event.target.value)
   };
 
-  const [filter, setfilter] = React.useState("30");
+  const [filter, setfilter] = React.useState("7");
   const handleChange3 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setfilter(event.target.value as string);
+    onFilter(event.target.value);
   };
 
   const [activity, setActivity] = React.useState("30");
   const handleChange4 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setActivity(event.target.value as string);
   };
+
+const changeText = (e:any) => {
+  setText(e.target.value);
+};
+
+const getText = (event:any) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+       searchingtext(text)
+       console.log('pressenterkey')
+    } else {
+      console.log('Noenterkey')
+    }
+ };
+
+
+// const handleChange5 = (event:any) => {
+//   event.preventDefault()
+//   searchingtext(text)
+// };
 
   return (
     <Container className={classes.Container}>
@@ -61,13 +88,21 @@ export default function Filters({onFilter}:{onFilter:any}) {
               onChange={handleChange1}
               label="Team"
             >
-              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={0}>
+                None
+              </MenuItem>
+              {Activitylist && Activitylist.map((res:any)=>(
+                  <MenuItem value={res.team_id}>{res.team_text} </MenuItem>
+              ))}
+              {/* <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem> */}
             </Select>
           </FormControl>
         </Box>
         <Box p={1} className={classes.formGroup}>
+
+
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Location
@@ -77,11 +112,18 @@ export default function Filters({onFilter}:{onFilter:any}) {
               id="demo-simple-select-outlined"
               value={location}
               onChange={handleChange2}
-              label="Team"
+              label="location"
             >
-              <MenuItem value={10}>sydney </MenuItem>
+              <MenuItem value={0}>
+                None
+              </MenuItem>
+
+              {Activitylist && Activitylist.map((res:any)=>(
+                  <MenuItem value={res.location_id}>{res.location_name} </MenuItem>
+              ))}
+              {/* <MenuItem value={10}>sydney </MenuItem>
               <MenuItem value={20}>New York</MenuItem>
-              <MenuItem value={30}>Melbourne </MenuItem>
+              <MenuItem value={30}>Melbourne </MenuItem> */}
             </Select>
           </FormControl>
         </Box>
@@ -115,7 +157,12 @@ export default function Filters({onFilter}:{onFilter:any}) {
                 input: classes.inputInput,
               }}
               inputProps={{ "aria-label": "search" }}
+              // value={text}
+              onKeyPress={(e) => getText(e)}
+              onChange={changeText}
             />
+
+            
           </div>
         </Box>
         <Box
@@ -135,11 +182,11 @@ export default function Filters({onFilter}:{onFilter:any}) {
               value={filter}
               onChange={handleChange3}
             >
-              <MenuItem value={10}>Today </MenuItem>
-              <MenuItem value={20}>Next 3 days</MenuItem>
-              <MenuItem value={30}>Next 7 days</MenuItem>
-              <MenuItem value={40}>This Month</MenuItem>
-              <MenuItem value={50}>All</MenuItem>
+              <MenuItem value={1}>Today </MenuItem>
+              <MenuItem value={3}>Next 3 days</MenuItem>
+              <MenuItem value={7}>Next 7 days</MenuItem>
+              <MenuItem value={30}>This Month</MenuItem>
+              <MenuItem value={500}>All</MenuItem>
             </Select>
           </FormControl>
         </Box>
