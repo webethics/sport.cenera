@@ -102,6 +102,8 @@ const deleteMultipleActivities = (access_token: string,club_id: number,activity_
   } )
 };
 
+
+
 //lOCATION
 const GetLocations = (access_token: string): any => {
     return {
@@ -184,6 +186,17 @@ const deleteWardrobes = (access_token: string,club_id:number ,wardrobe_id: numbe
     })
   };
 
+  //Getactivitylist  
+const Getactivitylist = (access_token: string): any => {
+  return {
+    url: `${configs.app.api}/booking/getTypes`,
+    method: 'post',
+    data: {
+      access_token
+    },
+  };
+};
+
 
 export const ActivityService = {
   // createOrEditClub,
@@ -200,5 +213,6 @@ export const ActivityService = {
   deleteMultipleActivities,
   setActivitiesPublished,
   getEditActivities,
-  GetActivities
+  GetActivities,
+  Getactivitylist
 }

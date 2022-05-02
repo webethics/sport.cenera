@@ -257,6 +257,7 @@ export default function CustomizedTables({
               component={Paper}
               className={classes.tableContainer}
             >
+  
               {activityList.map((res: any) => (
                 <Table className={classes.table} aria-label="customized table">
                   <TableHead>

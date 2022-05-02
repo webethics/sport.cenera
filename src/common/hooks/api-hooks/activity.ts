@@ -93,6 +93,21 @@ export const useFetchEditActivities = (activity_id_list:any) => {
   };
 };
 
+export const useFetchActivityType= () => { 
+  const { Getactivitylist } = ActivityService;
+  const [appState] = useAppContext();
+  const swr = useRequest<any>(Getactivitylist(appState.authentication.accessToken));
+
+  return {
+    activityType: swr.data ? swr.data : [],
+    loading: !swr.data && !swr.error,
+    error: getErrorMessage(swr.error),
+    isValidating: swr.isValidating,
+    revalidate: swr.revalidate,
+  };
+};
+
+
 
 
 

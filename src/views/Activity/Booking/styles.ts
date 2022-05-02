@@ -4,7 +4,7 @@ export const styles = (theme: Theme) => ({
   container: {
     margin: '0 auto',
   },
-
+  
   cardContainer: {
     display: 'flex',
     justifyContent: "center", 
@@ -80,4 +80,11 @@ export const styles = (theme: Theme) => ({
     margin: '24px auto',
     display: 'block',
   },
+  
+  recuring_custom_check:{
+   "& MuiTypography-root":{
+      fontSize: "12px"
+    }
+  }
+
 });

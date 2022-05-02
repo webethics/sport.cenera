@@ -31,7 +31,7 @@ export default function ItemPicker(props: any) {
         }}
       >
         <MenuItem
-          value=""
+          value="0.5"
           classes={{
             root: classes.selectMenuItem,
             selected: classes.selectMenuItemSelected,

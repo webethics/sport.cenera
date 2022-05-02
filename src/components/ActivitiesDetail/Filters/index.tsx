@@ -104,7 +104,7 @@ console.log(acitivityData,'mmmmmmmmm')
               label="Team"
             >
               <MenuItem value={0}>
-                None
+                All
               </MenuItem>
               {teamdata && teamdata.map((res:any)=>(
                   <MenuItem value={res.team_id}>{res.team_text} </MenuItem>
@@ -130,7 +130,7 @@ console.log(acitivityData,'mmmmmmmmm')
               label="location"
             >
               <MenuItem value={0}>
-                None
+                All
               </MenuItem>
 
               {locationdata && locationdata.map((res:any)=>(

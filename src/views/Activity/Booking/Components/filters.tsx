@@ -10,18 +10,20 @@ import { makeStyles } from "@material-ui/core/styles";
 import { filtersStyle } from "./styles";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { useSnackbar } from "notistack";
-import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchGetLocations ,useFetchActivityType} from "@cenera/common/hooks/api-hooks/activity";
 import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
+
 
 const useStyles = makeStyles(filtersStyle as any);
 
 export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,setteamid,setlocationid}:{onFilter:any,searchingtext:any,Filterdate:any,Textvalue:any,setteamid:any,setlocationid:any}) {
 
+  const [activitylist,setactivitylist] = useState([]);
   const classes = useStyles();
   const [text, setText] = useState("");
   const [team, setTeam] = React.useState("0");
   const [filter, setfilter] = React.useState(7);
-  const [activity, setActivity] = React.useState("0");
+  const [activity, setActivity] = React.useState("0.5");
   // const [searchtext, setSearchtext] = React.useState("");
 
   const handleChange1 = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -78,6 +80,7 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,set
   const [locations, setLocations] = useState([]);
   const { teams} = useFetchTeams(); 
   const [teamsList, setTeamsList] = useState([]); 
+  const{ activityType } = useFetchActivityType();
 
   useEffect(()=>{
     if(locationData){
@@ -96,9 +99,14 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,set
     if(Textvalue){
       setText(Textvalue)
     }
+    if(activityType[0]){
+      const newactivityType = activityType[0].values.map((res:any,index:number)=>({name:res.value, isMatch:res.isMatch,id:index}))
+      setactivitylist(newactivityType)
+    }
     
-  },[locationData,teams,Filterdate])
+  },[locationData,teams,Filterdate,activityType])
 
+ 
   
   return (
     <div className={classes.filterWrap}>
@@ -108,7 +116,7 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,set
             <InputLabel id="demo-simple-select-outlined-label">Team</InputLabel>
             <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={team} onChange={handleChange1} label="Team">
               <MenuItem value={0}>
-                None
+                All
               </MenuItem>
               {teamsList.map((res)=>(
                   <MenuItem value={res.id}>{res.name} </MenuItem>
@@ -123,7 +131,7 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,set
             <InputLabel id="demo-simple-select-outlined-label">Location</InputLabel>
             <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={location} onChange={handleChange2} label="Team">
               <MenuItem value={0}>
-                None
+                All
               </MenuItem>
               {locations.map((res)=>(
                   <MenuItem value={res.id}>{res.name} </MenuItem>
@@ -136,12 +144,14 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,set
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">Activity</InputLabel>
             <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={activity} onChange={handleChange4} label="Team">
-              <MenuItem value={0}>
-                None
+              <MenuItem value={0.5}>
+                All
               </MenuItem>
-              <MenuItem value={10}>Match </MenuItem>
-              <MenuItem value={20}>Training</MenuItem>
-              <MenuItem value={30}>Maintainance</MenuItem>
+
+              {activitylist.map((res)=>(
+                  <MenuItem value={res.id}>{res.name} </MenuItem>
+              ))}
+      
             </Select>
           </FormControl>
         </Box>

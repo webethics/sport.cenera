@@ -11,56 +11,120 @@ import { TextField, Divider } from "@material-ui/core";
 import UpcomingActivities from "./Components/UpcomingActivities";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+
 import { useSnackbar } from "notistack";
 // import axios from "axios";
 import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
 import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
-import { useFetchWardrobes} from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchWardrobes } from "@cenera/common/hooks/api-hooks/activity";
+import {  useFetchActivityType} from "@cenera/common/hooks/api-hooks/activity";
 import { ActivityService } from "@cenera/services/api/activity";
 import { useAppContext } from "@cenera/app-context";
 import moment from "moment"
 import * as Yup from "yup";
-
-
+import TimePicker from 'rc-time-picker';
+import 'rc-time-picker/assets/index.css';
+import Box from "@mui/material/Box";
 
 
 const useStyles = makeStyles(styles as any);
 
 export const Booking: FC = () => {
+  // const [recurringtype, setrecurringtype] = React.useState('');
+  const [week,setweek]= useState([]);
+  const [monthDates,setMonthDates]= useState([]);
   const [appState] = useAppContext();
   const classes = useStyles();
   const [selectedDate, SetselectedDate] = useState(new Date());
-
-  // const[selecttime,Setselecttime] = useState({start_time:"13:30",end_time:"20:30"})
+  const [activitylist,setactivitylist] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const {locationData}   = useFetchGetLocations();
-  
   const [locations, setLocations] = useState([]);
   const { teams} = useFetchTeams(); 
   const [teamsList, setTeamsList] = useState([]); 
+  const{ activityType } = useFetchActivityType();
   const {Wardrobesdata} = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
   const {addActivity } = ActivityService;
   const[fetchupcoming,setFetchupcoming]=useState(0)
 
 
-  useEffect(()=>{
+  //Recurring
+  const recurring = [
+    { name: "Yes",id:1 },
+    { name: "No",id:2 },
+  ];
 
-    if(locationData){
-      const newArr = locationData.map((res:any)=>({id:res.location_id , name:res.location_name}))
-      setLocations(newArr)
-    }
-    if(teams) {
-      const newTeam = teams.map((res:any)=>({id:res.team_id, name:res.team_name}))
-      setTeamsList(newTeam);
-    }
-    if(Wardrobesdata){
-      const newWardrobes = Wardrobesdata.map((res:any)=>({id:res.wardrobe_id, name:res.wardrobe_name}))
-      setWardrobes(newWardrobes);
-      
-    }
-  },[locationData,teams,Wardrobesdata])
+  
+  const recurringby = [
+    { name: "Weekly",id:1 },
+    { name: "bi-weekly",id:2 },
+    { name: "monthly",id:3 }
  
+  ];
+
+
+const weekdays = [
+  { name: "Monday"  },
+  { name: "Tuesday"  },
+  { name: "Wednesday"},
+  { name: "Thursday"},
+  { name: "Friday" },
+  { name: "Saturday"},
+  { name: "Sunday"}
+
+];
+let dates=[];
+for(let i=1;i<=31;i++){
+  dates.push(i);
+}
+
+
+
+const handledays1 = (el:string)=>{
+  console.log(week.some((elm)=>(elm.name)===el))
+  if(week.some((elm)=>(elm)===(el))){
+    setweek(week.filter((elm)=>elm!==el))
+  }else{
+    setweek((prevvalues)=>[...prevvalues,weekdays.find(element => element.name === el).name])
+  }
+ 
+}
+
+const handledays2 = (el:number)=>{
+  
+  if(monthDates.some((elm)=>(elm)==(el))){
+    console.log('ran');
+    setMonthDates(monthDates.filter((elm)=>elm!==el))
+  }else{
+    setMonthDates((prevvalues)=>[...prevvalues,el])
+  }
+ 
+}
+
+//end
+useEffect(()=>{
+
+  if(locationData){
+    const newArr = locationData.map((res:any)=>({id:res.location_id , name:res.location_name}))
+    setLocations(newArr)
+  }
+  if(teams) {
+    const newTeam = teams.map((res:any)=>({id:res.team_id, name:res.team_name}))
+    setTeamsList(newTeam);
+  }
+  if(Wardrobesdata){
+    const newWardrobes = Wardrobesdata.map((res:any)=>({id:res.wardrobe_id, name:res.wardrobe_name}))
+    setWardrobes(newWardrobes);
+    
+  }
+  if(activityType[0]){
+    const newactivityType = activityType[0].values.map((res:any,index:number)=>({name:res.value, isMatch:res.isMatch,id:index}))
+    setactivitylist(newactivityType)
+  }
+},[locationData,teams,Wardrobesdata,activityType])
+
+
   const handleDateChange = (pickerType: string, value: any) => {
   
     SetselectedDate(value);
@@ -68,6 +132,9 @@ export const Booking: FC = () => {
     const formikField = { ...formik.values };
     if (pickerType === "start_date") {
       formikField["start_date"] = value;
+    } 
+    else if (pickerType === "end_date_recurring") {
+      formikField["end_date_recurring"] = value;
     } else if (pickerType === "start_time") { 
       formikField["start_time"] = value;
     } else if (pickerType === "end_date") {
@@ -93,14 +160,32 @@ export const Booking: FC = () => {
     extWarBef30: false,
     extWarAf15: false,
     extWarAf30: false,
-    activity: "",
+    activity: "0.5",
     description: "",
     away_team: "",
     away_team_wardrobe: "",
     referee_wardrobe: "",
-    show_public:true
+    show_public:true,
+    recurring:0,
+    recurringby:0,
+    end_date_recurring: selectedDate,
+    recurringtype: ""
   };
 
+  const handleValueChange = (value:any) => {
+    console.log(value && value.format('HH:mm'),"start");
+ 
+  };
+
+    //weeks
+
+
+  const handleValueChangeend = (value:any) => {
+    console.log(value && value.format('HH:mm'));
+    formik.setValues({
+      ...formik.values,
+      end_time: value && value.format('HH:mm')})
+  };
 
   const formik = useFormik({
     initialValues: initialFormValues,
@@ -115,7 +200,8 @@ export const Booking: FC = () => {
 
 
       }),
-    
+
+  
     onSubmit: async (formValues) => { 
       console.log(formValues,'formValues')
       const {start_date , start_time, end_date, end_time} = formValues;
@@ -138,7 +224,25 @@ export const Booking: FC = () => {
     if(recurringstartdate !== recurringenddate){
       recuringDateList = getDaysBetweenDates(recurringstartdate, recurringenddate);
     }
-
+    let activity:string;
+     if(formValues.activity=="0"){
+      activity = "match";
+    }
+    else if(formValues.activity=="1"){
+      activity = "training";
+    }
+    else if(formValues.activity=="2"){
+      activity = "maintenance";
+    }
+    else if(formValues.activity=="3"){
+      activity = "rental";
+    }
+    else if(formValues.activity=="0.5"){
+      activity = "";
+    }
+    
+   // ...(formValues.team!=="0" && {"team_id": formValues.team}),
+   
       const  newobj = {
               "access_token": appState.authentication.accessToken,
               "updateType": "create",
@@ -146,11 +250,14 @@ export const Booking: FC = () => {
               "startTime": newStartTime,
               "endTime":  newEndTime,
               "location_id":formValues.location,
-              "activity_type": "training",
-              "recurring_item": recuringDateList.length>0? false : "", ////not added in form 
-              "recurring_details":"", //not added in form 
-              "recurring_exceptions":recuringDateList? recuringDateList : "", 
-              "team_id": formValues.team, 
+              "activity_type": activity,
+              "recurring_item": recuringDateList.length>0? true : "", ////not added in form 
+  
+              // "recurring_details": formValues.recurringby==1 && "", //not added in form 
+              ...(formValues.recurringby==1 && {"recurring_details": `weekly:${week.toString()}`}),
+              ...(formValues.recurringby==2 && {"recurring_details": `bi-weekly:${week.toString()}`}),
+              ...(formValues.recurringby==3 && {"recurring_details": `monthly:${monthDates.toString()}`}),
+              ...(formValues.team.length && {"team_id": formValues.team}),
               "team_text":formValues.orTeam,
               "away_team_text":formValues.away_team,
               "wardrobe_id": formValues.warderobe,
@@ -174,7 +281,8 @@ export const Booking: FC = () => {
     },
   });
 
-  
+
+
   useEffect(() => {
     if (formik.values.activity === "Match") {
       formik.setValues({
@@ -192,16 +300,15 @@ export const Booking: FC = () => {
   }, [formik.values.activity]);
 
  
-  const activitydata = [
-    { name: "Match",id:1 },
-    { name: "Training",id:2 },
-    { name: "Maintenance",id:3 },
-  ];
+
 
   const { values, handleChange, errors ,touched} = formik;
- 
+
+
+
   return (
     <div>
+     {console.log(monthDates)}
       <GridContainer>
         <GridItem xs={11} sm={11} md={11} xl={8} className={classes.container}>
           <Card>
@@ -229,6 +336,7 @@ export const Booking: FC = () => {
                     />
 
                   </GridItem>
+                  
                   <GridItem
                     xs="12"
                     sm="5"
@@ -256,6 +364,7 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                     />
                   </GridItem>
+                  
                   <GridItem
                     xs="12"
                     md="4"
@@ -289,22 +398,41 @@ export const Booking: FC = () => {
                     md="3"
                     style={{ marginBottom: "15px" }}
                   >
-
-                     <TextField
+                  {/* <TextField
+                    id="start_time"
+                    label="clock"
+                    type="time"
+                    defaultValue="07:30"
+                    className={classes.textField}
+                    value={values.start_time}
+                    onChange={handleChange}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{
+                      step: 300, // 5 min
+                    }}
+                  /> */}
+                     {/* <input
                       placeholder="time"
                       id="start_time"
                       type="time"
                       value={values.start_time}
                       
                       onChange={handleChange}
-                    /> 
+                    />  */} 
+                    <div>
+                     <TimePicker className="timepicker"  defaultValue={moment()} showSecond={false}  onChange={handleValueChange} />
+                    </div>
                   </GridItem>
+
+                  
+                  
                   <GridItem
                     xs="12"
                     md="4"
                     style={{ marginBottom: "15px" }}
                   ></GridItem>
-
                   <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
                     <h5 style={{ fontSize: "14px" }}>End *</h5>
                   </GridItem>
@@ -334,16 +462,263 @@ export const Booking: FC = () => {
                     md="3"
                     style={{ marginBottom: "15px" }}
                   >
-                    
-                     <TextField
-                      placeholder="time"
-                      id="end_time"
-                      type="time"
-                      value={values.end_time}
-                      onChange={handleChange}
-                    /> 
-                            
+                    <TimePicker className="timepicker"  defaultValue={moment()} showSecond={false}  onChange={handleValueChangeend} />
+
                   </GridItem>
+  {/* // recurring======================================= */}
+                  <GridItem
+                    xs="12"
+                    md="4"
+                    style={{ marginBottom: "15px" }}
+                  ></GridItem>
+                  <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
+                    <h5 style={{ fontSize: "14px" }}>Recurring</h5>
+                  </GridItem>
+                  <GridItem
+                    xs="6"
+                    sm="5"
+                    md="3"
+                    style={{ marginBottom: "15px" }}
+                  >
+                    {/* <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={values.recurring}
+                          label="Age"
+                          onChange={handleChange}
+                        >
+                          <MenuItem value={0}>None</MenuItem>
+                          <MenuItem value={1}>Yes</MenuItem>
+                          <MenuItem value={2}>No</MenuItem>
+                      </Select>
+                  </FormControl> */}
+
+                      <ItemPicker
+                        data={recurring}
+                        value={values.recurring}
+                        onChange={handleChange}
+                        id="recurring"
+
+                      />
+                  
+                  </GridItem>
+        
+                 <GridItem
+                    xs="6"
+                    sm="5"
+                    md="3"
+                    style={{ marginBottom: "15px" }}
+                  >
+                     {values.recurring==1 && 
+
+                     <ItemPicker
+                     placeholder="selectType"
+                     data={recurringby}
+                     value={values.recurringby}
+                     onChange={handleChange}
+                     id="recurringby"
+                     />
+
+                     }
+                </GridItem>
+               {console.log(values.recurringby,"values.recurringby")}
+                
+             
+{/* //recurring========================================================================= */}
+
+  {/* 11111111111111111111*/}
+
+             {values.recurringby>0 && <>
+                <GridItem
+                    xs="12"
+                    md="4"
+                    style={{ marginBottom: "15px" }}
+                  ></GridItem>
+                  <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
+                  
+                   {values.recurringby===1&& <h5 style={{ fontSize: "14px", marginBottom: "15px" }}>Select Days</h5>}
+                   {values.recurringby===2&& <h5 style={{ fontSize: "14px", marginBottom: "15px" }}>Select Days</h5>}
+                   {values.recurringby===3&& <h5 style={{ fontSize: "14px", marginBottom: "15px" }}>Select Dates</h5>}
+                   
+                  </GridItem>
+                  <GridItem
+                    xs="6"
+                    sm="5"
+                    md="3"
+                    style={{ marginBottom: "15px" }}
+                  >
+
+                 {values.recurringby===3&&
+                   <Box
+                   sx={{
+                     display:"flex",
+                     alignItems:"center",
+                     flexWrap:"wrap",
+                   }}
+                   >
+                {dates.map((res:any)=>(
+                  //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
+                   <Box 
+                   className={(monthDates.some((elm)=>(elm)===res))?'active_dates':''}
+                   component="span"
+                   sx={{
+                    width:"32px",
+                    height:"32px",
+                    display:"flex",
+                    alignItems:"center",
+                    justifyContent:"center",
+                    border:"1px solid #ddd",
+                    margin:"5px",
+                    borderRadius:"50%",
+                    fontSize:"12px",
+                    fontWeight:"600",
+                    color:"#000",
+                    "&.active_dates":{
+                    backgroundColor:"#00acc1",
+                    color:"#fff"
+                    }
+                  }}
+                   onClick={()=>handledays2(res)}>{res}</Box>
+                
+                ))}
+          
+              
+                </Box>
+                 }
+                  {values.recurringby===1&& 
+                
+                  <Box
+                     sx={{
+                       display:"flex",
+                       alignItems:"center"
+                     }}
+                     >
+                  {weekdays.map((res)=>(
+                    //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
+                     <Box 
+                     className={(week.some((elm)=>(elm)===res.name))?'active_day':''}
+                     component="span"
+                     sx={{
+                      width:"32px",
+                      height:"32px",
+                      display:"flex",
+                      alignItems:"center",
+                      justifyContent:"center",
+                      border:"1px solid #ddd",
+                      margin:"0 5px",
+                      borderRadius:"50%",
+                      fontSize:"12px",
+                      fontWeight:"600",
+                      color:"#000",
+                      "&.active_day":{
+                        backgroundColor:"#00acc1",
+                        color:"#fff"
+                      }
+                    }}
+                     onClick={()=>handledays1(res.name)}>{res.name.charAt(0)}</Box>
+                  
+                  ))}
+            
+                
+                  </Box>
+                   }
+
+              {values.recurringby===2&& 
+                <Box
+                   sx={{
+                     display:"flex",
+                     alignItems:"center"
+                   }}
+                   >
+                {weekdays.map((res)=>(
+
+                   <Box 
+                   className={(week.some((elm)=>(elm)===res.name))?'active_day':''}
+                   component="span"
+                   sx={{
+                    width:"32px",
+                    height:"32px",
+                    display:"flex",
+                    alignItems:"center",
+                    justifyContent:"center",
+                    border:"1px solid #ddd",
+                    margin:"0 5px",
+                    borderRadius:"50%",
+                    fontSize:"12px",
+                    fontWeight:"600",
+                    color:"#000",
+                    "&.active_day":{
+                      backgroundColor:"#00acc1",
+                      color:"#fff"
+                    }
+                  }}
+                   onClick={()=>handledays1(res.name)}>{res.name.charAt(0)}</Box>
+                
+                ))}
+
+                </Box>
+                 }
+
+                  </GridItem>
+                  {console.log(week.toString(),"week")}
+        
+                 <GridItem
+                    xs="6"
+                    sm="5"
+                    md="3"
+                    style={{ marginBottom: "15px" }}
+                  >
+                    
+
+                </GridItem> </>}
+
+               
+                
+                     
+{/* 1111111111111111111111111111111111111111111111111111111111111111111111111 */}
+{/* eeeeeeeeeeeeeenddddddddddddddddddddddd */}
+
+    {values.recurringby>0 && <>
+                <GridItem
+                    xs="12"
+                    md="4"
+                    style={{ marginBottom: "15px" }}
+                  ></GridItem>
+                  <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
+                  
+                   <h5 style={{ fontSize: "14px", marginBottom: "15px" }}>Select Recurring End Date</h5>
+                   
+                  </GridItem>
+                  <GridItem
+                    xs="6"
+                    sm="5"
+                    md="3"
+                    style={{ marginBottom: "15px" }}
+                  >
+                    <DatePicker
+                      className="datepicker"
+                     
+                      disablePast
+                      value={values.end_date_recurring}
+                      format="dd/MM/yyyy"
+                      onChange={(e) => handleDateChange("end_date_recurring", e)}
+                      animateYearScrolling
+                      id="end_date_recurring"
+                    />
+
+                  </GridItem>
+        
+                 <GridItem
+                    xs="6"
+                    sm="5"
+                    md="3"
+                    style={{ marginBottom: "15px" }}
+                  >
+                    
+                </GridItem> </>}
+{/* ddddddddddddddddddddaaaaaaaaaaaaaaaaaaaateeeeeeeeeeeeeeeeeeeeeeeeeeee*/}
+
                   <GridItem
                     xs="12"
                     md="4"
@@ -368,6 +743,7 @@ export const Booking: FC = () => {
                     />
                     {errors.location && touched.location && <span className={classes.errorColor} style={{color:'red',display: 'inline-block'}}>{errors.location}</span>}
                   </GridItem>
+                  
                   <GridItem
                     xs="12"
                     md="7"
@@ -503,11 +879,20 @@ export const Booking: FC = () => {
                     style={{ marginBottom: "15px" }}
                   >
                     <ItemPicker
-                      data={activitydata}
+                      data={activitylist}
                       value={values.activity}
                       onChange={handleChange}
                       id="activity"
                     />
+                    {/* {console.log(values.activity,'gggggg')} */}
+                     {/* <ItemPicker
+                      data={locations}
+                      value={values.location}
+                      onChange={handleChange}
+                      id="location"
+
+                    /> */}
+                    {console.log(values.activity,"values.activity")}
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -546,7 +931,7 @@ export const Booking: FC = () => {
                   </GridItem>
 
                   
-                  {Number(values.activity) == 1 && (
+                  {Number(values.activity) == 0 && (
                    
                     <>
                       {/* for away team */}
@@ -640,3 +1025,5 @@ export const Booking: FC = () => {
     </div>
   );
 };
+
+
