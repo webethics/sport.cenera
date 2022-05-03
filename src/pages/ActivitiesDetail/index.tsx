@@ -60,6 +60,7 @@ export default function ActivitiesDetail() {
 
   return (
     <>
+
       <Box bgcolor="primary.contrastText" className={classes.wrapper}>
         <AppBar position="static" className={classes.appbar}>
           <Box className={classes.justifyContentCenter}>
@@ -75,7 +76,6 @@ export default function ActivitiesDetail() {
         </AppBar>
         <Banner />
 
-        
         {activityList &&
         (<>
          <Filters 
@@ -101,7 +101,7 @@ export default function ActivitiesDetail() {
          <Table activityList={activityList} /> 
         </>) }
 
-        
+        {!acitivityData && <h4 style={{textAlign:"center"}}>No Activity Found</h4>}
         <footer className={classes.footer}>
           <Grid container>
             <Grid item xs={12}>

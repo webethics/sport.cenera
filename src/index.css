@@ -26,21 +26,38 @@ code {
   max-width: 200px;
   width: 100%;
 }
-
-.rc-time-picker-panel-combobox{
+.rc-time-picker {
+  flex: 1;
+}
+.rc-time-picker-panel-combobox {
   display: flex;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 263.54px;
 }
 .rc-time-picker .rc-time-picker-input {
-  height: 55px;
+  height: 42px;
+  border-color: rgba(0, 0, 0, 0.23);
 }
-.rc-time-picker {
-  width: 100%;
+
+.rc-time-picker-panel-combobox .rc-time-picker-panel-select {
+  max-height: 100%;
+  overflow: visible;
+  flex: 1;
 }
 .rc-time-picker .rc-time-picker-clear {
   top: 50%;
   transform: translateY(-50%);
 }
-
+.rc-time-picker-panel-inner {
+  margin-top: 60px;
+}
+.intervalFormControl .custom-form-control {
+  max-width: 100% !important;
+}
+body .MuiOutlinedInput-input {
+  padding: 11.5px 14px;
+}
 @media screen and (max-width: 600px) {
   .custom-form-control {
     max-width: 100% !important;

@@ -1,4 +1,4 @@
-import React, { useEffect , useState } from "react";
+import React, { useEffect, useState } from "react";
 // import axios from "axios"
 import {
   Modal,
@@ -19,16 +19,16 @@ import CloseIcon from "@material-ui/icons/Close";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { useSnackbar } from "notistack";
-import { useFetchGetLocations} from "@cenera/common/hooks/api-hooks/activity";
-import { useFetchTeams } from '@cenera/common/hooks/api-hooks';
-import { useFetchWardrobes} from "@cenera/common/hooks/api-hooks/activity";
-import { useFetchEditActivities} from "@cenera/common/hooks/api-hooks/activity";
-import { useFetchActivities} from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchGetLocations } from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchTeams } from "@cenera/common/hooks/api-hooks";
+import { useFetchWardrobes } from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchEditActivities } from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchActivities } from "@cenera/common/hooks/api-hooks/activity";
 import { useAppContext } from "@cenera/app-context";
 import { ActivityService } from "@cenera/services/api/activity";
-import moment from "moment"
+import moment from "moment";
 import * as Yup from "yup";
-import { Input } from '@mui/material';
+import { Input } from "@mui/material";
 const useStyles = makeStyles(styles as any);
 
 export default function EditActivityModal(props: any) {
@@ -38,54 +38,54 @@ export default function EditActivityModal(props: any) {
   const classes = useStyles();
   const [selectedDate, SetselectedDate] = useState(new Date());
   const { enqueueSnackbar } = useSnackbar();
-  const {locationData}   = useFetchGetLocations();
+  const { locationData } = useFetchGetLocations();
   const [locations, setLocations] = useState([]);
-  const { teams} = useFetchTeams(); 
-  const [teamsList, setTeamsList] = useState([]); 
-  const {Wardrobesdata} = useFetchWardrobes();
+  const { teams } = useFetchTeams();
+  const [teamsList, setTeamsList] = useState([]);
+  const { Wardrobesdata } = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
   const [acitivityList, setAcitivityList] = useState([]);
 
-
-  const  newobj = {
-    "access_token": appState.authentication.accessToken,
-    "club_id": appState.user.club_id,
-    "activity_id_list": [editActivity]
+  const newobj = {
+    access_token: appState.authentication.accessToken,
+    club_id: appState.user.club_id,
+    activity_id_list: [editActivity],
   };
- 
-  const {Activitydata}  = useFetchActivities(newobj);
+
+  const { Activitydata } = useFetchActivities(newobj);
 
   // const[currenteditactivity,setCurrenteditactivity] = useState(null)
   //data
-  const { EditActivitydata }  = useFetchEditActivities(editActivity);
-  const {addActivity} = ActivityService;
+  const { EditActivitydata } = useFetchEditActivities(editActivity);
+  const { addActivity } = ActivityService;
 
-
- 
-
-  useEffect(()=>{
-    if(Activitydata){
-      setAcitivityList(Activitydata)
+  useEffect(() => {
+    if (Activitydata) {
+      setAcitivityList(Activitydata);
     }
- 
-    if(locationData){
-      const newArr = locationData.map((res:any)=>({id:res.location_id , name:res.location_name}))
-      setLocations(newArr)
+
+    if (locationData) {
+      const newArr = locationData.map((res: any) => ({
+        id: res.location_id,
+        name: res.location_name,
+      }));
+      setLocations(newArr);
     }
-    if(teams) {
-      const newTeam = teams.map((res:any)=>({id:res.team_id, name:res.team_name}))
+    if (teams) {
+      const newTeam = teams.map((res: any) => ({
+        id: res.team_id,
+        name: res.team_name,
+      }));
       setTeamsList(newTeam);
     }
-    if(Wardrobesdata){
-      const newWardrobes = Wardrobesdata.map((res:any)=>({id:res.wardrobe_id, name:res.wardrobe_name}))
+    if (Wardrobesdata) {
+      const newWardrobes = Wardrobesdata.map((res: any) => ({
+        id: res.wardrobe_id,
+        name: res.wardrobe_name,
+      }));
       setWardrobes(newWardrobes);
-      
     }
-  },[Activitydata,locationData,teams,Wardrobesdata])
-
-
-
-  
+  }, [Activitydata, locationData, teams, Wardrobesdata]);
 
   const handleDateChange = (pickerType: string, value: any) => {
     SetselectedDate(value);
@@ -102,7 +102,6 @@ export default function EditActivityModal(props: any) {
     formik.setValues(formikField);
   };
 
- 
   // const editActivityData = async ()=>{
   //  await  axios.get(`https://61ad9197d228a9001703ae3b.mockapi.io/detail/`)
   //   .then(res=>{
@@ -112,133 +111,126 @@ export default function EditActivityModal(props: any) {
   //   })
   // || EditActivitydata && teamsList.find(res=>res.team_id===EditActivitydata[0].team_id)
 
-    const initialFormValues = {
-      team: "",
-      orTeam: "",
-      start_date:  selectedDate ,
-      start_time:   "13:30",
-      end_date:selectedDate,
-      end_time: "17:30",
-      location: "" ,
-      warderobe: "",
-      extWarBef15:  false,
-      extWarBef30:  false,
-      // extWarAf15:   false,
-      // extWarAf30:  false,
-      activity: "",
-      description:  "",
-      away_team:"",
-      away_team_wardrobe: "",
-      referee_wardrobe:"",
-      show_public:true
-    };
+  const initialFormValues = {
+    team: "",
+    orTeam: "",
+    start_date: selectedDate,
+    start_time: "13:30",
+    end_date: selectedDate,
+    end_time: "17:30",
+    location: "",
+    warderobe: "",
+    extWarBef15: false,
+    extWarBef30: false,
+    // extWarAf15:   false,
+    // extWarAf30:  false,
+    activity: "",
+    description: "",
+    away_team: "",
+    away_team_wardrobe: "",
+    referee_wardrobe: "",
+    show_public: true,
+  };
 
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: Yup.object({
-            location: Yup.string()
-            .required("Location is Required"),
-              start_date: Yup.date(),
-              end_date: Yup.date().min(
-                  Yup.ref('start_date'),
-                  "End date can't be before start date"
-                )
-    
-          }),
+      location: Yup.string().required("Location is Required"),
+      start_date: Yup.date(),
+      end_date: Yup.date().min(
+        Yup.ref("start_date"),
+        "End date can't be before start date"
+      ),
+    }),
 
     onSubmit: async (formValues) => {
-      const {start_date , start_time, end_date, end_time} = formValues;
-      const newStartTime = moment(start_date).format('YYYY-MM-DDT')+start_time;
-      const newEndTime = moment(end_date).format('YYYY-MM-DDT')+end_time;
-        const  newobj = {
-        "access_token": appState.authentication.accessToken,
-        "updateType": "update",
-        "club_id": appState.user.club_id,
-        "activity_id": props.activityId,
-        "startTime": newStartTime,
-        "endTime":  newEndTime,
-        "location_id":formValues.location,
-        "activity_type": "training",
-        "recurring_item": "", ////not added in form 
-        "recurring_details":"", //not added in form 
-        "recurring_exceptions":"", //not added in form 
-        "team_id": formValues.team, 
-        "team_text":formValues.team || formValues.orTeam,
-        "away_team_text":formValues.away_team,
-        "wardrobe_id": formValues.warderobe,
-        "wardrobe_id_away": formValues.away_team_wardrobe,
-        "wardrobe_id_referee": formValues.referee_wardrobe,
-        "wardrobe_extra_time": formValues.extWarBef15 && 15 ||formValues.extWarBef30 && 30,
-        "description":formValues.description,
-        "isPublic": formValues.show_public //not added in front end+
-        };
-  
-        let res =  addActivity(newobj);
-        if(res){
-              props.onClose();
-              enqueueSnackbar("Activity Edited Successfully",  { variant: 'success' })
-              props.callUpcomingActivity();
-             }
-             else{
-              enqueueSnackbar('err',  { variant: 'error' })
-             }
-    }
+      const { start_date, start_time, end_date, end_time } = formValues;
+      const newStartTime =
+        moment(start_date).format("YYYY-MM-DDT") + start_time;
+      const newEndTime = moment(end_date).format("YYYY-MM-DDT") + end_time;
+      const newobj = {
+        access_token: appState.authentication.accessToken,
+        updateType: "update",
+        club_id: appState.user.club_id,
+        activity_id: props.activityId,
+        startTime: newStartTime,
+        endTime: newEndTime,
+        location_id: formValues.location,
+        activity_type: "training",
+        recurring_item: "", ////not added in form
+        recurring_details: "", //not added in form
+        recurring_exceptions: "", //not added in form
+        team_id: formValues.team,
+        team_text: formValues.team || formValues.orTeam,
+        away_team_text: formValues.away_team,
+        wardrobe_id: formValues.warderobe,
+        wardrobe_id_away: formValues.away_team_wardrobe,
+        wardrobe_id_referee: formValues.referee_wardrobe,
+        wardrobe_extra_time:
+          (formValues.extWarBef15 && 15) || (formValues.extWarBef30 && 30),
+        description: formValues.description,
+        isPublic: formValues.show_public, //not added in front end+
+      };
+
+      let res = addActivity(newobj);
+      if (res) {
+        props.onClose();
+        enqueueSnackbar("Activity Edited Successfully", { variant: "success" });
+        props.callUpcomingActivity();
+      } else {
+        enqueueSnackbar("err", { variant: "error" });
+      }
+    },
   });
- 
 
   const activitydata = [
-    { name: "Match",id:1 },
-    { name: "Training",id:2 },
-    { name: "Maintenance",id:3 },
+    { name: "Match", id: 1 },
+    { name: "Training", id: 2 },
+    { name: "Maintenance", id: 3 },
   ];
 
-  
   useEffect(() => {
     if (formik.values.activity === "Match") {
       formik.setValues({
         ...formik.values,
-        extWarBef30: true
+        extWarBef30: true,
         // extWarAf30: true,
       });
     } else {
       formik.setValues({
         ...formik.values,
-        extWarBef30: false
+        extWarBef30: false,
         // extWarAf30: false,
       });
     }
-     
+
     //  if(teamsList && EditActivitydata && EditActivitydata.length>0){
     //    const teamName = teamsList.find(res=>res.id===EditActivitydata[0].team_id)
     //    formik.setValues({...formik.values,team:teamName.team_id})
 
     //  } teamsList,EditActivitydata
-     
-   
   }, [formik.values.activity]);
- 
 
-  useEffect(()=>{
-    if(teamsList && EditActivitydata && EditActivitydata.length>0){
-      const teamName = teamsList.find(res=>res.id===EditActivitydata[0].team_id)
-      
-      if(teamName){
-        formik.setValues({...formik.values,team:teamName.id})
+  useEffect(() => {
+    if (teamsList && EditActivitydata && EditActivitydata.length > 0) {
+      const teamName = teamsList.find(
+        (res) => res.id === EditActivitydata[0].team_id
+      );
+
+      if (teamName) {
+        formik.setValues({ ...formik.values, team: teamName.id });
       }
-      
+    }
+  }, [teamsList, EditActivitydata]);
 
-    } 
-  },[teamsList,EditActivitydata])
-
-  useEffect(()=>{
-
-    if(acitivityList[0]){
+  useEffect(() => {
+    if (acitivityList[0]) {
       const starttime = acitivityList[0].startTime;
-      const mstarttime = moment(starttime).format('HH:mm')
+      const mstarttime = moment(starttime).format("HH:mm");
       const endtime = acitivityList[0].endTime;
-      const mendtime = moment(endtime).format('HH:mm')
+      const mendtime = moment(endtime).format("HH:mm");
 
-      console.log(mstarttime,mendtime,"starttime")
+      console.log(mstarttime, mendtime, "starttime");
       formik.setValues({
         ...formik.values,
         warderobe: acitivityList[0].wardrobe_id,
@@ -252,16 +244,16 @@ export default function EditActivityModal(props: any) {
         end_date: acitivityList[0].endTime,
         start_time: mstarttime,
         end_time: mendtime,
-        extWarBef15: acitivityList[0].wardrobe_extra_time==15 && true,
-        extWarBef30:  acitivityList[0].wardrobe_extra_time==30 && true
-      })
+        extWarBef15: acitivityList[0].wardrobe_extra_time == 15 && true,
+        extWarBef30: acitivityList[0].wardrobe_extra_time == 30 && true,
+      });
     }
-  },[acitivityList])
-  if(acitivityList[0]){
-    console.log('current')
+  }, [acitivityList]);
+  if (acitivityList[0]) {
+    console.log("current");
   }
-//startTime
-//moment(res.startTime).format("HH:mm")
+  //startTime
+  //moment(res.startTime).format("HH:mm")
 
   const { values, handleChange, errors, touched } = formik;
 
@@ -279,7 +271,6 @@ export default function EditActivityModal(props: any) {
           <Divider style={{ width: "100%", marginBottom: "15px" }} />
 
           <form onSubmit={formik.handleSubmit}>
-            
             <GridContainer>
               <GridItem xs="12" sm="2" sx={{ mb: 3 }}>
                 <h5 style={{ fontSize: "14px" }}>Team</h5>
@@ -336,17 +327,23 @@ export default function EditActivityModal(props: any) {
                   animateYearScrolling
                   id="start_date"
                 />
-                {errors.end_date && <span className={classes.errorColor} style={{color:'red',display: 'inline-block'}}>{errors.end_date}</span>}
-
+                {errors.end_date && (
+                  <span
+                    className={classes.errorColor}
+                    style={{ color: "red", display: "inline-block" }}
+                  >
+                    {errors.end_date}
+                  </span>
+                )}
               </GridItem>
               <GridItem xs="6" sm="5" md="3" style={{ marginBottom: "15px" }}>
-                    <Input
-                      placeholder="time"
-                      id="start_time"
-                      type="time"
-                      value={values.start_time}
-                      onChange={handleChange}
-                    /> 
+                <Input
+                  placeholder="time"
+                  id="start_time"
+                  type="time"
+                  value={values.start_time}
+                  onChange={handleChange}
+                />
               </GridItem>
               <GridItem
                 xs="12"
@@ -370,13 +367,13 @@ export default function EditActivityModal(props: any) {
                 />
               </GridItem>
               <GridItem xs="6" sm="5" md="3" style={{ marginBottom: "15px" }}>
-                   <Input
-                      placeholder="time"
-                      id="end_time"
-                      type="time"
-                      value={values.end_time}
-                      onChange={handleChange}
-                    /> 
+                <Input
+                  placeholder="time"
+                  id="end_time"
+                  type="time"
+                  value={values.end_time}
+                  onChange={handleChange}
+                />
               </GridItem>
               <GridItem
                 xs="12"
@@ -394,7 +391,14 @@ export default function EditActivityModal(props: any) {
                   onChange={handleChange}
                   id="location"
                 />
-                {errors.location && touched.location && <span className={classes.errorColor} style={{color:'red',display: 'inline-block'}}>{errors.location}</span>}
+                {errors.location && touched.location && (
+                  <span
+                    className={classes.errorColor}
+                    style={{ color: "red", display: "inline-block" }}
+                  >
+                    {errors.location}
+                  </span>
+                )}
               </GridItem>
               <GridItem
                 xs="12"
@@ -403,7 +407,7 @@ export default function EditActivityModal(props: any) {
               ></GridItem>
 
               <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Warderobe</h5>
+                <h5 style={{ fontSize: "14px" }}>Wardrobe</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="3" style={{ marginBottom: "15px" }}>
                 <ItemPicker
@@ -442,7 +446,7 @@ export default function EditActivityModal(props: any) {
                     />
                   }
                   label="15 Min"
-                />  
+                />
 
                 <FormControlLabel
                   control={
@@ -464,7 +468,6 @@ export default function EditActivityModal(props: any) {
               </GridItem>
 
               <GridItem xs="12" sm="5" md="3" style={{ marginBottom: "15px" }}>
-     
                 {/* <h5 style={{ fontSize: "14px" }}>After</h5> */}
                 {/* <FormControlLabel
                   control={
@@ -483,7 +486,7 @@ export default function EditActivityModal(props: any) {
                   }
                   label="15 Min"
                 /> */}
-{/* 
+                {/* 
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -539,25 +542,28 @@ export default function EditActivityModal(props: any) {
                 />
               </GridItem>
 
-
-                  <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
-                    <h5 style={{ fontSize: "14px" }}>Show Activity In Public</h5>
-                  </GridItem>
-                  <GridItem xs="12" sm="10" style={{ marginBottom: "15px" }}>
-                  <FormControlLabel
-                      control={
-                        <Checkbox
-                          id="show_public"
-                          checked={values.show_public}
-                          style={{ color: "#00acc1" }}
-                          onChange={handleChange}
-                        />
-                      }
-                      label={values.show_public?"Your Activity will show in Public page" : ""}
+              <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
+                <h5 style={{ fontSize: "14px" }}>Show Activity In Public</h5>
+              </GridItem>
+              <GridItem xs="12" sm="10" style={{ marginBottom: "15px" }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      id="show_public"
+                      checked={values.show_public}
+                      style={{ color: "#00acc1" }}
+                      onChange={handleChange}
                     />
-                  </GridItem>
+                  }
+                  label={
+                    values.show_public
+                      ? "Your Activity will show in Public page"
+                      : ""
+                  }
+                />
+              </GridItem>
 
-                  {Number(values.activity) == 1 && (
+              {Number(values.activity) == 1 && (
                 <>
                   <Divider
                     style={{

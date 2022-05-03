@@ -3,7 +3,7 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Location from "./Component/Location";
 import Warderobe from "./Component/Warderobe";
-import Activity from "./Component/Activity";
+// import Activity from "./Component/Activity";
 
 const Configuration = () => {
   return (
@@ -16,9 +16,9 @@ const Configuration = () => {
           <Grid item xs={12} sm={6} lg={4}>
             <Warderobe />
           </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          {/* <Grid item xs={12} sm={6} lg={4}>
             <Activity />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </>
