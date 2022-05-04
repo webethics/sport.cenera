@@ -33,7 +33,7 @@ code {
   display: flex;
   max-height: 200px;
   overflow-y: auto;
-  width: 263.54px;
+  width: 251px;
 }
 .rc-time-picker .rc-time-picker-input {
   height: 42px;
@@ -50,7 +50,7 @@ code {
   transform: translateY(-50%);
 }
 .rc-time-picker-panel-inner {
-  margin-top: 60px;
+  margin-top: 44px;
 }
 .intervalFormControl .custom-form-control {
   max-width: 100% !important;

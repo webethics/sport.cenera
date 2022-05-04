@@ -102,8 +102,7 @@ const Warderobe = () => {
   const formik = useFormik({
     initialValues: { warderobe: "" },
     validationSchema: Yup.object({
-      warderobe: Yup.string()
-      .required("Wardrobe is required"),
+      warderobe: Yup.string().required("Wardrobe is required"),
     }),
     onSubmit: async (values: any, { resetForm }) => {
       addWardrobes(values);

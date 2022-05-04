@@ -1,6 +1,11 @@
 import React, { FC, useState, useEffect } from "react";
 import { useFormik } from "formik";
-import { makeStyles, CircularProgress, Backdrop } from "@material-ui/core";
+import {
+  makeStyles,
+  CircularProgress,
+  Backdrop,
+  FormControl,
+} from "@material-ui/core";
 import { GridContainer, GridItem } from "@cenera/components/Grid";
 import { CardHeader, Card, CardBody } from "@cenera/components/Card";
 import { Button } from "@cenera/components/Button/Button";
@@ -26,6 +31,9 @@ import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
 import Box from "@mui/material/Box";
 
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+
 const useStyles = makeStyles(styles as any);
 
 export const Booking: FC = () => {
@@ -34,6 +42,7 @@ export const Booking: FC = () => {
   const [appState] = useAppContext();
   const classes = useStyles();
   const [selectedDate, SetselectedDate] = useState(new Date());
+
   const [activitylist, setactivitylist] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const { locationData } = useFetchGetLocations();
@@ -45,6 +54,7 @@ export const Booking: FC = () => {
   const [wardrobes, setWardrobes] = useState([]);
   const { addActivity } = ActivityService;
   const [fetchupcoming, setFetchupcoming] = useState(0);
+  // const[weekerror,setweekerror]= useState(false);
 
   //Recurring
   const recurring = [
@@ -52,11 +62,11 @@ export const Booking: FC = () => {
     { name: "No", id: 2 },
   ];
 
-  const recurringby = [
-    { name: "Weekly", id: 1 },
-    { name: "bi-weekly", id: 2 },
-    { name: "monthly", id: 3 },
-  ];
+  // const recurringby = [
+  //   { name: "Weekly", id: 1 },
+  //   { name: "bi-weekly", id: 2 },
+  //   { name: "monthly", id: 3 },
+  // ];
 
   const weekdays = [
     { name: "Monday" },
@@ -125,6 +135,13 @@ export const Booking: FC = () => {
     formik.setValues(formikField);
   };
 
+  // const handleenddate = (pickerType: string, value: any) =>{
+  //   const formikField = { ...formik.values };
+  //   if (pickerType === "end_date_recurring") {
+  //     formikField["end_date_recurring"] = value;
+  //   }
+  // }
+
   const initialFormValues = {
     team: "",
     orTeam: "",
@@ -145,15 +162,14 @@ export const Booking: FC = () => {
     referee_wardrobe: "",
     show_public: true,
     recurring: 0,
-    recurringby: "",
+    recurringby: 1,
     end_date_recurring: selectedDate,
-    recurringtype: "",
+
     week_day: "",
+    month_day: "",
   };
 
   const handledays1 = (el: string) => {
-    formik.setValues({ ...formik.values, week_day: "okk" });
-    console.log(week.some((elm) => elm.name === el));
     if (week.some((elm) => elm === el)) {
       setweek(week.filter((elm) => elm !== el));
     } else {
@@ -165,7 +181,6 @@ export const Booking: FC = () => {
   };
 
   const handledays2 = (el: number) => {
-    formik.setValues({ ...formik.values, week_day: "okk" });
     if (monthDates.some((elm) => elm == el)) {
       console.log("ran");
       setMonthDates(monthDates.filter((elm) => elm !== el));
@@ -205,17 +220,19 @@ export const Booking: FC = () => {
       });
     }
   };
-
+  //month_day
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: Yup.object({
       recurring: Yup.number(),
-      recurringby: Yup.string().when("recurring", {
+      week_day: Yup.string().when("recurring", {
         is: 1,
         then: Yup.string().required("Field is required"),
       }),
-      week_day: Yup.string().when("recurring", {
-        is: 1,
+
+      recurringby: Yup.number(),
+      month_day: Yup.string().when("recurringby", {
+        is: 3,
         then: Yup.string().required("Field is required"),
       }),
 
@@ -273,17 +290,18 @@ export const Booking: FC = () => {
         location_id: formValues.location,
         activity_type: activity,
 
-        ...(formValues.recurring == 1
+        ...(formValues.recurring === 1
           ? { recurring_item: true }
           : { recurring_item: false }),
         // "recurring_details": formValues.recurringby==1 && "", //not added in form
-        ...(formValues.recurringby == "1" && {
-          recurring_details: `weekly:${week.toString()}`,
-        }),
-        ...(formValues.recurringby == "2" && {
+        ...(formValues.recurring === 1 &&
+          formValues.recurringby === 1 && {
+            recurring_details: `weekly:${week.toString()}`,
+          }),
+        ...(formValues.recurringby === 2 && {
           recurring_details: `bi-weekly:${week.toString()}`,
         }),
-        ...(formValues.recurringby == "3" && {
+        ...(formValues.recurringby === 3 && {
           recurring_details: `monthly:${monthDates.toString()}`,
         }),
         ...(formValues.team.length && { team_id: formValues.team }),
@@ -330,11 +348,31 @@ export const Booking: FC = () => {
     }
   }, [formik.values.activity]);
 
-  const { values, handleChange, errors, touched } = formik;
+  useEffect(() => {
+    if (week.length > 0) {
+      formik.setValues({ ...formik.values, week_day: "okk" });
+    } else {
+      formik.setValues({ ...formik.values, week_day: "" });
+    }
+  }, [week, monthDates]);
 
+  useEffect(() => {
+    if (monthDates.length > 0) {
+      formik.setValues({ ...formik.values, month_day: "okk" });
+    } else {
+      formik.setValues({ ...formik.values, month_day: "" });
+    }
+  }, [monthDates]);
+
+  const handleChangedays = (event: any) => {
+    formik.setValues({ ...formik.values, recurringby: event.target.value });
+  };
+
+  const { values, handleChange, errors, touched } = formik;
+  // console.log(formik.values.recurring, "nnnnnnnnnn");
+  // console.log(monthDates.length, "initiallengthhhhhhhhh");
   return (
     <div>
-      {console.log(monthDates)}
       <GridContainer>
         <GridItem xs={11} sm={11} md={11} xl={8} className={classes.container}>
           <Card>
@@ -597,40 +635,57 @@ export const Booking: FC = () => {
                           >
                             Interval
                           </Box>
-                          <ItemPicker
+                          {/* <ItemPicker
                             placeholder="selectType"
                             data={recurringby}
                             value={values.recurringby}
                             onChange={handleChange}
-                            id="recurringby"
-                          />
+                            id="recurringby"     
+                          /> */}
+                          <FormControl
+                            style={{ maxWidth: 200, width: "100%" }}
+                            className="custom-form-control"
+                          >
+                            <Select
+                              id="recurringby"
+                              value={values.recurringby}
+                              onChange={handleChangedays}
+                              style={{ fontSize: "13px", fontWeight: "300" }}
+                            >
+                              <MenuItem
+                                style={{ fontSize: "13px", fontWeight: "300" }}
+                                value={1}
+                              >
+                                weekly
+                              </MenuItem>
+                              <MenuItem
+                                style={{ fontSize: "13px", fontWeight: "300" }}
+                                value={2}
+                              >
+                                bi-weekly
+                              </MenuItem>
+                              <MenuItem
+                                style={{ fontSize: "13px", fontWeight: "300" }}
+                                value={3}
+                              >
+                                monthly
+                              </MenuItem>
+                            </Select>
+                          </FormControl>
                         </>
                       )}
                     </Box>
-                    {errors.recurringby && touched.recurringby && (
-                      <span
-                        className={classes.errorColor}
-                        style={{
-                          color: "red",
-                          display: "inline-block",
-                          marginLeft: "65px",
-                          fontSize: "12px",
-                        }}
-                      >
-                        {errors.recurringby}
-                      </span>
-                    )}
+                    {console.log(values.recurringby, "lllllllll")}
                   </GridItem>
                   <GridItem
                     xs="12"
                     md="2"
                     style={{ marginBottom: "15px" }}
                   ></GridItem>
-                  {console.log(values.recurringby, "by  value yes/no")}
 
                   {/*Select Recurring Days/Week*/}
 
-                  {values.recurring == 1 && values.recurringby > "0" && (
+                  {values.recurring == 1 && values.recurringby > 0 && (
                     <>
                       <GridItem
                         xs="12"
@@ -638,25 +693,25 @@ export const Booking: FC = () => {
                         md="2"
                         style={{ marginBottom: "15px" }}
                       >
-                        {values.recurringby == "1" && (
+                        {values.recurringby === 1 && (
                           <h5
                             style={{ fontSize: "14px", marginBottom: "15px" }}
                           >
-                            Select Days
+                            Select Recurring Days
                           </h5>
                         )}
-                        {values.recurringby == "2" && (
+                        {values.recurringby === 2 && (
                           <h5
                             style={{ fontSize: "14px", marginBottom: "15px" }}
                           >
-                            Select Days
+                            Select Recurring Days
                           </h5>
                         )}
-                        {values.recurringby == "3" && (
+                        {values.recurringby === 3 && (
                           <h5
                             style={{ fontSize: "14px", marginBottom: "15px" }}
                           >
-                            Select Dates
+                            Select Recurring Dates
                           </h5>
                         )}
                       </GridItem>
@@ -666,7 +721,7 @@ export const Booking: FC = () => {
                         md="4"
                         style={{ marginBottom: "15px" }}
                       >
-                        {values.recurringby == "3" && (
+                        {values.recurringby === 3 && (
                           <Box
                             sx={{
                               display: "flex",
@@ -705,9 +760,20 @@ export const Booking: FC = () => {
                                 {res}
                               </Box>
                             ))}
+                            {errors.month_day && touched.month_day && (
+                              <span
+                                style={{
+                                  color: "red",
+                                  marginLeft: "12px",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                {errors.month_day}
+                              </span>
+                            )}
                           </Box>
                         )}
-                        {values.recurringby == "1" && (
+                        {values.recurringby === 1 && (
                           <Box
                             sx={{
                               display: "flex",
@@ -737,6 +803,7 @@ export const Booking: FC = () => {
                                   fontWeight: "400",
                                   color: "#565656",
                                   lineHeight: "0",
+
                                   "&.active_day": {
                                     backgroundColor: "#00acc1",
                                     color: "#fff",
@@ -747,10 +814,21 @@ export const Booking: FC = () => {
                                 {res.name.charAt(0)}
                               </Box>
                             ))}
+                            {errors.week_day && touched.week_day && (
+                              <span
+                                style={{
+                                  color: "red",
+                                  marginLeft: "12px",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                {errors.week_day}
+                              </span>
+                            )}
                           </Box>
                         )}
 
-                        {values.recurringby == "2" && (
+                        {values.recurringby === 2 && (
                           <Box
                             sx={{
                               display: "flex",
@@ -789,21 +867,20 @@ export const Booking: FC = () => {
                                 {res.name.charAt(0)}
                               </Box>
                             ))}
+                            {errors.week_day && touched.week_day && (
+                              <span
+                                style={{
+                                  color: "red",
+                                  marginLeft: "12px",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                {errors.week_day}
+                              </span>
+                            )}
                           </Box>
                         )}
-                        {errors.week_day && touched.week_day && (
-                          <span
-                            style={{
-                              color: "red",
-                              marginLeft: "12px",
-                              fontSize: "12px",
-                            }}
-                          >
-                            {errors.week_day}
-                          </span>
-                        )}
                       </GridItem>
-                      {console.log(week.toString(), "week")}
                       <GridItem
                         xs="6"
                         sm="5"
@@ -819,8 +896,11 @@ export const Booking: FC = () => {
                   )}
 
                   {/* Start Recurring End Date */}
-
-                  {values.recurring == 1 && values.recurringby > "0" && (
+                  {console.log(
+                    values.recurringby,
+                    "values.recurringbyvalues.recurringbyvalues.recurringby"
+                  )}
+                  {values.recurring === 1 && values.recurringby > 0 && (
                     <>
                       <GridItem
                         xs="12"
@@ -829,7 +909,7 @@ export const Booking: FC = () => {
                         style={{ marginBottom: "15px" }}
                       >
                         <h5 style={{ fontSize: "14px", marginBottom: "15px" }}>
-                          Select Recurring End Date
+                          Recurring End Date
                         </h5>
                       </GridItem>
                       <GridItem
@@ -858,10 +938,6 @@ export const Booking: FC = () => {
                           </span>
                         )}
                       </GridItem>
-                      {console.log(
-                        values.end_date_recurring,
-                        "end date value is here"
-                      )}
                       <GridItem
                         xs="6"
                         sm="5"
@@ -897,11 +973,15 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                       id="location"
                     />
-                    {console.log(values.location, "location value ")}
+
                     {errors.location && touched.location && (
                       <span
                         className={classes.errorColor}
-                        style={{ color: "red", display: "inline-block" }}
+                        style={{
+                          color: "red",
+                          display: "inline-block",
+                          fontSize: "12px",
+                        }}
                       >
                         {errors.location}
                       </span>
@@ -1081,7 +1161,6 @@ export const Booking: FC = () => {
                       id="location"
 
                     /> */}
-                    {console.log(values.activity, "values.activity")}
                   </GridItem>
                   <GridItem
                     xs="12"

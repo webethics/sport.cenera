@@ -77,7 +77,10 @@ export default function LoginPage() {
           appDispatch(UserLoggedIn(result));
           history.replace("/admin/dashboard");
         } catch {
-          enqueueSnackbar("Login failed, either your email or password was wrong.", { variant: "error" });
+          enqueueSnackbar(
+            "Login failed, either your email or password was wrong.",
+            { variant: "error" }
+          );
         }
       }
     },
@@ -99,9 +102,14 @@ export default function LoginPage() {
               <GridItem xs={12} sm={6} md={4}>
                 <form onSubmit={formik.handleSubmit}>
                   <Card login={true} className={classes[cardAnimation]}>
-                    <CardHeader className={`${classes.cardHeader} ${classes.textCenter}`} color="rose">
+                    <CardHeader
+                      className={`${classes.cardHeader} ${classes.textCenter}`}
+                      color="rose"
+                    >
                       <h4 className={classes.cardTitle}>Log in</h4>
-                      <div className={classes.socialLine}>Please Login with your credentials.</div>
+                      <div className={classes.socialLine}>
+                        Please Login with your credentials.
+                      </div>
                     </CardHeader>
                     <CardBody>
                       <CustomInput
@@ -124,7 +132,11 @@ export default function LoginPage() {
                           value: values.email,
                         }}
                       />
-                      {errors.email && touched.email ? <label className={classes.errorLabel}>{errors.email}</label> : null}
+                      {errors.email && touched.email ? (
+                        <label className={classes.errorLabel}>
+                          {errors.email}
+                        </label>
+                      ) : null}
 
                       <CustomInput
                         labelText="Password"
@@ -132,11 +144,15 @@ export default function LoginPage() {
                         formControlProps={{
                           fullWidth: true,
                         }}
-                        error={touched.password && errors.password ? true : false}
+                        error={
+                          touched.password && errors.password ? true : false
+                        }
                         inputProps={{
                           endAdornment: (
                             <InputAdornment position="end">
-                              <Icon className={classes.inputAdornmentIcon}>lock_outline</Icon>
+                              <Icon className={classes.inputAdornmentIcon}>
+                                lock_outline
+                              </Icon>
                             </InputAdornment>
                           ),
                           name: "password",
@@ -148,7 +164,11 @@ export default function LoginPage() {
                         }}
                       />
 
-                      {errors.password && touched.password ? <label className={classes.errorLabel}>{errors.password}</label> : null}
+                      {errors.password && touched.password ? (
+                        <label className={classes.errorLabel}>
+                          {errors.password}
+                        </label>
+                      ) : null}
 
                       <div className={classes.checkboxAndRadio}>
                         <FormControlLabel
@@ -156,7 +176,9 @@ export default function LoginPage() {
                             <Checkbox
                               tabIndex={-1}
                               onClick={handleRememberMeToggle}
-                              checkedIcon={<Check className={classes.checkedIcon} />}
+                              checkedIcon={
+                                <Check className={classes.checkedIcon} />
+                              }
                               icon={<Check className={classes.uncheckedIcon} />}
                               classes={{
                                 checked: classes.checked,
@@ -173,13 +195,27 @@ export default function LoginPage() {
                         />
                       </div>
 
-                      <MatButton onClick={() => setPasswordResetDlgOpen(true)}>Forgot your password?</MatButton>
+                      <MatButton onClick={() => setPasswordResetDlgOpen(true)}>
+                        Forgot your password?
+                      </MatButton>
 
-                      {formik.isSubmitting ? <CircularProgress size="24px" className={classes.circularProgress} /> : null}
+                      {formik.isSubmitting ? (
+                        <CircularProgress
+                          size="24px"
+                          className={classes.circularProgress}
+                        />
+                      ) : null}
                     </CardBody>
 
                     <CardFooter className={classes.justifyContentCenter}>
-                      <Button color="rose" simple={true} size="lg" block={true} type="submit" disabled={formik.isSubmitting}>
+                      <Button
+                        color="rose"
+                        simple={true}
+                        size="lg"
+                        block={true}
+                        type="submit"
+                        disabled={formik.isSubmitting}
+                      >
                         Login
                       </Button>
                     </CardFooter>
@@ -187,7 +223,10 @@ export default function LoginPage() {
                 </form>
               </GridItem>
             </GridContainer>
-            <PasswordResetDialog open={passwordResetDlgOpen} onClose={() => setPasswordResetDlgOpen(false)} />
+            <PasswordResetDialog
+              open={passwordResetDlgOpen}
+              onClose={() => setPasswordResetDlgOpen(false)}
+            />
           </div>
           <Footer white={true} />
         </div>
