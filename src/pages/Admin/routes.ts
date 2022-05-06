@@ -15,12 +15,27 @@ import GroupsIcon from "@material-ui/icons/PeopleOutline";
 import { ClubsManagement } from "@cenera/views/Club";
 import { TeamsManagement } from "@cenera/views/Team";
 import { PlayersManagement } from "@cenera/views/Player";
-import { GameInfo, GameResults, GameLineUp, AwayTeam } from "@cenera/views/Games";
+import {
+  GameInfo,
+  GameResults,
+  GameLineUp,
+  AwayTeam,
+} from "@cenera/views/Games";
 import { Booking, Configuration } from "@cenera/views/Activity";
 import { Dashboard } from "@cenera/views/Dashboard";
 import { UsersManagement } from "@cenera/views/UserManagement";
-import SettingsIcon from '@material-ui/icons/Settings';
+import SettingsIcon from "@material-ui/icons/Settings";
+// import { useAppContext } from "@cenera/app-context";
 
+// const [appState] = useAppContext();
+// useEffect(() => {
+//   if (appState.user.user_type === "clubAdmin" && teamsList !== null) {
+//     setshowDropDown(true);
+//   } else {
+//     setshowDropDown(false);
+//     setTeamId(null);
+//   }
+// }, [teamsList]);
 export const adminRoutes = [
   {
     path: "/dashboard",
@@ -102,7 +117,6 @@ export const adminRoutes = [
       },
     ],
   },
-
   {
     collapse: true,
     name: "Activity",

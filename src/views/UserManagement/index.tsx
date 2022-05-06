@@ -1,18 +1,21 @@
-import React, { FC, useState } from 'react';
-import { GridContainer, GridItem } from '@cenera/components/Grid';
+import React, { FC, useState } from "react";
+import { GridContainer, GridItem } from "@cenera/components/Grid";
 
-import { UsersList } from './components/UsersList';
-import { CreateEditUser } from './components/CreateEditUser';
-import { useFetchUsers, useFetchClubs } from '@cenera/common/hooks/api-hooks';
-import { User } from '@cenera/models';
-import { Card, CardBody } from '@cenera/components/Card';
-import { CircularProgress } from '@material-ui/core';
+import { UsersList } from "./components/UsersList";
+import { CreateEditUser } from "./components/CreateEditUser";
+import { useFetchUsers, useFetchClubs } from "@cenera/common/hooks/api-hooks";
+import { User } from "@cenera/models";
+import { Card, CardBody } from "@cenera/components/Card";
+import { CircularProgress } from "@material-ui/core";
 
 export const UsersManagement: FC = () => {
   const { users, loading, error, revalidate } = useFetchUsers();
   const { clubs, loading: clubsLoading } = useFetchClubs();
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  if (users && users[1]) {
+    console.log(users[1].user_club, "selectedUserselectedUser");
+  }
 
   const handleUsersUpdate = () => {
     revalidate();
@@ -55,7 +58,7 @@ export const UsersManagement: FC = () => {
             clubsLoading ? (
               <Card>
                 <CardBody>
-                  <p style={{ textAlign: 'center' }}>
+                  <p style={{ textAlign: "center" }}>
                     <CircularProgress />
                   </p>
                 </CardBody>
@@ -72,7 +75,9 @@ export const UsersManagement: FC = () => {
           ) : (
             <Card>
               <CardBody>
-                <p style={{ textAlign: 'center' }}>Please click add team on the left side or edit a team.</p>
+                <p style={{ textAlign: "center" }}>
+                  Please click add team on the left side or edit a team.
+                </p>
               </CardBody>
             </Card>
           )}

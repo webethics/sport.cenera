@@ -1,20 +1,30 @@
-import React, { FC, useState, useEffect } from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { MenuItem, makeStyles, FormControl, InputLabel, Select, Backdrop, CircularProgress } from '@material-ui/core';
-import { useSnackbar } from 'notistack';
+import React, { FC, useState, useEffect } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import {
+  MenuItem,
+  makeStyles,
+  FormControl,
+  InputLabel,
+  Select,
+  Backdrop,
+  CircularProgress,
+} from "@material-ui/core";
+import { useSnackbar } from "notistack";
 
-import { useAppContext } from '@cenera/app-context';
-import { CardHeader, Card, CardBody } from '@cenera/components/Card';
-import { GridContainer, GridItem } from '@cenera/components/Grid';
-import { CustomInput } from '@cenera/components/CustomInput/CustomInput';
-import { Button as CustomButton } from '@cenera/components/Button/Button';
-import { getErrorMessage } from '@cenera/common/utils/error-helper';
-import { User, Club } from '@cenera/models';
+import { useAppContext } from "@cenera/app-context";
+import { CardHeader, Card, CardBody } from "@cenera/components/Card";
+import { GridContainer, GridItem } from "@cenera/components/Grid";
+import { CustomInput } from "@cenera/components/CustomInput/CustomInput";
+import { Button as CustomButton } from "@cenera/components/Button/Button";
+import { getErrorMessage } from "@cenera/common/utils/error-helper";
+import { User, Club } from "@cenera/models";
 
-import { styles } from './styles';
-import { UserService } from '@cenera/services/api';
-
+import { styles } from "./styles";
+import { UserService } from "@cenera/services/api";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import { useFetchUser } from "@cenera/common/hooks/api-hooks";
 const useStyles = makeStyles(styles as any);
 
 type Props = {
@@ -24,56 +34,86 @@ type Props = {
   clubs: Club[];
 };
 
-export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdit, onEditCancel }) => {
+export const CreateEditUser: FC<Props> = ({
+  clubs,
+  toEditUser,
+  onUserCreateOrEdit,
+  onEditCancel,
+}) => {
   const classes = useStyles();
   const [appState] = useAppContext();
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
+  const id = toEditUser && toEditUser.user_id;
+  const { user, loading, revalidate } = useFetchUser(id);
 
   const { enqueueSnackbar } = useSnackbar();
 
+  //allowBooking
+
   const initialFormValues = {
-    user_login: toEditUser ? toEditUser.user_login : '',
+    user_login: toEditUser ? toEditUser.user_login : "",
     user_type: toEditUser
       ? toEditUser.user_type
-      : appState.user.user_type === 'sysAdmin'
-      ? ''
-      : appState.user.user_type === 'clubAdmin'
-      ? 'teamAdmin'
-      : '',
+      : appState.user.user_type === "sysAdmin"
+      ? ""
+      : appState.user.user_type === "clubAdmin"
+      ? "teamAdmin"
+      : "",
     user_club: toEditUser
       ? toEditUser.user_club || -1
-      : appState.user.user_type !== 'sysAdmin'
+      : appState.user.user_type !== "sysAdmin"
       ? appState.user.club_id
       : -1,
     user_team: toEditUser ? toEditUser.user_team || -1 : -1,
-    allowBooking: true
+    allowBooking: false,
+    allowGameinfo: false,
   };
-
+  // allowBooking: user && user.allowBooking,
+  // allowGameinfo: user && user.allowGameinfo,
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: Yup.object({
       user_login: Yup.string()
-        .required('Required')
-        .email('Enter a valid Email!'),
-      user_type: Yup.string().required('Required'),
-      user_club: Yup.number().required('Required'),
-      user_team: Yup.number().required('Required'),
+        .required("Required")
+        .email("Enter a valid Email!"),
+      user_type: Yup.string().required("Required"),
+      user_club: Yup.number().required("Required"),
+      user_team: Yup.number().required("Required"),
     }),
-    onSubmit: async formValues => {
+    onSubmit: async (formValues) => {
       try {
         if (formik.isValid) {
-          const user = toEditUser ? { ...toEditUser, ...formValues } : formValues;
-          const res = await UserService.createOrUpdateUser(user, appState.authentication.accessToken);
-          enqueueSnackbar(res.data.message, { variant: 'success' });
+          const user = toEditUser
+            ? { ...toEditUser, ...formValues }
+            : formValues;
+          const res = await UserService.createOrUpdateUser(
+            user,
+            appState.authentication.accessToken
+          );
+          enqueueSnackbar(res.data.message, { variant: "success" });
+          revalidate();
           onUserCreateOrEdit();
           formik.setValues(initialFormValues);
         }
       } catch (err) {
-        enqueueSnackbar(getErrorMessage(err), { variant: 'error' });
+        enqueueSnackbar(getErrorMessage(err), { variant: "error" });
       }
     },
   });
+  useEffect(() => {
+    if (user) {
+      formik.setValues({
+        ...formik.values,
+        allowBooking: user.allowBooking,
+        allowGameinfo: user.allowGameinfo,
+      });
+      // formik.setValues({ ...formik.values, allowGameinfo: user.allowGameinfo });
+    }
+  }, [loading]);
 
+  if (user && loading === false && user.allowBooking) {
+    console.log("single user", user.allowBooking);
+  }
   const handleClubChange = (
     event: React.ChangeEvent<{
       name?: string;
@@ -81,14 +121,14 @@ export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdi
     }>
   ) => {
     handleChange(event);
-    setSelectedClub(clubs.find(c => c.club_id === event.target.value));
+    setSelectedClub(clubs.find((c) => c.club_id === event.target.value));
   };
 
   useEffect(() => {
     if (toEditUser) {
-      setSelectedClub(clubs.find(c => c.club_id === toEditUser.user_club));
-    } else if (appState.user.user_type !== 'sysAdmin') {
-      setSelectedClub(clubs.find(c => c.club_id === appState.user.club_id));
+      setSelectedClub(clubs.find((c) => c.club_id === toEditUser.user_club));
+    } else if (appState.user.user_type !== "sysAdmin") {
+      setSelectedClub(clubs.find((c) => c.club_id === appState.user.club_id));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clubs, toEditUser]);
@@ -98,7 +138,11 @@ export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdi
   return (
     <Card>
       <CardHeader>
-        <h4>{toEditUser ? `Edit User ${toEditUser.user_login}` : 'Create New User'}</h4>
+        <h4>
+          {toEditUser
+            ? `Edit User ${toEditUser.user_login}`
+            : "Create New User"}
+        </h4>
       </CardHeader>
       <CardBody>
         <form onSubmit={formik.handleSubmit}>
@@ -115,16 +159,24 @@ export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdi
                   value: values.user_login,
                   onChange: handleChange,
                   onBlur: handleBlur,
-                  type: 'text',
+                  type: "text",
                 }}
               />
               {errors.user_login && touched.user_login ? (
-                <label className={classes.errorLabel}>{errors.user_login}</label>
+                <label className={classes.errorLabel}>
+                  {errors.user_login}
+                </label>
               ) : null}
 
-              {appState.user.user_type === 'sysAdmin' ? (
-                <FormControl fullWidth={true} className={classes.selectFormControl}>
-                  <InputLabel htmlFor="user_type" className={classes.selectLabel}>
+              {appState.user.user_type === "sysAdmin" ? (
+                <FormControl
+                  fullWidth={true}
+                  className={classes.selectFormControl}
+                >
+                  <InputLabel
+                    htmlFor="user_type"
+                    className={classes.selectLabel}
+                  >
                     User Role
                   </InputLabel>
                   <Select
@@ -139,24 +191,27 @@ export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdi
                     onBlur={handleBlur}
                     error={formik.errors.user_type ? true : false}
                     inputProps={{
-                      name: 'user_type',
-                      id: 'user_type',
-                    }}>
+                      name: "user_type",
+                      id: "user_type",
+                    }}
+                  >
                     <MenuItem
                       disabled={true}
                       classes={{
                         root: classes.selectMenuItem,
-                      }}>
+                      }}
+                    >
                       Choose User Role
                     </MenuItem>
-                    {appState.appTypes.userTypes.map(userType => (
+                    {appState.appTypes.userTypes.map((userType) => (
                       <MenuItem
                         key={userType}
                         classes={{
                           root: classes.selectMenuItem,
                           selected: classes.selectMenuItemSelected,
                         }}
-                        value={userType}>
+                        value={userType}
+                      >
                         {userType}
                       </MenuItem>
                     ))}
@@ -164,9 +219,15 @@ export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdi
                 </FormControl>
               ) : null}
 
-              {appState.user.user_type === 'sysAdmin' ? (
-                <FormControl fullWidth={true} className={classes.selectFormControl}>
-                  <InputLabel htmlFor="user_club" className={classes.selectLabel}>
+              {appState.user.user_type === "sysAdmin" ? (
+                <FormControl
+                  fullWidth={true}
+                  className={classes.selectFormControl}
+                >
+                  <InputLabel
+                    htmlFor="user_club"
+                    className={classes.selectLabel}
+                  >
                     User Club
                   </InputLabel>
                   <Select
@@ -181,24 +242,27 @@ export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdi
                     onBlur={handleBlur}
                     error={formik.errors.user_club ? true : false}
                     inputProps={{
-                      name: 'user_club',
-                      id: 'user_club',
-                    }}>
+                      name: "user_club",
+                      id: "user_club",
+                    }}
+                  >
                     <MenuItem
                       disabled={true}
                       classes={{
                         root: classes.selectMenuItem,
-                      }}>
+                      }}
+                    >
                       Choose User Role
                     </MenuItem>
-                    {clubs.map(club => (
+                    {clubs.map((club) => (
                       <MenuItem
                         key={club.club_id}
                         classes={{
                           root: classes.selectMenuItem,
                           selected: classes.selectMenuItemSelected,
                         }}
-                        value={club.club_id}>
+                        value={club.club_id}
+                      >
                         {club.club_name}
                       </MenuItem>
                     ))}
@@ -206,7 +270,10 @@ export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdi
                 </FormControl>
               ) : null}
 
-              <FormControl fullWidth={true} className={classes.selectFormControl}>
+              <FormControl
+                fullWidth={true}
+                className={classes.selectFormControl}
+              >
                 <InputLabel htmlFor="user_team" className={classes.selectLabel}>
                   User Team
                 </InputLabel>
@@ -222,25 +289,28 @@ export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdi
                   onBlur={handleBlur}
                   error={formik.errors.user_team ? true : false}
                   inputProps={{
-                    name: 'user_team',
-                    id: 'user_team',
-                  }}>
+                    name: "user_team",
+                    id: "user_team",
+                  }}
+                >
                   <MenuItem
                     disabled={true}
                     classes={{
                       root: classes.selectMenuItem,
-                    }}>
+                    }}
+                  >
                     Choose User Team
                   </MenuItem>
                   {selectedClub ? (
-                    selectedClub.teams.map(team => (
+                    selectedClub.teams.map((team) => (
                       <MenuItem
                         key={team.team_id}
                         classes={{
                           root: classes.selectMenuItem,
                           selected: classes.selectMenuItemSelected,
                         }}
-                        value={team.team_id}>
+                        value={team.team_id}
+                      >
                         {team.team_name}
                       </MenuItem>
                     ))
@@ -250,7 +320,8 @@ export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdi
                         root: classes.selectMenuItem,
                         selected: classes.selectMenuItemSelected,
                       }}
-                      value={-1}>
+                      value={-1}
+                    >
                       Please first choose a Club
                     </MenuItem>
                   )}
@@ -258,22 +329,54 @@ export const CreateEditUser: FC<Props> = ({ clubs, toEditUser, onUserCreateOrEdi
               </FormControl>
             </GridItem>
           </GridContainer>
-
+          <div>
+            <GridItem xs="12" sm="10" style={{ marginBottom: "15px" }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    id="allowGameinfo"
+                    checked={formik.values.allowGameinfo}
+                    onChange={formik.handleChange}
+                  />
+                }
+                label="Allow booking"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    id="allowBooking"
+                    checked={formik.values.allowBooking}
+                    onChange={formik.handleChange}
+                  />
+                }
+                label="Allow Games"
+              />
+            </GridItem>
+          </div>
           <div className={classes.btnContainer}>
-            <CustomButton color="info" className={classes.btnSubmit} type="submit" disabled={formik.isSubmitting}>
-              {toEditUser ? 'Edit User' : 'Create User'}
+            <CustomButton
+              color="info"
+              className={classes.btnSubmit}
+              type="submit"
+              disabled={formik.isSubmitting}
+            >
+              {toEditUser ? "Edit User" : "Create User"}
             </CustomButton>
 
             <CustomButton
               color="danger"
               className={classes.btnSubmit}
               disabled={formik.isSubmitting}
-              onClick={onEditCancel}>
+              onClick={onEditCancel}
+            >
               Cancel
             </CustomButton>
           </div>
         </form>
-        <Backdrop className={classes.backdrop} open={formik.isSubmitting}>
+        <Backdrop
+          className={classes.backdrop}
+          open={formik.isSubmitting || loading}
+        >
           <CircularProgress color="inherit" />
         </Backdrop>
       </CardBody>

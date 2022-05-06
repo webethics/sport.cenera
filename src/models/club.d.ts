@@ -10,4 +10,5 @@ export type Club = {
   club_image: string;
   club_image_logo: string;
   teams?: { team_id: number; team_name: string; team_type: string }[];
+  allowBooking?: boolean;
 };

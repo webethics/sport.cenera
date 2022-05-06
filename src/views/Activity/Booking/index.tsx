@@ -11,7 +11,7 @@ import { CardHeader, Card, CardBody } from "@cenera/components/Card";
 import { Button } from "@cenera/components/Button/Button";
 import { styles } from "./styles";
 import ItemPicker from "./Components/ItemPicker";
-import { DatePicker } from "@material-ui/pickers";
+// import { DatePicker } from "@material-ui/pickers";
 import { TextField, Divider } from "@material-ui/core";
 import UpcomingActivities from "./Components/UpcomingActivities";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -33,6 +33,8 @@ import Box from "@mui/material/Box";
 
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+
+import { KeyboardDatePicker } from "@material-ui/pickers";
 
 const useStyles = makeStyles(styles as any);
 
@@ -61,12 +63,6 @@ export const Booking: FC = () => {
     { name: "Yes", id: 1 },
     { name: "No", id: 2 },
   ];
-
-  // const recurringby = [
-  //   { name: "Weekly", id: 1 },
-  //   { name: "bi-weekly", id: 2 },
-  //   { name: "monthly", id: 3 },
-  // ];
 
   const weekdays = [
     { name: "Monday" },
@@ -146,9 +142,9 @@ export const Booking: FC = () => {
     team: "",
     orTeam: "",
     start_date: selectedDate,
-    start_time: "13:30",
+    start_time: "",
     end_date: selectedDate,
-    end_time: "18:30",
+    end_time: "",
     location: "",
     warderobe: "",
     extWarBef15: false,
@@ -279,6 +275,10 @@ export const Booking: FC = () => {
         activity = "";
       }
 
+      console.log(
+        formValues.team.length,
+        "formValues.team.lengthformValues.team.lengthformValues.team.lengthformValues.team.length"
+      );
       // ...(formValues.team!=="0" && {"team_id": formValues.team}),
 
       const newobj = {
@@ -304,7 +304,7 @@ export const Booking: FC = () => {
         ...(formValues.recurringby === 3 && {
           recurring_details: `monthly:${monthDates.toString()}`,
         }),
-        ...(formValues.team.length && { team_id: formValues.team }),
+        ...(formValues.team !== "" && { team_id: formValues.team }),
         team_text: formValues.orTeam,
         away_team_text: formValues.away_team,
         wardrobe_id: formValues.warderobe,
@@ -447,7 +447,7 @@ export const Booking: FC = () => {
                     md="4"
                     style={{ marginBottom: "15px" }}
                   >
-                    <DatePicker
+                    {/* <DatePicker
                       className="datepicker"
                       label="Date"
                       disablePast
@@ -456,6 +456,18 @@ export const Booking: FC = () => {
                       onChange={(e) => handleDateChange("start_date", e)}
                       animateYearScrolling
                       id="start_date"
+                    /> */}
+
+                    <KeyboardDatePicker
+                      id="start_date"
+                      className="datepicker"
+                      clearable
+                      disablePast
+                      value={values.start_date}
+                      placeholder="10/10/2018"
+                      onChange={(e) => handleDateChange("start_date", e)}
+                      minDate={new Date()}
+                      format="MM/dd/yyyy"
                     />
                   </GridItem>
                   <GridItem
@@ -521,7 +533,7 @@ export const Booking: FC = () => {
                     md="4"
                     style={{ marginBottom: "15px" }}
                   >
-                    <DatePicker
+                    {/* <DatePicker
                       className="datepicker"
                       label="Date"
                       disablePast
@@ -530,6 +542,17 @@ export const Booking: FC = () => {
                       onChange={(e) => handleDateChange("end_date", e)}
                       animateYearScrolling
                       id="end_date"
+                    /> */}
+                    <KeyboardDatePicker
+                      id="end_date"
+                      className="datepicker"
+                      clearable
+                      disablePast
+                      value={values.end_date}
+                      placeholder="10/10/2018"
+                      onChange={(e) => handleDateChange("end_date", e)}
+                      minDate={new Date()}
+                      format="MM/dd/yyyy"
                     />
                     {errors.end_date && (
                       <span
@@ -918,7 +941,7 @@ export const Booking: FC = () => {
                         md="4"
                         style={{ marginBottom: "15px" }}
                       >
-                        <DatePicker
+                        {/* <DatePicker
                           className="datepicker"
                           disablePast
                           value={values.end_date_recurring}
@@ -928,6 +951,19 @@ export const Booking: FC = () => {
                           }
                           animateYearScrolling
                           id="end_date_recurring"
+                        /> */}
+                        <KeyboardDatePicker
+                          id="end_date_recurring"
+                          className="datepicker"
+                          clearable
+                          disablePast
+                          value={values.end_date_recurring}
+                          placeholder="10/10/2018"
+                          onChange={(e) =>
+                            handleDateChange("end_date_recurring", e)
+                          }
+                          minDate={new Date()}
+                          format="MM/dd/yyyy"
                         />
                         {errors.end_date_recurring && (
                           <span
