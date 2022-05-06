@@ -19,6 +19,7 @@ import Paper from "@material-ui/core/Paper";
 import Filters from "./filters";
 // import axios from "axios"
 import moment from "moment";
+import { getFormatedData } from "@cenera/utils/services";
 
 import { useFetchActivities } from "@cenera/common/hooks/api-hooks/activity";
 import { ActivityService } from "@cenera/services/api/activity";
@@ -168,9 +169,8 @@ const UpcomingActivities = ({
 
   useEffect(() => {
     if (Activitydata) {
-      setAcitivityList(Activitydata);
-      let uniqueChars = Array.from(new Set(acitivityList));
-      console.log(uniqueChars, "uniqueCharsuniqueChars");
+      let temp = getFormatedData(Activitydata);
+      setAcitivityList(temp);
     }
     if (fetchupcomingactivity == 1 && Activitydata) {
       revalidate();
@@ -189,11 +189,13 @@ const UpcomingActivities = ({
 
   useEffect(() => {
     if (data == 2) {
-      setAcitivityList(Activitydata);
+      let temp = getFormatedData(Activitydata);
+      setAcitivityList(temp);
     }
     if (successedit === false) {
       revalidate();
-      setAcitivityList(Activitydata);
+      let temp = getFormatedData(Activitydata);
+      setAcitivityList(temp);
     }
   }, [Activitydata, data, successedit]);
 
@@ -331,7 +333,11 @@ const UpcomingActivities = ({
                       <TableHead>
                         <TableRow>
                           <StyledTableCell colSpan={9}>
-                            {moment(res.startTime).format("dddd MMMM DD, YYYY")}
+                            {res.recuring && res.recuring.length > 0
+                              ? moment(res.recuring[0].startTime).format(
+                                  "DD-MM-YYYY"
+                                )
+                              : moment(res.startTime).format("DD-MM-YYYY")}
                           </StyledTableCell>
                         </TableRow>
                         <TableRow className={classes.customeTableRow}>
@@ -357,85 +363,186 @@ const UpcomingActivities = ({
                           <StyledTableCell align="left"></StyledTableCell>
                         </TableRow>
                       </TableHead>
-                      <TableBody>
-                        <StyledTableRow>
-                          <BodyTableCell scope="row">
-                            {moment(res.startTime).format("HH:mm")}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            {moment(res.endTime).format("HH:mm")}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            {showDuration(res.startTime, res.endTime)}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            {res.team} {res.team_text}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            {res.location_name}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            {res.wardrobe_name}
-                          </BodyTableCell>
-                          <BodyTableCell
-                            className={`${res.activity === "Match" &&
-                              classes.matched}`}
-                            align="left"
-                          >
-                            {res.activity_type_name}
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            <Button
-                              color="info"
-                              style={{
-                                maxWidth: "100%",
-                                margin: "auto",
-                                display: "block",
-                              }}
-                              onClick={() =>
-                                handleEditActivity(res.activity_id)
-                              }
-                            >
-                              Edit
-                            </Button>
-                          </BodyTableCell>
-                          <BodyTableCell align="left">
-                            <Checkbox
-                              style={{ color: "#00acc1" }}
-                              name={res.id}
-                              checked={res.isSelected}
-                              onChange={() =>
-                                handleCheckBoxForDelete(res.activity_id)
-                              }
-                            />
-                          </BodyTableCell>
-                        </StyledTableRow>
 
-                        {/* for away team  */}
-                        {res.activity === "Match" && (
-                          <StyledTableRow className={classes.bottomTableRow}>
-                            <BodyTableCell scope="row"></BodyTableCell>
-                            <BodyTableCell align="left"></BodyTableCell>
+                      {!res.recuring && (
+                        <TableBody>
+                          <StyledTableRow>
+                            <BodyTableCell scope="row">
+                              {moment(res.startTime).format("HH:mm")}
+                            </BodyTableCell>
+                            <BodyTableCell align="left">
+                              {moment(res.endTime).format("HH:mm")}
+                            </BodyTableCell>
+                            <BodyTableCell align="left">
+                              {showDuration(res.startTime, res.endTime)}
+                            </BodyTableCell>
+                            <BodyTableCell align="left">
+                              {res.team} {res.team_text}
+                            </BodyTableCell>
+                            <BodyTableCell align="left">
+                              {res.location_name}
+                            </BodyTableCell>
+                            <BodyTableCell align="left">
+                              {res.wardrobe_name}
+                            </BodyTableCell>
                             <BodyTableCell
-                              className={classes.label}
+                              className={`${res.activity === "Match" &&
+                                classes.matched}`}
                               align="left"
                             >
-                              Away Team
+                              {res.activity_type_name}
                             </BodyTableCell>
                             <BodyTableCell align="left">
-                              {res.away_team}
+                              <Button
+                                color="info"
+                                style={{
+                                  maxWidth: "100%",
+                                  margin: "auto",
+                                  display: "block",
+                                }}
+                                onClick={() =>
+                                  handleEditActivity(res.activity_id)
+                                }
+                              >
+                                Edit
+                              </Button>
                             </BodyTableCell>
                             <BodyTableCell align="left">
-                              Warderobe
+                              <Checkbox
+                                style={{ color: "#00acc1" }}
+                                name={res.id}
+                                checked={res.isSelected}
+                                onChange={() =>
+                                  handleCheckBoxForDelete(res.activity_id)
+                                }
+                              />
                             </BodyTableCell>
-                            <BodyTableCell align="left">
-                              {res.away_team_text}
-                            </BodyTableCell>
-                            {/* <BodyTableCell align="left"></BodyTableCell> */}
                           </StyledTableRow>
-                        )}
-                        {/* for away team end here */}
-                      </TableBody>
+
+                          {/* for away team  */}
+                          {res.activity === "Match" && (
+                            <StyledTableRow className={classes.bottomTableRow}>
+                              <BodyTableCell scope="row"></BodyTableCell>
+                              <BodyTableCell align="left"></BodyTableCell>
+                              <BodyTableCell
+                                className={classes.label}
+                                align="left"
+                              >
+                                Away Team
+                              </BodyTableCell>
+                              <BodyTableCell align="left">
+                                {res.away_team}
+                              </BodyTableCell>
+                              <BodyTableCell align="left">
+                                Warderobe
+                              </BodyTableCell>
+                              <BodyTableCell align="left">
+                                {res.away_team_text}
+                              </BodyTableCell>
+                              {/* <BodyTableCell align="left"></BodyTableCell> */}
+                            </StyledTableRow>
+                          )}
+                          {/* for away team end here */}
+                        </TableBody>
+                      )}
+
+                      {res.recuring &&
+                        res.recuring.map((recuringValue: any) => (
+                          <TableBody>
+                            <StyledTableRow>
+                              <BodyTableCell scope="row">
+                                {console.log(
+                                  recuringValue.startTime,
+                                  "recuring starttime"
+                                )}
+                                {moment(recuringValue.startTime).format(
+                                  "HH:mm"
+                                )}
+                              </BodyTableCell>
+                              <BodyTableCell align="left">
+                                {moment(recuringValue.endTime).format("HH:mm")}
+                              </BodyTableCell>
+                              <BodyTableCell align="left">
+                                {showDuration(
+                                  recuringValue.startTime,
+                                  recuringValue.endTime
+                                )}
+                              </BodyTableCell>
+                              <BodyTableCell align="left">
+                                {recuringValue.team} {recuringValue.team_text}
+                              </BodyTableCell>
+                              <BodyTableCell align="left">
+                                {recuringValue.location_name}
+                              </BodyTableCell>
+                              <BodyTableCell align="left">
+                                {recuringValue.wardrobe_name}
+                              </BodyTableCell>
+                              <BodyTableCell
+                                className={`${recuringValue.activity ===
+                                  "Match" && classes.matched}`}
+                                align="left"
+                              >
+                                {recuringValue.activity_type_name}
+                              </BodyTableCell>
+                              <BodyTableCell align="left">
+                                <Button
+                                  color="info"
+                                  style={{
+                                    maxWidth: "100%",
+                                    margin: "auto",
+                                    display: "block",
+                                  }}
+                                  onClick={() =>
+                                    handleEditActivity(
+                                      recuringValue.activity_id
+                                    )
+                                  }
+                                >
+                                  Edit
+                                </Button>
+                              </BodyTableCell>
+                              <BodyTableCell align="left">
+                                <Checkbox
+                                  style={{ color: "#00acc1" }}
+                                  name={recuringValue.id}
+                                  checked={recuringValue.isSelected}
+                                  onChange={() =>
+                                    handleCheckBoxForDelete(
+                                      recuringValue.activity_id
+                                    )
+                                  }
+                                />
+                              </BodyTableCell>
+                            </StyledTableRow>
+
+                            {/* for away team  */}
+                            {recuringValue.activity === "Match" && (
+                              <StyledTableRow
+                                className={classes.bottomTableRow}
+                              >
+                                <BodyTableCell scope="row"></BodyTableCell>
+                                <BodyTableCell align="left"></BodyTableCell>
+                                <BodyTableCell
+                                  className={classes.label}
+                                  align="left"
+                                >
+                                  Away Team
+                                </BodyTableCell>
+                                <BodyTableCell align="left">
+                                  {recuringValue.away_team}
+                                </BodyTableCell>
+                                <BodyTableCell align="left">
+                                  Warderobe
+                                </BodyTableCell>
+                                <BodyTableCell align="left">
+                                  {recuringValue.away_team_text}
+                                </BodyTableCell>
+                                {/* <BodyTableCell align="left"></BodyTableCell> */}
+                              </StyledTableRow>
+                            )}
+                            {/* for away team end here */}
+                          </TableBody>
+                        ))}
                     </Table>
                   ))}
               </TableContainer>

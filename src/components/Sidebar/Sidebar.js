@@ -14,9 +14,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Hidden from '@material-ui/core/Hidden';
 import Collapse from '@material-ui/core/Collapse';
-import Icon from '@material-ui/core/Icon';
-
-// core components
+import Icon from '@material-ui/core/Icon';// core components
 import { AdminNavBarLinks } from '@cenera/components/NavBars/AdminNavbarLinks';
 
 import sidebarStyle from './sidebarStyle.js';
@@ -67,9 +65,14 @@ class Sidebar extends React.Component {
     this.state = {
       openAvatar: false,
       miniActive: true,
+      appState: JSON.parse(localStorage.getItem('appState')),
       ...this.getCollapseStates(props.routes),
     };
+    // let appState = localStorage.getItem('appState');  
+    // let useState = JSON.parse(appState)
   }
+
+
 
   mainPanel = React.createRef();
   // this creates the intial state of this component based on the collapse routes
