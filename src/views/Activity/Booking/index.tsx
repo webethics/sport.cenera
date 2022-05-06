@@ -896,10 +896,6 @@ export const Booking: FC = () => {
                   )}
 
                   {/* Start Recurring End Date */}
-                  {console.log(
-                    values.recurringby,
-                    "values.recurringbyvalues.recurringbyvalues.recurringby"
-                  )}
                   {values.recurring === 1 && values.recurringby > 0 && (
                     <>
                       <GridItem

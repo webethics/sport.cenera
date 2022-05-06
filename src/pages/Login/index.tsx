@@ -73,7 +73,7 @@ export default function LoginPage() {
             email: formValues.email,
             password: formValues.password,
           });
-
+          localStorage.setItem('appState', JSON.stringify(result));
           appDispatch(UserLoggedIn(result));
           history.replace("/admin/dashboard");
         } catch {
