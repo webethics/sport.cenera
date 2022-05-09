@@ -60,9 +60,7 @@ export default function Filters({onFilter,searchingtext,Filterdate,Textvalue,set
     if (event.key === 'Enter') {
       event.preventDefault()
        searchingtext(text)
-       console.log('pressenterkey')
     } else {
-      console.log('Noenterkey')
     }
  };
 

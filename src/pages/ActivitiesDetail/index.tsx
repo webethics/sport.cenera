@@ -39,13 +39,7 @@ export default function ActivitiesDetail() {
     "endTime": nextdate
   }   
   
-  const data1 = {
-    "club_id":id
- 
-  }
-  console.log(data1,'dataaaa')
   const {acitivityData,loading,revalidate,error} = useFetchGetActivites(data); 
-  console.log(acitivityData,'dummy')
   const [activityList , setActivityList] = useState(null);
 
  

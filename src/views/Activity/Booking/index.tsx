@@ -178,7 +178,7 @@ export const Booking: FC = () => {
 
   const handledays2 = (el: number) => {
     if (monthDates.some((elm) => elm == el)) {
-      console.log("ran");
+
       setMonthDates(monthDates.filter((elm) => elm !== el));
     } else {
       setMonthDates((prevvalues) => [...prevvalues, el]);
@@ -186,7 +186,6 @@ export const Booking: FC = () => {
   };
 
   const handleValueChange = (value: any) => {
-    console.log(value && typeof value.format("HH:mm"), "start");
     if (value === null) {
       formik.setValues({
         ...formik.values,
@@ -203,7 +202,6 @@ export const Booking: FC = () => {
   //weeks
 
   const handleValueChangeend = (value: any) => {
-    console.log(value && value.format("HH:mm"));
     if (value === null) {
       formik.setValues({
         ...formik.values,
@@ -248,7 +246,6 @@ export const Booking: FC = () => {
     }),
 
     onSubmit: async (formValues) => {
-      console.log(formValues, "formValues");
       const {
         start_date,
         start_time,
@@ -275,10 +272,7 @@ export const Booking: FC = () => {
         activity = "";
       }
 
-      console.log(
-        formValues.team.length,
-        "formValues.team.lengthformValues.team.lengthformValues.team.lengthformValues.team.length"
-      );
+    
       // ...(formValues.team!=="0" && {"team_id": formValues.team}),
 
       const newobj = {
@@ -369,8 +363,7 @@ export const Booking: FC = () => {
   };
 
   const { values, handleChange, errors, touched } = formik;
-  // console.log(formik.values.recurring, "nnnnnnnnnn");
-  // console.log(monthDates.length, "initiallengthhhhhhhhh");
+
   return (
     <div>
       <GridContainer>
@@ -698,7 +691,6 @@ export const Booking: FC = () => {
                         </>
                       )}
                     </Box>
-                    {console.log(values.recurringby, "lllllllll")}
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -1185,7 +1177,6 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                       id="activity"
                     />
-                    {/* {console.log(values.activity,'gggggg')} */}
                     {/* <ItemPicker
                       data={locations}
                       value={values.location}

@@ -88,7 +88,6 @@ export default function EditActivityModal(props: any) {
   // const[currenteditactivity,setCurrenteditactivity] = useState(null)
   //data
   const { EditActivitydata } = useFetchEditActivities(editActivity);
-  console.log(EditActivitydata, "EditActivitydata");
   const { addActivity } = ActivityService;
 
   useEffect(() => {
@@ -184,7 +183,6 @@ export default function EditActivityModal(props: any) {
 
   const handledays2 = (el: number) => {
     if (monthDates.some((elm) => elm == el)) {
-      console.log("ran");
       setMonthDates(monthDates.filter((elm) => elm !== el));
     } else {
       setMonthDates((prevvalues) => [...prevvalues, el]);
@@ -192,8 +190,6 @@ export default function EditActivityModal(props: any) {
   };
 
   const handleValueChange = (value: any) => {
-    console.log("hit");
-    console.log(value && typeof value.format("HH:mm"));
     if (value === null) {
       formik.setValues({
         ...formik.values,
@@ -209,7 +205,6 @@ export default function EditActivityModal(props: any) {
   //weeks
 
   const handleValueChangeend = (value: any) => {
-    console.log(value && value.format("HH:mm"));
     if (value === null) {
       formik.setValues({
         ...formik.values,
@@ -368,7 +363,6 @@ export default function EditActivityModal(props: any) {
       const endtime = acitivityList[0].endTime;
       const mendtime = moment(endtime).format("HH:mm");
 
-      console.log(mstarttime, mendtime, "starttime");
       formik.setValues({
         ...formik.values,
         warderobe: acitivityList[0].wardrobe_id,
@@ -387,9 +381,7 @@ export default function EditActivityModal(props: any) {
       });
     }
   }, [acitivityList]);
-  if (acitivityList[0]) {
-    console.log("current");
-  }
+
   //startTime
   //moment(res.startTime).format("HH:mm")
 
@@ -658,7 +650,6 @@ export default function EditActivityModal(props: any) {
                     </>
                   )}
                 </Box>
-                {console.log(values.recurringby, "lllllllll")}
               </GridItem>
               <GridItem
                 xs="12"
@@ -860,10 +851,6 @@ export default function EditActivityModal(props: any) {
               )}
 
               {/* Start Recurring End Date */}
-              {console.log(
-                values.recurringby,
-                "values.recurringbyvalues.recurringbyvalues.recurringby"
-              )}
               {values.recurring === 1 && values.recurringby > 0 && (
                 <>
                   <GridItem

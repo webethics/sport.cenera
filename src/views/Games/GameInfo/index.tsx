@@ -78,8 +78,6 @@ export const GameInfo: FC = () => {
     lineupsystem: gameInfo ? gameInfo.game_lineupsystem : "",
   };
 
-  console.log(teams);
-
   const formik = useFormik({
     initialValues: initialFormValues,
     onSubmit: async (formValues) => {
@@ -121,8 +119,6 @@ export const GameInfo: FC = () => {
         message1: gameInfo.game_message1,
         message2: gameInfo.game_message2,
       });
-
-      console.log("test", gameInfo);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, gameInfo, teamId]);

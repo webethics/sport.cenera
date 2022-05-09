@@ -63,7 +63,7 @@ export const CreateEditClub: FC<Props> = ({
     textfield5: toEditClub ? toEditClub.textfield5 : "",
     allowBooking: false,
   };
-  console.log(toEditClub, "toEditClubtoEditClubtoEditClubtoEditClub");
+ 
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: Yup.object({
@@ -129,7 +129,6 @@ export const CreateEditClub: FC<Props> = ({
 
     if (e.target.files.length > 0) {
       const file = e.target.files[0];
-      console.log("file", e.target.files[0].name);
       if (file.size > 1024 * 1024) {
         enqueueSnackbar(
           `Maximum image size is 1MB.  Yours was ${(
@@ -451,7 +450,6 @@ export const CreateEditClub: FC<Props> = ({
                 label="Allow booking"
               />
             </GridItem>
-            {console.log(formik.values.allowBooking, "allowbooking")}
           </div>
           {/* /checkbox/ */}
           <div className={classes.btnContainer}>

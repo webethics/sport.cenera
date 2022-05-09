@@ -13,9 +13,6 @@ export const UsersManagement: FC = () => {
   const { clubs, loading: clubsLoading } = useFetchClubs();
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  if (users && users[1]) {
-    console.log(users[1].user_club, "selectedUserselectedUser");
-  }
 
   const handleUsersUpdate = () => {
     revalidate();

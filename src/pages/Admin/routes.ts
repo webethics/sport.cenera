@@ -138,16 +138,13 @@ if (appState && appState.allowBooking === false) {
     adminRoutes.findIndex((a) => a.name === "Activity"),
     1
   );
-  localStorage.removeItem("appState");
 }
+
 if (appState && appState.allowGameinfo === false) {
   adminRoutes.splice(
     adminRoutes.findIndex((a) => a.name === "Games"),
-    1
+    1 
   );
-  localStorage.removeItem("appState");
 }
-
-console.log(appState, "appstate");
 
 export { adminRoutes };

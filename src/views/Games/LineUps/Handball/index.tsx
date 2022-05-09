@@ -122,7 +122,6 @@ export const HandballLineUp: FC<Props> = ({
   });
 
   const deleteLineUp = () => {
-    // console.log("from serce"  , lineUpIdToDelete.length);
     setDeleting(true);
 
     GameService.deleteGameLineUp(
@@ -216,7 +215,7 @@ export const HandballLineUp: FC<Props> = ({
       );
     }
   }
-  console.log("0000", lines);
+
   return (
     <div>
       <GridContainer>

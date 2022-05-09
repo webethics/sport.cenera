@@ -69,7 +69,6 @@ const Warderobe = () => {
   };
 
   const handleDelete = async (wardrobe_id: any) => {
-    // console.log(wardrobe_id,'delete')
     setDeleteConfig(true);
     try {
       const response = await deleteWardrobes(

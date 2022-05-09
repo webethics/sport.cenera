@@ -50,7 +50,6 @@ const deleteGameInfo = (access_token: string,team_id?:number) => {  //team_id ad
 };
 
 const createGameLineUp = (gameLineUp: GameLineUp, access_token: string,team_id?:number) => {  // team id new
-  console.log(gameLineUp)
   return axios.post<GameInfoUpdateReqResponse>(`${configs.app.api}/updateGameLineup`, {
     access_token,
     team_id: team_id, 
@@ -60,8 +59,6 @@ const createGameLineUp = (gameLineUp: GameLineUp, access_token: string,team_id?:
 };
 
 const deleteGameLineUp = async(lineup_id: number | string | any, access_token: string, team_id?:number,deleteGameName?:string) => {  //edited added any after string | 
-
-  console.log("from servies file" , lineup_id);
  
   if(deleteGameName === "handball" || deleteGameName === "football"){  // for handball only
     let newVAr:any = null; // new
@@ -112,9 +109,7 @@ const deleteGameMatchRecord = (match_id: number, access_token: string) => {
 };
 
 const getGameAwayTeam = (access_token: string , team_id:number):any => {
-  console.log(  'team id and access token',team_id , access_token);
   if(team_id===null || typeof(team_id)!=="number"){
-    console.log('hit');
     return 
   }
   else{

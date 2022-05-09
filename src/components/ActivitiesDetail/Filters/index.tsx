@@ -54,9 +54,6 @@ const getText = (event:any) => {
     if (event.key === 'Enter') {
       event.preventDefault()
        searchingtext(text)
-       console.log('pressenterkey')
-    } else {
-      console.log('Noenterkey')
     }
  };
 
@@ -72,9 +69,6 @@ const getText = (event:any) => {
 }, [acitivityData]);
 
 
-if(acitivityData){
-console.log(acitivityData,'mmmmmmmmm')
-}
 // const handleChange5 = (event:any) => {
 //   event.preventDefault()
 //   searchingtext(text)

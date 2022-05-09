@@ -315,7 +315,6 @@ export const AwayTeam: FC = () => {
                       </div>
                     </FormControl>
                     <img alt="" className={classes.teamLogo} ref={teamLogoImgRef} src={values.away_team_image_logo ? `${process.env.REACT_APP_SERVER_IMAGE_URL}/${values.away_team_image_logo}` : ""} />
-                    {/* {console.log(values.away_team_image_logo)} */}
                   </GridItem>
 
                   <GridItem xs={4} md={4}>

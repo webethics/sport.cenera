@@ -47,6 +47,7 @@ export function AdminNavBarLinks(props) {
   const handleLogOut = () => {
     setOpenUserMenu(null);
     appDispatch(UserLogout());
+    localStorage.removeItem("appState");
   };
 
   const classes = useStyles();
