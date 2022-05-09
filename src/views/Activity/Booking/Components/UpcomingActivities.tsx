@@ -19,7 +19,7 @@ import Paper from "@material-ui/core/Paper";
 import Filters from "./filters";
 // import axios from "axios"
 import moment from "moment";
-import { getFormatedData ,getFormatedReccuringDate } from "@cenera/utils/services";
+import { getFormatedData ,getFormatedReccuringDate,getduraiton } from "@cenera/utils/services";
 
 import { useFetchActivities } from "@cenera/common/hooks/api-hooks/activity";
 import { ActivityService } from "@cenera/services/api/activity";
@@ -105,40 +105,31 @@ const UpcomingActivities = ({
     deleteRecurringActivity,
   } = ActivityService;
 
-  const deleteActivity = async () => {
-    const deletesingleBooking = acitivityList
-      .filter((res) => res.isSelected === true && res.recurring_item === false)
-      .map((res) => res.activity_id); //returning array of id
 
-    const deleteRecurenceBooking = acitivityList
-    .filter((res) =>(res.isSelected === true && res.recurring_item === true))
-    .map((res)=>({id:res.activity_id, dateDeletes:[ moment(res.startTime).format("YYYY-MM-DD")]}));
+  const deleteNonReccuring =async (deletesingleBooking:any)=>{
+    setDeleting(true);
+    let params = {activity_id_list:deletesingleBooking}
+   const response = await deleteMultipleActivities(
+     appState.authentication.accessToken,
+     appState.user.club_id,
+     params
+   );
+   if (response) {
+     await revalidate();
+     setrevaldate(1);
+     enqueueSnackbar("Activity Deleted Successfully", {
+       variant: "success",
+     });
+     setDeleting(false);
+   }
+  }
 
 
-    if (deletesingleBooking){
-      setDeleting(true);
-      // let params = {activity_id_list:deletesingleBooking}
-      const response = await deleteMultipleActivities(
-        appState.authentication.accessToken,
-        appState.user.club_id,
-        "lol"
-        // params
-      );
-      if (response) {
-        await revalidate();
-        setrevaldate(1);
-        enqueueSnackbar("Activity Deleted Successfully", {
-          variant: "success",
-        });
-        setDeleting(false);
-      }
-    }
-
-    if (deleteRecurenceBooking) {
-      let formatedDeleteDate =  getFormatedReccuringDate(deleteRecurenceBooking);
+  const deleteReccuring = async (deleteRecurenceBooking:any) => {
+    let formatedDeleteDate =  getFormatedReccuringDate(deleteRecurenceBooking);
       console.log(formatedDeleteDate,"test");
       let deleteStatus:boolean = false;
-      
+
       Promise.all(formatedDeleteDate.map( async(res:any)=>{
         let params = { delete_dates: res.dateDeletes, activity_id: res.id };
         const response = await deleteRecurringActivity(
@@ -159,9 +150,22 @@ const UpcomingActivities = ({
               variant: "success",
             });
             setDeleting(false);
-          }
+          } 
       })
-    }
+  }
+
+
+  const deleteActivity = async () => {
+    const deletesingleBooking = acitivityList
+      .filter((res) => res.isSelected === true && res.recurring_item === false)
+      .map((res) => res.activity_id); //returning array of id
+
+    const deleteRecurenceBooking = acitivityList
+    .filter((res) =>(res.isSelected === true && res.recurring_item === true))
+    .map((res)=>({id:res.activity_id, dateDeletes:[ moment(res.startTime).format("YYYY-MM-DD")]}));
+    console.log(deletesingleBooking,deleteRecurenceBooking,"test")
+    if (deletesingleBooking) deleteNonReccuring(deletesingleBooking)
+    if (deleteRecurenceBooking) deleteReccuring(deleteRecurenceBooking)
   };
 
   const publishActivity = async () => {
@@ -238,11 +242,19 @@ const UpcomingActivities = ({
     }
   }, [Activitydata, data, successedit]);
 
-  const handleDeleteSelected = () => {
-    let isSelectedForDelete = acitivityList.some(
-      (res) => res.isSelected === true
-    );
 
+  const handleDeleteSelected = () => {
+    let isSelectedForDelete = acitivityList.some((res) => {
+      if(res.isSelected === true){
+        return res
+      }else{
+        for(let i of res.recuring){
+          if(i.isSelected === true)  return res
+        }
+      }
+    });
+
+     console.log(isSelectedForDelete,"pppp")
     if (isSelectedForDelete) {
       showConfirmDialog();
     }
@@ -256,6 +268,7 @@ const UpcomingActivities = ({
       showPublicDialoge();
     }
   };
+
 
   const handleCheckBoxForDelete = (id: number) => {
     const newArr = [...acitivityList];
@@ -275,15 +288,7 @@ const UpcomingActivities = ({
 
     setAcitivityList([...newArr]);
   };
-  const duraiton = (t1: any, t2: any) => {
-    let a = moment(t1);
-    let b = moment(t2);
 
-    const milliseconds = b.diff(a);
-    const minutes = (milliseconds / (1000 * 60)) % 60;
-    const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
-    return `${hours}:${minutes} h`;
-  };
 
   const showDuration = (start: string, end: string) => {
     let startDate = moment(start).format("YYYY-MM-DD");
@@ -293,11 +298,12 @@ const UpcomingActivities = ({
     let finalEndTime = moment(startDate + " " + endTime);
 
     if (startDate === endDate) {
-      return duraiton(start, end);
+      return getduraiton(start, end);
     } else {
-      return duraiton(start, finalEndTime);
+      return getduraiton(start, finalEndTime);
     }
   };
+
 
   console.log(acitivityList, "acitivityList");
 

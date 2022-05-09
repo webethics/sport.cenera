@@ -102,10 +102,22 @@ import moment from "moment"
  }
 
 
+ const getduraiton = (t1: any, t2: any) => {
+    let a = moment(t1);
+    let b = moment(t2);
+
+    const milliseconds = b.diff(a);
+    const minutes = (milliseconds / (1000 * 60)) % 60;
+    const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
+    return `${hours}:${minutes} h`;
+  };
+
+
+
  const randomId = ()=>{
     return (Math.floor(Math.random() *1000 *Math.random()*11))
  }
 
 
- export {getFormatedData,getFormatedReccuringDate}
+ export {getFormatedData,getFormatedReccuringDate,getduraiton}
 
