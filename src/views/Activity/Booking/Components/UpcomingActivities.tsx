@@ -19,7 +19,11 @@ import Paper from "@material-ui/core/Paper";
 import Filters from "./filters";
 // import axios from "axios"
 import moment from "moment";
-import { getFormatedData ,getFormatedReccuringDate,getduraiton } from "@cenera/utils/services";
+import {
+  getFormatedData,
+  getFormatedReccuringDate,
+  getduraiton,
+} from "@cenera/utils/services";
 
 import { useFetchActivities } from "@cenera/common/hooks/api-hooks/activity";
 import { ActivityService } from "@cenera/services/api/activity";
@@ -84,6 +88,8 @@ const UpcomingActivities = ({
   const [acitivityList, setAcitivityList] = useState([]);
   const [appState] = useAppContext();
   const [revaldatestate, setrevaldate] = useState(null);
+  const [deleteRecuring, setDeleteRecuring] = useState();
+  const [deleteNonRecuring, setDeleteNonRecuring] = useState();
   var date = new Date();
   date.setDate(date.getDate() + filterdate);
   const nextdate = moment(date).format("YYYY-MM-DDTHH:MM");
@@ -105,67 +111,143 @@ const UpcomingActivities = ({
     deleteRecurringActivity,
   } = ActivityService;
 
-
-  const deleteNonReccuring =async (deletesingleBooking:any)=>{
+  const deleteNonReccuring = async (deletesingleBooking: any) => {
+    console.log("non recuring called");
     setDeleting(true);
-    let params = {activity_id_list:deletesingleBooking}
-   const response = await deleteMultipleActivities(
-     appState.authentication.accessToken,
-     appState.user.club_id,
-     params
-   );
-   if (response) {
-     await revalidate();
-     setrevaldate(1);
-     enqueueSnackbar("Activity Deleted Successfully", {
-       variant: "success",
-     });
-     setDeleting(false);
-   }
-  }
+    let params = {
+      activity_id_list: deletesingleBooking.activity_id,
+      deleteDates: deletesingleBooking.date,
+    };
+    const response = await deleteMultipleActivities(
+      appState.authentication.accessToken,
+      appState.user.club_id,  
+      params
+    );
+    console.log(response, "lololo");
+    if (response) {
+      // await revalidate();
+      console.log(deletesingleBooking, deleteMultipleActivities, "bololo");
+      // setrevaldate(1);
+      enqueueSnackbar("Activity Deleted Successfully", {
+        variant: "success",
+      });
+      setDeleting(false);
+    }
+  };
 
-
-  const deleteReccuring = async (deleteRecurenceBooking:any) => {
-    let formatedDeleteDate =  getFormatedReccuringDate(deleteRecurenceBooking);
-      console.log(formatedDeleteDate,"test");
-      let deleteStatus:boolean = false;
-
-      Promise.all(formatedDeleteDate.map( async(res:any)=>{
-        let params = { delete_dates: res.dateDeletes, activity_id: res.id };
+  const deleteReccuring = async (deleteRecurenceBooking: any) => {
+    let formatedDeleteDate = getFormatedReccuringDate(deleteRecurenceBooking);
+    let deleteStatus: boolean = false;
+    setDeleting(true);
+    Promise.all(
+      formatedDeleteDate.map(async (res: any) => {
+        let params = { deleteDates: res.dateDeletes, activity_id: res.id };
+        console.log(params);
         const response = await deleteRecurringActivity(
           appState.authentication.accessToken,
-          appState.user.club_id,
           params
         );
         if (response) {
-           deleteStatus=true
+          deleteStatus = true;
         }
-      } 
-      )).then(res=>{
-          console.log(res)
-          if(deleteStatus===true){
-            revalidate();
-            setrevaldate(1);
-            enqueueSnackbar("Activity Deleted Successfully", {
-              variant: "success",
-            });
-            setDeleting(false);
-          } 
       })
-  }
+    ).then(async (res) => {
+      console.log(res, "promise response");
+      if (deleteStatus === true) {
+        // await revalidate();
+        console.log("revalidate will run");
+        // setrevaldate(1);
+        enqueueSnackbar("Activity Deleted Successfully", {
+          variant: "success",
+        });
+        setDeleting(false);
+      }
+    });
+  };
 
+  const deleteAllSelected = async () => {
+    console.log("both wala function");
+    await deleteNonReccuring(deleteNonRecuring);
+    await deleteReccuring(deleteRecuring);
+    await revalidate();
+  };
 
-  const deleteActivity = async () => {
-    const deletesingleBooking = acitivityList
-      .filter((res) => res.isSelected === true && res.recurring_item === false)
-      .map((res) => res.activity_id); //returning array of id
+  useEffect(() => {
+    if (deleteNonRecuring && deleteRecuring) {
+      deleteAllSelected();
+    }
+  }, [deleteNonRecuring, deleteRecuring]);
 
-    const deleteRecurenceBooking = acitivityList
-    .filter((res) =>(res.isSelected === true && res.recurring_item === true))
-    .map((res)=>({id:res.activity_id, dateDeletes:[ moment(res.startTime).format("YYYY-MM-DD")]}));
-    console.log(deletesingleBooking,deleteRecurenceBooking,"test")
-    if (deletesingleBooking) deleteNonReccuring(deletesingleBooking)
-    if (deleteRecurenceBooking) deleteReccuring(deleteRecurenceBooking)
+  console.log(deleteNonRecuring, deleteRecuring, "cccccccc");
+
+  const deleteActivity = () => {
+    // const deletesingleBooking = acitivityList
+    //   .filter((res) => res.isSelected === true && res.recurring_item === false)
+    //   .map((res) => res.activity_id); //returning array of id
+
+    // acitivityList.forEach((res) =>{
+    //   if(res.isSelected === true && res.recurring_item === false){
+    //     nonRecuringDeleteDates.push(res)
+    //     console.log("upper")
+    //     }
+    //     if(res.recuring){
+    //         res.recuring.forEach((value:any)=>{
+    //           if(value.isSelected===true && res.recurring_item === false){
+    //             console.log("under")
+    //             nonRecuringDeleteDates.push(value)
+    //           }
+    //         })
+    //     }
+    //   })
+
+    //   let nonrecDelete =  nonRecuringDeleteDates.map((res:any) => ({
+    //     id: res.activity_id,
+    //     dateDeletes: [moment(res.startTime).format("YYYY-MM-DD")],
+    //   }));
+
+    const nonRecuringDeleteDates: any = { activity_id: [], date: [] };
+    const recuringDeleteDates: any = [];
+    acitivityList.forEach((res) => {
+      if (res.isSelected === true && res.recurring_item === true) {
+        recuringDeleteDates.push(res);
+      }
+      if (res.isSelected === true && res.recurring_item === false) {
+        nonRecuringDeleteDates.activity_id.push(res.activity_id);
+        nonRecuringDeleteDates.date.push(
+          moment(res.startTime).format("YYYY-MM-DD")
+        );
+      }
+      if (res.recuring) {
+        res.recuring.forEach((value: any) => {
+          if (value.isSelected === true && value.recurring_item === true) {
+            recuringDeleteDates.push(value);
+          }
+          if (value.isSelected === true && value.recurring_item === false) {
+            nonRecuringDeleteDates.activity_id.push(value.activity_id);
+            nonRecuringDeleteDates.date.push(
+              moment(value.startTime).format("YYYY-MM-DD")
+            );
+          }
+        });
+      }
+    });
+
+    let multiRecDelete = recuringDeleteDates.map((res: any) => ({
+      id: res.activity_id,
+      dateDeletes: [moment(res.startTime).format("YYYY-MM-DD")],
+    }));
+
+    if (
+      nonRecuringDeleteDates.activity_id.length > 0 &&
+      multiRecDelete.length > 0
+    ) {
+      setDeleteRecuring(multiRecDelete);
+      setDeleteNonRecuring(nonRecuringDeleteDates);
+    } else {
+      if (nonRecuringDeleteDates.activity_id.length > 0)
+        deleteNonReccuring(nonRecuringDeleteDates);
+      if (multiRecDelete.length > 0) deleteReccuring(multiRecDelete);
+    }
   };
 
   const publishActivity = async () => {
@@ -242,19 +324,16 @@ const UpcomingActivities = ({
     }
   }, [Activitydata, data, successedit]);
 
-
   const handleDeleteSelected = () => {
     let isSelectedForDelete = acitivityList.some((res) => {
-      if(res.isSelected === true){
-        return res
-      }else{
-        for(let i of res.recuring){
-          if(i.isSelected === true)  return res
-        }
+      if (res.isSelected === true) {
+        return res;
+      }
+      if (res.recuring) {
+        return res.recuring.some((value: any) => value.isSelected === true);
       }
     });
 
-     console.log(isSelectedForDelete,"pppp")
     if (isSelectedForDelete) {
       showConfirmDialog();
     }
@@ -269,7 +348,6 @@ const UpcomingActivities = ({
     }
   };
 
-
   const handleCheckBoxForDelete = (id: number) => {
     const newArr = [...acitivityList];
     newArr.forEach((res, index) => {
@@ -277,18 +355,19 @@ const UpcomingActivities = ({
         newArr[index] = { ...res, isSelected: !res.isSelected };
       }
 
-      if (res.recuring) {
+      if (res.recuring && res.recuring.length > 0) {
         res.recuring.forEach((recVal: any, i: any) => {
           if (recVal.randomId == id) {
-            newArr[index].recuring[i] = { ...recVal, isSelected: !res.isSelected };
+            newArr[index].recuring[i] = {
+              ...recVal,
+              isSelected: !res.isSelected,
+            };
           }
         });
       }
     });
-
     setAcitivityList([...newArr]);
   };
-
 
   const showDuration = (start: string, end: string) => {
     let startDate = moment(start).format("YYYY-MM-DD");
@@ -303,7 +382,6 @@ const UpcomingActivities = ({
       return getduraiton(start, finalEndTime);
     }
   };
-
 
   console.log(acitivityList, "acitivityList");
 
@@ -440,11 +518,11 @@ const UpcomingActivities = ({
                               {res.wardrobe_name}
                             </BodyTableCell>
                             <BodyTableCell
-                              className={`${res.activity === "Match" &&
+                              className={`${res.activity_type === "Match" &&
                                 classes.matched}`}
                               align="left"
                             >
-                              {res.activity_type_name}
+                              {res.activity_type}
                             </BodyTableCell>
                             <BodyTableCell align="left">
                               <Button
@@ -474,7 +552,7 @@ const UpcomingActivities = ({
                           </StyledTableRow>
 
                           {/* for away team  */}
-                          {res.activity === "Match" && (
+                          {res.activity_type === "Match" && (
                             <StyledTableRow className={classes.bottomTableRow}>
                               <BodyTableCell scope="row"></BodyTableCell>
                               <BodyTableCell align="left"></BodyTableCell>
@@ -485,13 +563,18 @@ const UpcomingActivities = ({
                                 Away Team
                               </BodyTableCell>
                               <BodyTableCell align="left">
-                                {res.away_team}
+                                {res.away_team_text}
                               </BodyTableCell>
-                              <BodyTableCell align="left">
+                              <BodyTableCell
+                                align="left"
+                                className={classes.label}
+                              >
                                 Warderobe
                               </BodyTableCell>
                               <BodyTableCell align="left">
-                                {res.away_team_text}
+                                {res.wardrobe_name_away
+                                  ? res.wardrobe_name_away
+                                  : "NA"}
                               </BodyTableCell>
                               {/* <BodyTableCell align="left"></BodyTableCell> */}
                             </StyledTableRow>
@@ -528,11 +611,11 @@ const UpcomingActivities = ({
                                 {recuringValue.wardrobe_name}
                               </BodyTableCell>
                               <BodyTableCell
-                                className={`${recuringValue.activity ===
+                                className={`${recuringValue.activity_type ===
                                   "Match" && classes.matched}`}
                                 align="left"
                               >
-                                {recuringValue.activity_type_name}
+                                {recuringValue.activity_type}
                               </BodyTableCell>
                               <BodyTableCell align="left">
                                 <Button
@@ -566,7 +649,7 @@ const UpcomingActivities = ({
                             </StyledTableRow>
 
                             {/* for away team  */}
-                            {recuringValue.activity === "Match" && (
+                            {recuringValue.activity_type === "Match" && (
                               <StyledTableRow
                                 className={classes.bottomTableRow}
                               >
@@ -579,13 +662,18 @@ const UpcomingActivities = ({
                                   Away Team
                                 </BodyTableCell>
                                 <BodyTableCell align="left">
-                                  {recuringValue.away_team}
+                                  {recuringValue.away_team_text}
                                 </BodyTableCell>
-                                <BodyTableCell align="left">
+                                <BodyTableCell
+                                  align="left"
+                                  className={classes.label}
+                                >
                                   Warderobe
                                 </BodyTableCell>
                                 <BodyTableCell align="left">
-                                  {recuringValue.away_team_text}
+                                  {recuringValue.wardrobe_name_away
+                                    ? recuringValue.wardrobe_name_away
+                                    : "NA"}
                                 </BodyTableCell>
                                 {/* <BodyTableCell align="left"></BodyTableCell> */}
                               </StyledTableRow>

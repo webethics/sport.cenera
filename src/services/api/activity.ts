@@ -47,12 +47,11 @@ const addActivity = (newobj:any):any =>{
 return axios.post<any>(`${configs.app.api}/booking/updateActivity`,newobj)}
 
 
-const deleteRecurringActivity = (access_token:string,club_id:number,params:any):any =>{
+const deleteRecurringActivity = (access_token:string,params:any):any =>{
   return axios.post<any>(`${configs.app.api}/booking/updateActivity`,{
     access_token: access_token,
     updateType: "delete",
-    delete_type: "single-occurance",
-    club_id:club_id,
+    deleteType: "single-occurance",
     ...params
   })}
 
@@ -101,11 +100,10 @@ const GetActivities = (data:any): any => {
   }
 };
 
-
-const deleteMultipleActivities = (access_token: string,club_id: number,params: any) => {
+const deleteMultipleActivities = (access_token: string,club_id:number,params: any) => {
   return axios.post<any>(`${configs.app.api}/booking/multiDeleteActivities` ,{
     access_token: access_token,
-    club_id:club_id,
+    club_id:club_id,  
     ...params
     // activity_id_list: activity_id_list,
 
