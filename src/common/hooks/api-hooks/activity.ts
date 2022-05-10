@@ -3,7 +3,7 @@ import useRequest from "@cenera/common/hooks/useRequest";
 import { ActivityService } from "@cenera/services/api/activity";
 import { useAppContext } from "@cenera/app-context";
 import { getErrorMessage } from "@cenera/common/utils/error-helper";
-
+ 
 export const useFetchPublicClubs = () => {
   const { GetPublicClubs } = ActivityService;
   const swr = useRequest<any>(GetPublicClubs());
@@ -20,9 +20,8 @@ export const useFetchPublicClubs = () => {
 export const useFetchGetActivites = (data: any) => {
   const { GetActivities } = ActivityService;
   const swr = useRequest<any>(GetActivities(data));
-  const data1 = [swr.data];
-  console.log(data1[0]);
 
+   
   return {
     acitivityData: swr.data && swr.data,
     loading: !swr.data && !swr.error,

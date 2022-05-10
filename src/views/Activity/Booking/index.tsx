@@ -178,7 +178,6 @@ export const Booking: FC = () => {
   };
 
   const handleValueChange = (value: any) => {
-    console.log(value && typeof value.format("HH:mm"), "start");
     if (value === null) {
       formik.setValues({
         ...formik.values,
@@ -195,7 +194,6 @@ export const Booking: FC = () => {
   //weeks
 
   const handleValueChangeend = (value: any) => {
-    console.log(value && value.format("HH:mm"));
     if (value === null) {
       formik.setValues({
         ...formik.values,
@@ -1165,9 +1163,7 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                       id="activity"
                     />
-
-                    {/* {console.log(values.activity,'gggggg')} */}
-                    {/* <ItemPicker
+                     {/* <ItemPicker
                       data={locations}
                       value={values.location}
                       onChange={handleChange}

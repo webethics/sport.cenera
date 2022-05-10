@@ -27,7 +27,6 @@ export default function Listing() {
     }
   };
 
-  console.log(publicClubs); 
 
   useEffect(() => {
     fetchPublicClubs();

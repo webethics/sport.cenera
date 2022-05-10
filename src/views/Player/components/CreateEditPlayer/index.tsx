@@ -222,20 +222,18 @@ export const CreateEditPlayer: FC<Props> = ({
 
       if (team.team_type === "amateur") {
         setShowSimplifiedForm(true);
-       // console.log("amateur");
+
         const newSchema = { ...vSchema };
         //delete newSchema.weight;
         //delete newSchema.height;
         //delete newSchema.shirtnumber;
         setValidationSchema(Yup.object().shape(newSchema));
       } else if (team.team_type === "professional") {
-        //console.log("professional");
 
         setShowSimplifiedForm(false);
         const newSchema = { ...vSchema };
         setValidationSchema(Yup.object().shape(newSchema));
       } else {
-        //console.log("else");
         setShowSimplifiedForm(false);
         setValidationSchema(Yup.object().shape(vSchema));
       }

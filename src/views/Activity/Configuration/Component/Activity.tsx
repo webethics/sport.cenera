@@ -68,7 +68,6 @@ const Activity = () => {
         }
       })
     
-      console.log(formik)
       const {values, handleChange,handleSubmit} = formik;
 
 

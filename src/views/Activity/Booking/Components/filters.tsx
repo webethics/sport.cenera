@@ -65,13 +65,13 @@ export default function Filters({
     setText(e.target.value);
   };
 
-  const getText = (event: any) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      searchingtext(text);
-      console.log("pressenterkey");
+
+  
+  const getText = (event:any) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+       searchingtext(text)
     } else {
-      console.log("Noenterkey");
     }
   };
 

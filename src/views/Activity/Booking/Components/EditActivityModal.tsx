@@ -103,6 +103,7 @@ export default function EditActivityModal(props: any) {
   );
   console.log(EditActivitydata, "llll");
   //recurring_item
+ 
   const { addActivity } = ActivityService;
 
   useEffect(() => {
@@ -198,7 +199,6 @@ export default function EditActivityModal(props: any) {
 
   const handledays2 = (el: number) => {
     if (monthDates.some((elm) => elm == el)) {
-      console.log("ran");
       setMonthDates(monthDates.filter((elm) => elm !== el));
     } else {
       setMonthDates((prevvalues) => [...prevvalues, el]);
@@ -206,8 +206,6 @@ export default function EditActivityModal(props: any) {
   };
 
   const handleValueChange = (value: any) => {
-    console.log("hit");
-    console.log(value && typeof value.format("HH:mm"));
     if (value === null) {
       formik.setValues({
         ...formik.values,
@@ -223,7 +221,6 @@ export default function EditActivityModal(props: any) {
   //weeks
 
   const handleValueChangeend = (value: any) => {
-    console.log(value && value.format("HH:mm"));
     if (value === null) {
       formik.setValues({
         ...formik.values,
@@ -387,9 +384,7 @@ export default function EditActivityModal(props: any) {
       });
     }
   }, [acitivityList]);
-  if (acitivityList[0]) {
-    console.log("current");
-  }
+
   //startTime
   //moment(res.startTime).format("HH:mm")
 
@@ -873,8 +868,7 @@ export default function EditActivityModal(props: any) {
               )}
 
               {/* Start Recurring End Date */}
-
-              {values.recurring === 1 && values.recurringby > 0 && (
+               {values.recurring === 1 && values.recurringby > 0 && (
                 <>
                   <GridItem
                     xs="12"
@@ -891,7 +885,7 @@ export default function EditActivityModal(props: any) {
                     sm="5"
                     md="4"
                     style={{ marginBottom: "15px" }}
-                  >
+                  > 
                     <KeyboardDatePicker
                       id="end_date_recurring"
                       className="datepicker"

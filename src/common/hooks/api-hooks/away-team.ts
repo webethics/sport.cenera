@@ -9,11 +9,7 @@ export const useFetchAwayTeamInfo = (team_id?: number) => {
   const { getGameAwayTeam } = GameService;
   const [appState] = useAppContext();
 
-  console.log("team id", team_id);
-
   const swr = useRequest<GetAwayTeamReqResponse>(getGameAwayTeam(appState.authentication.accessToken, team_id));
-
-  console.log("from game-away.ts", swr);
 
   return {
     awayTeamInfo: swr.data && swr.data,

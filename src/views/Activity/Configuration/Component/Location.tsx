@@ -36,7 +36,6 @@ const Location = () => {
   const [locations, setLocations] = useState([]);
 
   const handleDelete = async (location_id: any) => {
-    console.log(location_id);
     setDeleteConfig(true);
     try {
       const response = await deleteLocation(

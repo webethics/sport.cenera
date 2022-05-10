@@ -19,7 +19,7 @@ import Paper from "@material-ui/core/Paper";
 import Filters from "./filters";
 // import axios from "axios"
 import moment from "moment";
-import { getFormatedData } from "@cenera/utils/services";
+import { getFormatedData ,getFormatedReccuringDate,getduraiton } from "@cenera/utils/services";
 
 import { useFetchActivities } from "@cenera/common/hooks/api-hooks/activity";
 import { ActivityService } from "@cenera/services/api/activity";
@@ -101,29 +101,73 @@ const UpcomingActivities = ({
   };
 
   const { Activitydata, loading, revalidate } = useFetchActivities(newobj);
-  const { deleteMultipleActivities, setActivitiesPublished } = ActivityService;
+  const {
+    setActivitiesPublished,
+    deleteMultipleActivities,
+    deleteRecurringActivity,
+  } = ActivityService;
+
+
+  const deleteNonReccuring =async (deletesingleBooking:any)=>{
+    setDeleting(true);
+    let params = {activity_id_list:deletesingleBooking}
+   const response = await deleteMultipleActivities(
+     appState.authentication.accessToken,
+     appState.user.club_id,
+     params
+   );
+   if (response) {
+     await revalidate();
+     setrevaldate(1);
+     enqueueSnackbar("Activity Deleted Successfully", {
+       variant: "success",
+     });
+     setDeleting(false);
+   }
+  }
+
+
+  const deleteReccuring = async (deleteRecurenceBooking:any) => {
+    let formatedDeleteDate =  getFormatedReccuringDate(deleteRecurenceBooking);
+      console.log(formatedDeleteDate,"test");
+      let deleteStatus:boolean = false;
+
+      Promise.all(formatedDeleteDate.map( async(res:any)=>{
+        let params = { delete_dates: res.dateDeletes, activity_id: res.id };
+        const response = await deleteRecurringActivity(
+          appState.authentication.accessToken,
+          appState.user.club_id,
+          params
+        );
+        if (response) {
+           deleteStatus=true
+        }
+      } 
+      )).then(res=>{
+          console.log(res)
+          if(deleteStatus===true){
+            revalidate();
+            setrevaldate(1);
+            enqueueSnackbar("Activity Deleted Successfully", {
+              variant: "success",
+            });
+            setDeleting(false);
+          } 
+      })
+  }
+
 
   const deleteActivity = async () => {
-    const itemDelete = acitivityList
-      .filter((res) => res.isSelected)
-      .map((res) => res.activity_id);
+    const deletesingleBooking = acitivityList
+      .filter((res) => res.isSelected === true && res.recurring_item === false)
+      .map((res) => res.activity_id); //returning array of id
 
-    if (itemDelete) {
-      setDeleting(true);
-      const response = await deleteMultipleActivities(
-        appState.authentication.accessToken,
-        appState.user.club_id,
-        itemDelete
-      );
-      if (response) {
-        await revalidate();
-        setrevaldate(1);
-        enqueueSnackbar("Activity Deleted Successfully", {
-          variant: "success",
-        });
-        setDeleting(false);
-      }
-    }
+    const deleteRecurenceBooking = acitivityList
+    .filter((res) =>(res.isSelected === true && res.recurring_item === true))
+    .map((res)=>({id:res.activity_id, dateDeletes:[ moment(res.startTime).format("YYYY-MM-DD")]}));
+    console.log(deletesingleBooking,deleteRecurenceBooking,"test")
+    if (deletesingleBooking) deleteNonReccuring(deletesingleBooking)
+    if (deleteRecurenceBooking) deleteReccuring(deleteRecurenceBooking)
   };
 
   const publishActivity = async () => {
@@ -138,7 +182,6 @@ const UpcomingActivities = ({
         appState.user.club_id,
         itempublish
       );
-
       if (response) {
         await revalidate();
         setrevaldate(1);
@@ -203,12 +246,19 @@ const UpcomingActivities = ({
       setAcitivityList(temp);
     }
   }, [Activitydata, data, successedit]);
-
+ 
   const handleDeleteSelected = () => {
-    let isSelectedForDelete = acitivityList.some(
-      (res) => res.isSelected === true
-    );
-
+    let isSelectedForDelete = acitivityList.some((res) => {
+      if(res.isSelected === true){
+        return res
+      }else{
+        for(let i of res.recuring){
+          if(i.isSelected === true)  return res
+        }
+      }
+    });
+ 
+     console.log(isSelectedForDelete,"pppp")
     if (isSelectedForDelete) {
       showConfirmDialog();
     }
@@ -223,24 +273,26 @@ const UpcomingActivities = ({
     }
   };
 
+
   const handleCheckBoxForDelete = (id: number) => {
     const newArr = [...acitivityList];
     newArr.forEach((res, index) => {
-      if (res.activity_id == id) {
+      if (res.randomId == id) {
         newArr[index] = { ...res, isSelected: !res.isSelected };
       }
+
+      if (res.recuring) {
+        res.recuring.forEach((recVal: any, i: any) => {
+          if (recVal.randomId == id) {
+            newArr[index].recuring[i] = { ...recVal, isSelected: !res.isSelected };
+          }
+        });
+      }
     });
+
     setAcitivityList([...newArr]);
   };
-  const duraiton = (t1: any, t2: any) => {
-    let a = moment(t1);
-    let b = moment(t2);
 
-    const milliseconds = b.diff(a);
-    const minutes = (milliseconds / (1000 * 60)) % 60;
-    const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
-    return `${hours}:${minutes} h`;
-  };
 
   const showDuration = (start: string, end: string) => {
     let startDate = moment(start).format("YYYY-MM-DD");
@@ -250,11 +302,14 @@ const UpcomingActivities = ({
     let finalEndTime = moment(startDate + " " + endTime);
 
     if (startDate === endDate) {
-      return duraiton(start, end);
+      return getduraiton(start, end);
     } else {
-      return duraiton(start, finalEndTime);
+      return getduraiton(start, finalEndTime);
     }
   };
+
+
+  console.log(acitivityList, "acitivityList");
 
   return (
     <div className="parent">
@@ -423,7 +478,7 @@ const UpcomingActivities = ({
                                 name={res.id}
                                 checked={res.isSelected}
                                 onChange={() =>
-                                  handleCheckBoxForDelete(res.activity_id)
+                                  handleCheckBoxForDelete(res.randomId)
                                 }
                               />
                             </BodyTableCell>
@@ -516,7 +571,7 @@ const UpcomingActivities = ({
                                   checked={recuringValue.isSelected}
                                   onChange={() =>
                                     handleCheckBoxForDelete(
-                                      recuringValue.activity_id
+                                      recuringValue.randomId
                                     )
                                   }
                                 />

@@ -217,7 +217,6 @@ export default function CustomizedTables({
 }: {
   activityList: any;
 }) {
-  console.log(activityList,'list');
 
   const duraiton = (t1:any, t2:any) => {
     let a = moment(t1);

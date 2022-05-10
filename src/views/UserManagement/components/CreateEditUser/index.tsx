@@ -111,9 +111,7 @@ export const CreateEditUser: FC<Props> = ({
     }
   }, [loading]);
 
-  if (user && loading === false && user.allowBooking) {
-    console.log("single user", user.allowBooking);
-  }
+
   const handleClubChange = (
     event: React.ChangeEvent<{
       name?: string;

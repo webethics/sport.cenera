@@ -28,7 +28,6 @@ export const GameResults: FC = () => {
   const [showDropDown, setshowDropDown] = useState(false);
 
   const { dispatch } = useContext(appContext); //use SetTeamId
-  console.log("GameRsult-----", appState.teamId);
 
   useEffect(() => {
     //new
