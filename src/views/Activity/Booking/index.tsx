@@ -65,13 +65,13 @@ export const Booking: FC = () => {
   ];
 
   const weekdays = [
-    { name: "Monday" },
-    { name: "Tuesday" },
-    { name: "Wednesday" },
-    { name: "Thursday" },
-    { name: "Friday" },
-    { name: "Saturday" },
-    { name: "Sunday" },
+    { name: "monday" },
+    { name: "tuesday" },
+    { name: "wednesday" },
+    { name: "thursday" },
+    { name: "friday" },
+    { name: "saturday" },
+    { name: "sunday" },
   ];
   let dates = [];
   for (let i = 1; i <= 31; i++) {
@@ -106,7 +106,7 @@ export const Booking: FC = () => {
         (res: any, index: number) => ({
           name: res.value,
           isMatch: res.isMatch,
-          id: index+1,
+          id: index + 1,
         })
       );
       setactivitylist(newactivityType);
@@ -130,13 +130,6 @@ export const Booking: FC = () => {
     }
     formik.setValues(formikField);
   };
-
-  // const handleenddate = (pickerType: string, value: any) =>{
-  //   const formikField = { ...formik.values };
-  //   if (pickerType === "end_date_recurring") {
-  //     formikField["end_date_recurring"] = value;
-  //   }
-  // }
 
   const initialFormValues = {
     team: "",
@@ -183,8 +176,6 @@ export const Booking: FC = () => {
     }
   };
 
-
-
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: Yup.object({
@@ -204,23 +195,31 @@ export const Booking: FC = () => {
         Yup.ref("start_date"),
         "End date can't be before start date"
       ),
-      start_time: Yup.string().required("start time could not be equal to end time"),
-      
+      start_time: Yup.string().required(
+        "start time could not be equal to end time"
+      ),
+
       end_time: Yup.string()
         .required("endtime could not be equal to start time")
-        .test("is-greater", "end time should be greater than start time", function(value) {
-          const { start_time } = this.parent;
-          return moment(value, "HH:mm").isSameOrAfter(
-            moment(start_time, "HH:mm")
-          );
-        }),
+        .test(
+          "is-greater",
+          "end time should be greater than start time",
+          function(value) {
+            const { start_time } = this.parent;
+            return moment(value, "HH:mm").isSameOrAfter(
+              moment(start_time, "HH:mm")
+            );
+          }
+        ),
 
-      location: Yup.number().min(1, 'Location is Required').required("Location is Required"),
+      location: Yup.number()
+        .min(1, "Location is Required")
+        .required("Location is Required"),
       start_date: Yup.date(),
-      end_date_recurring: Yup.date().min(
-        Yup.ref("start_date"),
-        "End date can't be before start date"
-      ),
+      // end_date_recurring: Yup.date().min(
+      //   Yup.ref("start_date"),
+      //   "End date can't be before start date"
+      // ),
     }),
 
     onSubmit: async (formValues) => {
@@ -233,7 +232,8 @@ export const Booking: FC = () => {
       const endrecurring_date = moment(end_date_recurring).format(
         "YYYY-MM-DDT00:00"
       );
-      const newStartTime =moment(start_date).format("YYYY-MM-DDT") + start_time;
+      const newStartTime =
+        moment(start_date).format("YYYY-MM-DDT") + start_time;
       const newEndTime = moment(start_date).format("YYYY-MM-DDT") + end_time;
 
       let activity: string;
@@ -249,7 +249,6 @@ export const Booking: FC = () => {
         activity = "";
       }
 
-
       const newobj = {
         access_token: appState.authentication.accessToken,
         updateType: "create",
@@ -262,7 +261,7 @@ export const Booking: FC = () => {
         ...(formValues.recurring === 1
           ? { recurring_item: true }
           : { recurring_item: false }),
-        // "recurring_details": formValues.recurringby==1 && "", //not added in form
+
         ...(formValues.recurring === 1 &&
           formValues.recurringby === 1 && {
             recurring_details: `weekly:${week.toString()}`,
@@ -307,7 +306,6 @@ export const Booking: FC = () => {
       start_time: moment(startTimefield).format("HH:mm"), //if time change it will update formik
       end_time: moment(endTimefield).format("HH:mm"),
     });
-    
   }, [startTimefield, endTimefield]);
 
   useEffect(() => {
@@ -950,6 +948,7 @@ export const Booking: FC = () => {
                           minDate={new Date()}
                           format="MM/dd/yyyy"
                         />
+
                         {errors.end_date_recurring && (
                           <span
                             className={classes.errorColor}
