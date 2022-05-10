@@ -65,13 +65,13 @@ export const Booking: FC = () => {
   ];
 
   const weekdays = [
-    { name: "Monday" },
-    { name: "Tuesday" },
-    { name: "Wednesday" },
-    { name: "Thursday" },
-    { name: "Friday" },
-    { name: "Saturday" },
-    { name: "Sunday" },
+    { name: "monday" },
+    { name: "tuesday" },
+    { name: "wednesday" },
+    { name: "thursday" },
+    { name: "friday" },
+    { name: "saturday" },
+    { name: "sunday" },
   ];
   let dates = [];
   for (let i = 1; i <= 31; i++) {
@@ -131,13 +131,6 @@ export const Booking: FC = () => {
     formik.setValues(formikField);
   };
 
-  // const handleenddate = (pickerType: string, value: any) =>{
-  //   const formikField = { ...formik.values };
-  //   if (pickerType === "end_date_recurring") {
-  //     formikField["end_date_recurring"] = value;
-  //   }
-  // }
-
   const initialFormValues = {
     team: "",
     orTeam: "",
@@ -178,7 +171,6 @@ export const Booking: FC = () => {
 
   const handledays2 = (el: number) => {
     if (monthDates.some((elm) => elm == el)) {
-      console.log("ran");
       setMonthDates(monthDates.filter((elm) => elm !== el));
     } else {
       setMonthDates((prevvalues) => [...prevvalues, el]);
@@ -232,23 +224,22 @@ export const Booking: FC = () => {
         then: Yup.string().required("Field is required"),
       }),
 
-      end_date: Yup.date().min(
-        Yup.ref("start_date"),
-        "End date can't be before start date"
-      ),
+      // end_date: Yup.date().min(
+      //   Yup.ref("start_date"),
+      //   "End date can't be before start date"
+      // ),
 
       start_time: Yup.string().required("Time is Required"),
       end_time: Yup.string().required("Time is Required"),
       location: Yup.string().required("Location is Required"),
       start_date: Yup.date(),
-      end_date_recurring: Yup.date().min(
-        Yup.ref("start_date"),
-        "End date can't be before start date"
-      ),
+      // end_date_recurring: Yup.date().min(
+      //   Yup.ref("start_date"),
+      //   "End date can't be before start date"
+      // ),
     }),
 
     onSubmit: async (formValues) => {
-      console.log(formValues, "formValues");
       const {
         start_date,
         start_time,
@@ -262,25 +253,15 @@ export const Booking: FC = () => {
         moment(start_date).format("YYYY-MM-DDT") + start_time;
       const newEndTime = moment(start_date).format("YYYY-MM-DDT") + end_time;
 
-      let activity: string;
-      if (formValues.activity == "0") {
-        activity = "match";
-      } else if (formValues.activity == "1") {
-        activity = "training";
-      } else if (formValues.activity == "2") {
-        activity = "maintenance";
-      } else if (formValues.activity == "3") {
-        activity = "rental";
-      } else if (formValues.activity == "0.5") {
-        activity = "";
-      }
-
-      console.log(
-        formValues.team.length,
-        "formValues.team.lengthformValues.team.lengthformValues.team.lengthformValues.team.length"
-      );
-      // ...(formValues.team!=="0" && {"team_id": formValues.team}),
-
+      var activity: any;
+      var Activitytype: any;
+      activitylist.forEach((res) => {
+        if (res.id == formValues.activity) {
+          Activitytype = res.name;
+          activity = Activitytype;
+        }
+      });
+      console.log(activity, "activityactivity");
       const newobj = {
         access_token: appState.authentication.accessToken,
         updateType: "create",
@@ -293,7 +274,7 @@ export const Booking: FC = () => {
         ...(formValues.recurring === 1
           ? { recurring_item: true }
           : { recurring_item: false }),
-        // "recurring_details": formValues.recurringby==1 && "", //not added in form
+
         ...(formValues.recurring === 1 &&
           formValues.recurringby === 1 && {
             recurring_details: `weekly:${week.toString()}`,
@@ -369,8 +350,7 @@ export const Booking: FC = () => {
   };
 
   const { values, handleChange, errors, touched } = formik;
-  // console.log(formik.values.recurring, "nnnnnnnnnn");
-  // console.log(monthDates.length, "initiallengthhhhhhhhh");
+
   return (
     <div>
       <GridContainer>
@@ -698,7 +678,6 @@ export const Booking: FC = () => {
                         </>
                       )}
                     </Box>
-                    {console.log(values.recurringby, "lllllllll")}
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -961,6 +940,7 @@ export const Booking: FC = () => {
                           minDate={new Date()}
                           format="MM/dd/yyyy"
                         />
+
                         {errors.end_date_recurring && (
                           <span
                             className={classes.errorColor}
@@ -1185,6 +1165,7 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                       id="activity"
                     />
+
                     {/* {console.log(values.activity,'gggggg')} */}
                     {/* <ItemPicker
                       data={locations}

@@ -81,6 +81,8 @@ const UpcomingActivities = ({
   const [publish, setpublish] = useState(false);
   const [modalshow, setModalshow] = useState(false);
   const [activityIdForEdit, setActivityIdForEdit] = useState(null);
+  const [activitystarttime, setactivitystarttime] = useState(null);
+  const [activityendtime, setactivityendtime] = useState(null);
   const [acitivityList, setAcitivityList] = useState([]);
   const [appState] = useAppContext();
   const [revaldatestate, setrevaldate] = useState(null);
@@ -136,7 +138,7 @@ const UpcomingActivities = ({
         appState.user.club_id,
         itempublish
       );
-      console.log(response, "dataaa");
+
       if (response) {
         await revalidate();
         setrevaldate(1);
@@ -162,8 +164,11 @@ const UpcomingActivities = ({
     confirmMessage: "Activity will be publish for good!",
   });
 
-  const handleEditActivity = (id: number) => {
+  const handleEditActivity = (id: number, sdate: any, edate: any) => {
     setActivityIdForEdit(id);
+    setactivitystarttime(sdate);
+    setactivityendtime(edate);
+
     setModalshow(true);
   };
 
@@ -172,7 +177,7 @@ const UpcomingActivities = ({
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
     }
-    if (fetchupcomingactivity == 1 && Activitydata) {
+    if (fetchupcomingactivity && fetchupcomingactivity == 1 && Activitydata) {
       revalidate();
       setdata(2);
     }
@@ -198,8 +203,6 @@ const UpcomingActivities = ({
       setAcitivityList(temp);
     }
   }, [Activitydata, data, successedit]);
-
-  // console.log(acitivityList,'fetchupcomingactivity989898')
 
   const handleDeleteSelected = () => {
     let isSelectedForDelete = acitivityList.some(
@@ -267,7 +270,10 @@ const UpcomingActivities = ({
       <EditActivityModal
         open={modalshow}
         onClose={() => setModalshow(false)}
+        // activitystartdate={}
         activityId={activityIdForEdit}
+        activitystarttime={activitystarttime}
+        activityendtime={activityendtime}
         callUpcomingActivity={() => setsuccessedit(false)}
       />
 
@@ -401,7 +407,11 @@ const UpcomingActivities = ({
                                   display: "block",
                                 }}
                                 onClick={() =>
-                                  handleEditActivity(res.activity_id)
+                                  handleEditActivity(
+                                    res.activity_id,
+                                    res.startTime,
+                                    res.endTime
+                                  )
                                 }
                               >
                                 Edit
@@ -451,10 +461,6 @@ const UpcomingActivities = ({
                           <TableBody>
                             <StyledTableRow>
                               <BodyTableCell scope="row">
-                                {console.log(
-                                  recuringValue.startTime,
-                                  "recuring starttime"
-                                )}
                                 {moment(recuringValue.startTime).format(
                                   "HH:mm"
                                 )}
@@ -494,7 +500,9 @@ const UpcomingActivities = ({
                                   }}
                                   onClick={() =>
                                     handleEditActivity(
-                                      recuringValue.activity_id
+                                      recuringValue.activity_id,
+                                      res.startTime,
+                                      res.endTime
                                     )
                                   }
                                 >

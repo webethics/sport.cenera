@@ -1,5 +1,5 @@
-import axios from 'axios';
-import configs from '@cenera/configs';
+import axios from "axios";
+import configs from "@cenera/configs";
 // import { Club } from '@cenera/models';
 // import { ClubUpdateReqResponse } from './types';
 
@@ -28,7 +28,6 @@ import configs from '@cenera/configs';
 //   });
 // };
 
-
 // const GetActivities = (club_id:number ,access_token:string) =>{
 //   return axios.post<ClubUpdateReqResponse>(`${configs.app.api}/booking/getActivities`, {
 //     access_token,
@@ -37,166 +36,181 @@ import configs from '@cenera/configs';
 //   });
 // }
 
-
-const GetPublicClubs = ():any =>{
-   return axios.post<any>(`${configs.app.api}/booking/getClubsPublic`)
-}
+const GetPublicClubs = (): any => {
+  return axios.post<any>(`${configs.app.api}/booking/getClubsPublic`);
+};
 
 //Create activity
-const addActivity = (newobj:any):any =>{
-return axios.post<any>(`${configs.app.api}/booking/updateActivity`,newobj)}
-
-
+const addActivity = (newobj: any): any => {
+  return axios.post<any>(`${configs.app.api}/booking/updateActivity`, newobj);
+};
 
 //Get activity
 
-const getUpcomingActivities = (newobj:any): any => {
+const getUpcomingActivities = (newobj: any): any => {
   return {
     url: `${configs.app.api}/booking/getActivities`,
-    method: 'post',
-    data: 
-      newobj
-  
-    ,
+    method: "post",
+    data: newobj,
   };
 };
 
-
-const getEditActivities = (access_token: string,club_id:number,activity_id_list: Array<Number> ): any => {
-  
+const getEditActivities = (
+  access_token: string,
+  club_id: number,
+  activity_id_list: Array<Number>,
+  startTime: string,
+  endTime: string
+): any => {
   return {
     url: `${configs.app.api}/booking/getActivities`,
-    method: 'post',
+    method: "post",
     data: {
       access_token,
       club_id: club_id,
-      activity_id_list: [activity_id_list]
+      activity_id_list: [activity_id_list],
+      startTime: startTime,
+      endTime: endTime,
     },
-  }
-}
-const GetActivities = (data:any): any => {
+  };
+};
+const GetActivities = (data: any): any => {
   return {
     url: `${configs.app.api}/booking/getActivities`,
-    method: 'post',
-    data: data
-      // access_token: access_token,
-      // club_id: club_id,
-      // team_id: team_id,
-      // location_id: 1,
-      // activity_type: 5,
-      // wardrobe_id: 1,
-      // // activity_id_list: [1,2,3],
-      // text_search:"value",
-      // startTime: "2022-03-29T14:00",
-      // endTime: "2022-03-29T15:00"
-  }
+    method: "post",
+    data: data,
+    // access_token: access_token,
+    // club_id: club_id,
+    // team_id: team_id,
+    // location_id: 1,
+    // activity_type: 5,
+    // wardrobe_id: 1,
+    // // activity_id_list: [1,2,3],
+    // text_search:"value",
+    // startTime: "2022-03-29T14:00",
+    // endTime: "2022-03-29T15:00"
+  };
 };
 
-
-const deleteMultipleActivities = (access_token: string,club_id: number,activity_id_list: any) => {
-  return axios.post<any>(`${configs.app.api}/booking/multiDeleteActivities` ,{
+const deleteMultipleActivities = (
+  access_token: string,
+  club_id: number,
+  activity_id_list: any
+) => {
+  return axios.post<any>(`${configs.app.api}/booking/multiDeleteActivities`, {
     access_token: access_token,
-    club_id:club_id,
+    club_id: club_id,
     activity_id_list: activity_id_list,
-
-  } )
+  });
 };
-
-
 
 //lOCATION
 const GetLocations = (access_token: string): any => {
-    return {
-      url: `${configs.app.api}/booking/getLocations`,
-      method: 'post',
-      data: {
-        access_token
-      },
-    };
-};
-
-
-const UpdateLocation = (access_token: string,club_id:number ,location_name: string) => {
-return axios.post<any>(`${configs.app.api}/booking/updateLocation` ,{
-        access_token: access_token,
-        club_id:club_id,
-        updateType:"create",
-        location_id: "",
-        location_type: "field",
-        location_name: location_name,
-        location_description: "" 
-  } )
-};
-
-
-
-const deleteLocation = (access_token: string,club_id:number ,location_id: number) => {
-  return axios.post<any>(`${configs.app.api}/booking/updateLocation` ,{
-          access_token: access_token,
-          club_id:club_id,
-          updateType:"delete",
-          location_id: location_id,
-    } )
-  };
-
-//Wardrobs
-
- const getWardrobes = (access_token: string): any => {
   return {
-    url: `${configs.app.api}/booking/getWardrobes`,
-    method: 'post',
+    url: `${configs.app.api}/booking/getLocations`,
+    method: "post",
     data: {
       access_token,
     },
   };
 };
 
-
-const createWardrobes = (access_token: string,club_id:number,wardrobe_name: string) => {
-  return axios.post<any>(`${configs.app.api}/booking/updateWardrobe` , {
-
+const UpdateLocation = (
+  access_token: string,
+  club_id: number,
+  location_name: string
+) => {
+  return axios.post<any>(`${configs.app.api}/booking/updateLocation`, {
     access_token: access_token,
-    club_id:club_id,
+    club_id: club_id,
+    updateType: "create",
+    location_id: "",
+    location_type: "field",
+    location_name: location_name,
+    location_description: "",
+  });
+};
+
+const deleteLocation = (
+  access_token: string,
+  club_id: number,
+  location_id: number
+) => {
+  return axios.post<any>(`${configs.app.api}/booking/updateLocation`, {
+    access_token: access_token,
+    club_id: club_id,
+    updateType: "delete",
+    location_id: location_id,
+  });
+};
+
+//Wardrobs
+
+const getWardrobes = (access_token: string): any => {
+  return {
+    url: `${configs.app.api}/booking/getWardrobes`,
+    method: "post",
+    data: {
+      access_token,
+    },
+  };
+};
+
+const createWardrobes = (
+  access_token: string,
+  club_id: number,
+  wardrobe_name: string
+) => {
+  return axios.post<any>(`${configs.app.api}/booking/updateWardrobe`, {
+    access_token: access_token,
+    club_id: club_id,
     updateType: "create",
     wardrobe_id: "",
     wardrobe_name: wardrobe_name,
     wardrobe_maxCapacity: 2,
-    wardrobe_description: ""
-  })
+    wardrobe_description: "",
+  });
 };
 
-
-const deleteWardrobes = (access_token: string,club_id:number ,wardrobe_id: number) => {
-  return axios.post<any>(`${configs.app.api}/booking/updateWardrobe` ,{
-          access_token: access_token,
-          club_id:club_id,
-          updateType:"delete",
-          wardrobe_id: wardrobe_id,
-
-    } )
-  };
-
-
-  const setActivitiesPublished = (access_token: string,club_id:number,activity_id_list: any) => {
-    return axios.post<any>(`${configs.app.api}/booking/setActivitiesPublishedState`, {
+const deleteWardrobes = (
+  access_token: string,
+  club_id: number,
+  wardrobe_id: number
+) => {
+  return axios.post<any>(`${configs.app.api}/booking/updateWardrobe`, {
     access_token: access_token,
-    club_id:club_id,
-    isPublic: true,
-    activity_id_list: activity_id_list
-    })
-  };
+    club_id: club_id,
+    updateType: "delete",
+    wardrobe_id: wardrobe_id,
+  });
+};
 
-  //Getactivitylist  
+const setActivitiesPublished = (
+  access_token: string,
+  club_id: number,
+  activity_id_list: any
+) => {
+  return axios.post<any>(
+    `${configs.app.api}/booking/setActivitiesPublishedState`,
+    {
+      access_token: access_token,
+      club_id: club_id,
+      isPublic: true,
+      activity_id_list: activity_id_list,
+    }
+  );
+};
+
+//Getactivitylist
 const Getactivitylist = (access_token: string): any => {
   return {
     url: `${configs.app.api}/booking/getTypes`,
-    method: 'post',
+    method: "post",
     data: {
-      access_token
+      access_token,
     },
   };
 };
-
 
 export const ActivityService = {
   // createOrEditClub,
@@ -214,5 +228,5 @@ export const ActivityService = {
   setActivitiesPublished,
   getEditActivities,
   GetActivities,
-  Getactivitylist
-}
+  Getactivitylist,
+};

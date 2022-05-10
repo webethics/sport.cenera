@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 // import axios from "axios"
 import {
   Modal,
-  Box,
   makeStyles,
   CircularProgress,
   Backdrop,
@@ -28,22 +27,32 @@ import { useFetchActivities } from "@cenera/common/hooks/api-hooks/activity";
 import { useAppContext } from "@cenera/app-context";
 import { ActivityService } from "@cenera/services/api/activity";
 import moment from "moment";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { useFetchActivityType } from "@cenera/common/hooks/api-hooks/activity";
 import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import Box from "@mui/material/Box";
+
 const useStyles = makeStyles(styles as any);
 
 export default function EditActivityModal(props: any) {
   const editActivity = props.activityId;
+  const editActivitystarttime = props.activitystarttime;
+  const activityendtime = props.activityendtime;
+  console.log(
+    editActivitystarttime,
+    "editActivitystarttimeeditActivitystarttime"
+  );
   // const [locationname,setLocationname]= useState();
   const [week, setweek] = useState([]);
+  console.log(week, "weekweek");
   const [monthDates, setMonthDates] = useState([]);
   const [appState] = useAppContext();
   const classes = useStyles();
   const [selectedDate, SetselectedDate] = useState(new Date());
+
   const { enqueueSnackbar } = useSnackbar();
   const { locationData } = useFetchGetLocations();
   const [locations, setLocations] = useState([]);
@@ -87,8 +96,13 @@ export default function EditActivityModal(props: any) {
 
   // const[currenteditactivity,setCurrenteditactivity] = useState(null)
   //data
-  const { EditActivitydata } = useFetchEditActivities(editActivity);
-  console.log(EditActivitydata, "EditActivitydata");
+  const { EditActivitydata } = useFetchEditActivities(
+    editActivity,
+    editActivitystarttime,
+    activityendtime
+  );
+  console.log(EditActivitydata, "llll");
+  //recurring_item
   const { addActivity } = ActivityService;
 
   useEffect(() => {
@@ -134,6 +148,8 @@ export default function EditActivityModal(props: any) {
     const formikField = { ...formik.values };
     if (pickerType === "start_date") {
       formikField["start_date"] = value;
+    } else if (pickerType === "end_date_recurring") {
+      formikField["end_date_recurring"] = value;
     } else if (pickerType === "start_time") {
       formikField["start_time"] = value;
     } else if (pickerType === "end_date") {
@@ -155,8 +171,6 @@ export default function EditActivityModal(props: any) {
     warderobe: "",
     extWarBef15: false,
     extWarBef30: false,
-    // extWarAf15:   false,
-    // extWarAf30:  false,
     activity: "",
     description: "",
     away_team: "",
@@ -225,33 +239,33 @@ export default function EditActivityModal(props: any) {
 
   const formik = useFormik({
     initialValues: initialFormValues,
-    validationSchema: Yup.object({
-      recurring: Yup.number(),
-      week_day: Yup.string().when("recurring", {
-        is: 1,
-        then: Yup.string().required("Field is required"),
-      }),
+    // validationSchema: Yup.object({
+    //   recurring: Yup.number(),
+    //   week_day: Yup.string().when("recurring", {
+    //     is: 1,
+    //     then: Yup.string().required("Field is required"),
+    //   }),
 
-      recurringby: Yup.number(),
-      month_day: Yup.string().when("recurringby", {
-        is: 3,
-        then: Yup.string().required("Field is required"),
-      }),
+    //   recurringby: Yup.number(),
+    //   month_day: Yup.string().when("recurringby", {
+    //     is: 3,
+    //     then: Yup.string().required("Field is required"),
+    //   }),
 
-      end_date: Yup.date().min(
-        Yup.ref("start_date"),
-        "End date can't be before start date"
-      ),
+    //   end_date: Yup.date().min(
+    //     Yup.ref("start_date"),
+    //     "End date can't be before start date"
+    //   ),
 
-      start_time: Yup.string().required("Time is Required"),
-      end_time: Yup.string().required("Time is Required"),
-      location: Yup.string().required("Location is Required"),
-      start_date: Yup.date(),
-      end_date_recurring: Yup.date().min(
-        Yup.ref("start_date"),
-        "End date can't be before start date"
-      ),
-    }),
+    //   start_time: Yup.string().required("Time is Required"),
+    //   end_time: Yup.string().required("Time is Required"),
+    //   location: Yup.string().required("Location is Required"),
+    //   start_date: Yup.date(),
+    //   end_date_recurring: Yup.date().min(
+    //     Yup.ref("start_date"),
+    //     "End date can't be before start date"
+    //   ),
+    // }),
 
     onSubmit: async (formValues) => {
       const {
@@ -267,17 +281,11 @@ export default function EditActivityModal(props: any) {
         moment(start_date).format("YYYY-MM-DDT") + start_time;
       const newEndTime = moment(start_date).format("YYYY-MM-DDT") + end_time;
       let activity: string;
-      if (formValues.activity == "0") {
-        activity = "match";
-      } else if (formValues.activity == "1") {
-        activity = "training";
-      } else if (formValues.activity == "2") {
-        activity = "maintenance";
-      } else if (formValues.activity == "3") {
-        activity = "rental";
-      } else if (formValues.activity == "0.5") {
-        activity = "";
-      }
+      activitylist.forEach((res) => {
+        if (res.id == formValues.activity) {
+          activity = res.name;
+        }
+      });
       const newobj = {
         access_token: appState.authentication.accessToken,
         updateType: "update",
@@ -290,7 +298,6 @@ export default function EditActivityModal(props: any) {
         ...(formValues.recurring === 1
           ? { recurring_item: true }
           : { recurring_item: false }),
-        // "recurring_details": formValues.recurringby==1 && "", //not added in form
         ...(formValues.recurring === 1 &&
           formValues.recurringby === 1 && {
             recurring_details: `weekly:${week.toString()}`,
@@ -332,21 +339,13 @@ export default function EditActivityModal(props: any) {
       formik.setValues({
         ...formik.values,
         extWarBef30: true,
-        // extWarAf30: true,
       });
     } else {
       formik.setValues({
         ...formik.values,
         extWarBef30: false,
-        // extWarAf30: false,
       });
     }
-
-    //  if(teamsList && EditActivitydata && EditActivitydata.length>0){
-    //    const teamName = teamsList.find(res=>res.id===EditActivitydata[0].team_id)
-    //    formik.setValues({...formik.values,team:teamName.team_id})
-
-    //  } teamsList,EditActivitydata
   }, [formik.values.activity]);
 
   useEffect(() => {
@@ -368,7 +367,6 @@ export default function EditActivityModal(props: any) {
       const endtime = acitivityList[0].endTime;
       const mendtime = moment(endtime).format("HH:mm");
 
-      console.log(mstarttime, mendtime, "starttime");
       formik.setValues({
         ...formik.values,
         warderobe: acitivityList[0].wardrobe_id,
@@ -384,6 +382,8 @@ export default function EditActivityModal(props: any) {
         end_time: mendtime,
         extWarBef15: acitivityList[0].wardrobe_extra_time == 15 && true,
         extWarBef30: acitivityList[0].wardrobe_extra_time == 30 && true,
+        recurring: acitivityList[0].recurring_item == true && 1,
+        end_date_recurring: acitivityList[0].end_date_recurring,
       });
     }
   }, [acitivityList]);
@@ -442,6 +442,7 @@ export default function EditActivityModal(props: any) {
                   >
                     or
                   </Box>
+
                   <TextField
                     style={{ flex: "1" }}
                     className="desc_box "
@@ -658,7 +659,6 @@ export default function EditActivityModal(props: any) {
                     </>
                   )}
                 </Box>
-                {console.log(values.recurringby, "lllllllll")}
               </GridItem>
               <GridItem
                 xs="12"
@@ -727,6 +727,10 @@ export default function EditActivityModal(props: any) {
                               fontWeight: "400",
                               color: "#565656",
                               lineHeight: "0",
+                              "&.active_dates": {
+                                backgroundColor: "#00acc1",
+                                color: "#fff",
+                              },
                             }}
                             onClick={() => handledays2(res)}
                           >
@@ -759,7 +763,7 @@ export default function EditActivityModal(props: any) {
                           <Box
                             className={
                               week.some((elm) => elm === res.name)
-                                ? "active_day"
+                                ? "active_days"
                                 : ""
                             }
                             component="span"
@@ -776,6 +780,11 @@ export default function EditActivityModal(props: any) {
                               fontWeight: "400",
                               color: "#565656",
                               lineHeight: "0",
+
+                              "&.active_days": {
+                                backgroundColor: "#00acc1",
+                                color: "#fff",
+                              },
                             }}
                             onClick={() => handledays1(res.name)}
                           >
@@ -825,6 +834,10 @@ export default function EditActivityModal(props: any) {
                               fontWeight: "400",
                               color: "#565656",
                               lineHeight: "0",
+                              "&.active_days": {
+                                backgroundColor: "#00acc1",
+                                color: "#fff",
+                              },
                             }}
                             onClick={() => handledays1(res.name)}
                           >
@@ -860,10 +873,7 @@ export default function EditActivityModal(props: any) {
               )}
 
               {/* Start Recurring End Date */}
-              {console.log(
-                values.recurringby,
-                "values.recurringbyvalues.recurringbyvalues.recurringby"
-              )}
+
               {values.recurring === 1 && values.recurringby > 0 && (
                 <>
                   <GridItem
@@ -983,8 +993,6 @@ export default function EditActivityModal(props: any) {
                 <h5 style={{ fontSize: "14px" }}>Extra Warderobe Time</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                {/* <h5 style={{ fontSize: "14px" }}>Before</h5> */}
-
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -1021,43 +1029,12 @@ export default function EditActivityModal(props: any) {
                 />
               </GridItem>
 
-              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                {/* <h5 style={{ fontSize: "14px" }}>After</h5> */}
-                {/* <FormControlLabel
-                      control={
-                        <Checkbox
-                          id="extWarAf15"
-                          checked={values.extWarAf15}
-                          style={{ color: "#00acc1" }}
-                          onChange={(e) => {
-                            formik.setValues({
-                              ...formik.values,
-                              extWarAf30: false,
-                            });
-                            handleChange(e);
-                          }}
-                        />
-                      }
-                      label="15 Min"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          id="extWarAf30"
-                          checked={values.extWarAf30}
-                          style={{ color: "#00acc1" }}
-                          onChange={(e) => {
-                            formik.setValues({
-                              ...formik.values,
-                              extWarAf15: false,
-                            });
-                            handleChange(e);
-                          }}
-                        />
-                      }
-                      label="30 Min"
-                    /> */}
-              </GridItem>
+              <GridItem
+                xs="12"
+                sm="5"
+                md="4"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
               <GridItem
                 xs="12"
                 md="2"
