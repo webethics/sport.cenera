@@ -19,7 +19,11 @@ import Paper from "@material-ui/core/Paper";
 import Filters from "./filters";
 // import axios from "axios"
 import moment from "moment";
-import { getFormatedData ,getFormatedReccuringDate,getduraiton } from "@cenera/utils/services";
+import {
+  getFormatedData,
+  getFormatedReccuringDate,
+  getduraiton,
+} from "@cenera/utils/services";
 
 import { useFetchActivities } from "@cenera/common/hooks/api-hooks/activity";
 import { ActivityService } from "@cenera/services/api/activity";
@@ -107,32 +111,31 @@ const UpcomingActivities = ({
     deleteRecurringActivity,
   } = ActivityService;
 
-
-  const deleteNonReccuring =async (deletesingleBooking:any)=>{
+  const deleteNonReccuring = async (deletesingleBooking: any) => {
     setDeleting(true);
-    let params = {activity_id_list:deletesingleBooking}
-   const response = await deleteMultipleActivities(
-     appState.authentication.accessToken,
-     appState.user.club_id,
-     params
-   );
-   if (response) {
-     await revalidate();
-     setrevaldate(1);
-     enqueueSnackbar("Activity Deleted Successfully", {
-       variant: "success",
-     });
-     setDeleting(false);
-   }
-  }
+    let params = { activity_id_list: deletesingleBooking };
+    const response = await deleteMultipleActivities(
+      appState.authentication.accessToken,
+      appState.user.club_id,
+      params
+    );
+    if (response) {
+      await revalidate();
+      setrevaldate(1);
+      enqueueSnackbar("Activity Deleted Successfully", {
+        variant: "success",
+      });
+      setDeleting(false);
+    }
+  };
 
+  const deleteReccuring = async (deleteRecurenceBooking: any) => {
+    let formatedDeleteDate = getFormatedReccuringDate(deleteRecurenceBooking);
+    console.log(formatedDeleteDate, "test");
+    let deleteStatus: boolean = false;
 
-  const deleteReccuring = async (deleteRecurenceBooking:any) => {
-    let formatedDeleteDate =  getFormatedReccuringDate(deleteRecurenceBooking);
-      console.log(formatedDeleteDate,"test");
-      let deleteStatus:boolean = false;
-
-      Promise.all(formatedDeleteDate.map( async(res:any)=>{
+    Promise.all(
+      formatedDeleteDate.map(async (res: any) => {
         let params = { delete_dates: res.dateDeletes, activity_id: res.id };
         const response = await deleteRecurringActivity(
           appState.authentication.accessToken,
@@ -140,22 +143,21 @@ const UpcomingActivities = ({
           params
         );
         if (response) {
-           deleteStatus=true
+          deleteStatus = true;
         }
-      } 
-      )).then(res=>{
-          console.log(res)
-          if(deleteStatus===true){
-            revalidate();
-            setrevaldate(1);
-            enqueueSnackbar("Activity Deleted Successfully", {
-              variant: "success",
-            });
-            setDeleting(false);
-          } 
       })
-  }
-
+    ).then((res) => {
+      console.log(res);
+      if (deleteStatus === true) {
+        revalidate();
+        setrevaldate(1);
+        enqueueSnackbar("Activity Deleted Successfully", {
+          variant: "success",
+        });
+        setDeleting(false);
+      }
+    });
+  };
 
   const deleteActivity = async () => {
     const deletesingleBooking = acitivityList
@@ -163,11 +165,14 @@ const UpcomingActivities = ({
       .map((res) => res.activity_id); //returning array of id
 
     const deleteRecurenceBooking = acitivityList
-    .filter((res) =>(res.isSelected === true && res.recurring_item === true))
-    .map((res)=>({id:res.activity_id, dateDeletes:[ moment(res.startTime).format("YYYY-MM-DD")]}));
-    console.log(deletesingleBooking,deleteRecurenceBooking,"test")
-    if (deletesingleBooking) deleteNonReccuring(deletesingleBooking)
-    if (deleteRecurenceBooking) deleteReccuring(deleteRecurenceBooking)
+      .filter((res) => res.isSelected === true && res.recurring_item === true)
+      .map((res) => ({
+        id: res.activity_id,
+        dateDeletes: [moment(res.startTime).format("YYYY-MM-DD")],
+      }));
+    console.log(deletesingleBooking, deleteRecurenceBooking, "test");
+    if (deletesingleBooking) deleteNonReccuring(deletesingleBooking);
+    if (deleteRecurenceBooking) deleteReccuring(deleteRecurenceBooking);
   };
 
   const publishActivity = async () => {
@@ -246,19 +251,19 @@ const UpcomingActivities = ({
       setAcitivityList(temp);
     }
   }, [Activitydata, data, successedit]);
- 
+
   const handleDeleteSelected = () => {
     let isSelectedForDelete = acitivityList.some((res) => {
-      if(res.isSelected === true){
-        return res
-      }else{
-        for(let i of res.recuring){
-          if(i.isSelected === true)  return res
+      if (res.isSelected === true) {
+        return res;
+      } else {
+        for (let i of res.recuring) {
+          if (i.isSelected === true) return res;
         }
       }
     });
- 
-     console.log(isSelectedForDelete,"pppp")
+
+    console.log(isSelectedForDelete, "pppp");
     if (isSelectedForDelete) {
       showConfirmDialog();
     }
@@ -273,7 +278,6 @@ const UpcomingActivities = ({
     }
   };
 
-
   const handleCheckBoxForDelete = (id: number) => {
     const newArr = [...acitivityList];
     newArr.forEach((res, index) => {
@@ -284,7 +288,10 @@ const UpcomingActivities = ({
       if (res.recuring) {
         res.recuring.forEach((recVal: any, i: any) => {
           if (recVal.randomId == id) {
-            newArr[index].recuring[i] = { ...recVal, isSelected: !res.isSelected };
+            newArr[index].recuring[i] = {
+              ...recVal,
+              isSelected: !res.isSelected,
+            };
           }
         });
       }
@@ -292,7 +299,6 @@ const UpcomingActivities = ({
 
     setAcitivityList([...newArr]);
   };
-
 
   const showDuration = (start: string, end: string) => {
     let startDate = moment(start).format("YYYY-MM-DD");
@@ -307,7 +313,6 @@ const UpcomingActivities = ({
       return getduraiton(start, finalEndTime);
     }
   };
-
 
   console.log(acitivityList, "acitivityList");
 
@@ -424,7 +429,6 @@ const UpcomingActivities = ({
                           <StyledTableCell align="left"></StyledTableCell>
                         </TableRow>
                       </TableHead>
-
                       {!res.recuring && (
                         <TableBody>
                           <StyledTableRow>

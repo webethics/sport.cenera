@@ -216,11 +216,11 @@ export const Booking: FC = () => {
         then: Yup.string().required("Field is required"),
       }),
 
-      recurringby: Yup.number(),
-      month_day: Yup.string().when("recurringby", {
-        is: 3,
-        then: Yup.string().required("Field is required"),
-      }),
+      // recurringby: Yup.number(),
+      // month_day: Yup.string().when("recurringby", {
+      //   is: 3,
+      //   then: Yup.string().required("Field is required"),
+      // }),
 
       // end_date: Yup.date().min(
       //   Yup.ref("start_date"),
@@ -231,10 +231,10 @@ export const Booking: FC = () => {
       end_time: Yup.string().required("Time is Required"),
       location: Yup.string().required("Location is Required"),
       start_date: Yup.date(),
-      // end_date_recurring: Yup.date().min(
-      //   Yup.ref("start_date"),
-      //   "End date can't be before start date"
-      // ),
+      end_date_recurring: Yup.date().min(
+        Yup.ref("start_date"),
+        "End date can't be before start date"
+      ),
     }),
 
     onSubmit: async (formValues) => {
@@ -1163,7 +1163,7 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                       id="activity"
                     />
-                     {/* <ItemPicker
+                    {/* <ItemPicker
                       data={locations}
                       value={values.location}
                       onChange={handleChange}

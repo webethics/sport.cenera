@@ -10,29 +10,43 @@ import { makeStyles } from "@material-ui/core/styles";
 import { filtersStyle } from "./styles";
 import Container from "@material-ui/core/Container";
 import FilterListIcon from "@material-ui/icons/FilterList";
-import { useFetchGetActivites} from "@cenera/common/hooks/api-hooks/activity";
+import { useFetchGetActivites } from "@cenera/common/hooks/api-hooks/activity";
 
 const useStyles = makeStyles(filtersStyle as any);
 
-export default function Filters({onFilter,filterTeam,filterLocation,searchingtext,clubid}:{onFilter:any,filterTeam:any,filterLocation:any,searchingtext:any,clubid:any}) {
+export default function Filters({
+  onFilter,
+  filterTeam,
+  filterLocation,
+  searchingtext,
+  clubid,
+  onFilteractivity,
+}: {
+  onFilter: any;
+  filterTeam: any;
+  filterLocation: any;
+  searchingtext: any;
+  clubid: any;
+  onFilteractivity: any;
+}) {
+  const [locationdata, setlocationdata] = React.useState([]);
+  const [teamdata, setTeamdata] = React.useState([]);
+  const [activitytype, setactivitytype] = React.useState([]);
 
-  const[locationdata,setlocationdata] = React.useState([]);
-  const[teamdata,setTeamdata] = React.useState([]);
   const classes = useStyles();
-  const {acitivityData} = useFetchGetActivites({"club_id":clubid}); 
+  const { acitivityData } = useFetchGetActivites({ club_id: clubid });
 
   const [text, setText] = React.useState("");
   const [team, setTeam] = React.useState("0");
   const handleChange1 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setTeam(event.target.value as string);
-    filterTeam(event.target.value)
+    filterTeam(event.target.value);
   };
- 
 
   const [location, setLocation] = React.useState("0");
   const handleChange2 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLocation(event.target.value as string);
-    filterLocation(event.target.value)
+    filterLocation(event.target.value);
   };
 
   const [filter, setfilter] = React.useState("7");
@@ -41,39 +55,50 @@ export default function Filters({onFilter,filterTeam,filterLocation,searchingtex
     onFilter(event.target.value);
   };
 
-  const [activity, setActivity] = React.useState("30");
+  const [activity, setActivity] = React.useState("");
   const handleChange4 = (event: React.ChangeEvent<{ value: unknown }>) => {
+    onFilteractivity(event.target.value);
     setActivity(event.target.value as string);
   };
 
-const changeText = (e:any) => {
-  setText(e.target.value);
-};
+  const changeText = (e: any) => {
+    setText(e.target.value);
+  };
 
-const getText = (event:any) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-       searchingtext(text)
+  const getText = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      searchingtext(text);
     }
- };
+  };
 
- useEffect(() => {
- if(acitivityData){
+  useEffect(() => {
+    if (acitivityData) {
+      const filterLocations = acitivityData.map((res: any) => ({
+        location_name: res.location_name,
+        location_id: res.location_id,
+      }));
+      setlocationdata(filterLocations);
+      const filterTeam = acitivityData.map((res: any) => ({
+        team_text: res.team_text,
+        team_id: res.team_id,
+      }));
+      setTeamdata(filterTeam);
+      const filterActivitylist = acitivityData
+        .filter((res: any) => res.activity_type !== "")
+        .map((res: any) => ({
+          activity_type: res.activity_type,
+        }));
+      setactivitytype(filterActivitylist);
+    }
+  }, [acitivityData]);
 
-  const filterLocations = acitivityData.map((res:any)=>({location_name:res.location_name, location_id:res.location_id}))
-  setlocationdata(filterLocations)
-  const filterTeam = acitivityData.map((res:any)=>({team_text:res.team_text, team_id:res.team_id}))
-  setTeamdata(filterTeam);
- }
+  const ids = activitytype.map((o) => o.id);
+  const filtered = activitytype.filter(
+    ({ id }, index) => !ids.includes(id, index + 1)
+  );
 
-}, [acitivityData]);
-
-
-// const handleChange5 = (event:any) => {
-//   event.preventDefault()
-//   searchingtext(text)
-// };
-
+  // const arrTwo = acitivityData.filter((item, index) => activity_type.indexOf(item) == index);
   return (
     <Container className={classes.Container}>
       <Box
@@ -97,12 +122,11 @@ const getText = (event:any) => {
               onChange={handleChange1}
               label="Team"
             >
-              <MenuItem value={0}>
-                All
-              </MenuItem>
-              {teamdata && teamdata.map((res:any)=>(
+              <MenuItem value={0}>All</MenuItem>
+              {teamdata &&
+                teamdata.map((res: any) => (
                   <MenuItem value={res.team_id}>{res.team_text} </MenuItem>
-              ))}
+                ))}
               {/* <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem> */}
@@ -110,8 +134,6 @@ const getText = (event:any) => {
           </FormControl>
         </Box>
         <Box p={1} className={classes.formGroup}>
-
-
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Location
@@ -123,13 +145,14 @@ const getText = (event:any) => {
               onChange={handleChange2}
               label="location"
             >
-              <MenuItem value={0}>
-                All
-              </MenuItem>
+              <MenuItem value={0}>All</MenuItem>
 
-              {locationdata && locationdata.map((res:any)=>(
-                  <MenuItem value={res.location_id}>{res.location_name} </MenuItem>
-              ))}
+              {locationdata &&
+                locationdata.map((res: any) => (
+                  <MenuItem value={res.location_id}>
+                    {res.location_name}{" "}
+                  </MenuItem>
+                ))}
               {/* <MenuItem value={10}>sydney </MenuItem>
               <MenuItem value={20}>New York</MenuItem>
               <MenuItem value={30}>Melbourne </MenuItem> */}
@@ -148,9 +171,13 @@ const getText = (event:any) => {
               onChange={handleChange4}
               label="Team"
             >
-              <MenuItem value={10}>Match </MenuItem>
-              <MenuItem value={20}>Training</MenuItem>
-              <MenuItem value={30}>Maintainance</MenuItem>
+              <MenuItem value={0}>All</MenuItem>
+              {filtered &&
+                filtered.map((res: any) => (
+                  <MenuItem value={res.activity_type}>
+                    {res.activity_type}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
         </Box>
@@ -170,8 +197,6 @@ const getText = (event:any) => {
               onKeyPress={(e) => getText(e)}
               onChange={changeText}
             />
-
-            
           </div>
         </Box>
         <Box

@@ -56,4 +56,5 @@ export const filtersStyle = (theme: Theme) => ({
     alignItems: "center", 
     minWidth:'200px',
   },
+
 });

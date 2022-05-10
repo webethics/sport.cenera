@@ -65,12 +65,10 @@ export default function Filters({
     setText(e.target.value);
   };
 
-
-  
-  const getText = (event:any) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-       searchingtext(text)
+  const getText = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      searchingtext(text);
     } else {
     }
   };
@@ -83,6 +81,7 @@ export default function Filters({
   const { enqueueSnackbar } = useSnackbar();
   const { locationData, error } = useFetchGetLocations();
   const [locations, setLocations] = useState([]);
+
   const { teams } = useFetchTeams();
   const [teamsList, setTeamsList] = useState([]);
   const { activityType } = useFetchActivityType();
