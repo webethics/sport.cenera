@@ -27,27 +27,19 @@ import { useFetchActivities } from "@cenera/common/hooks/api-hooks/activity";
 import { useAppContext } from "@cenera/app-context";
 import { ActivityService } from "@cenera/services/api/activity";
 import moment from "moment";
-// import * as Yup from "yup";
+import * as Yup from "yup";
 import { useFetchActivityType } from "@cenera/common/hooks/api-hooks/activity";
-import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
-
+import { KeyboardTimePicker } from "@material-ui/pickers";
 const useStyles = makeStyles(styles as any);
 
 export default function EditActivityModal(props: any) {
   const editActivity = props.activityId;
   const editActivitystarttime = props.activitystarttime;
-  const activityendtime = props.activityendtime;
-  console.log(
-    editActivitystarttime,
-    "editActivitystarttimeeditActivitystarttime"
-  );
-  // const [locationname,setLocationname]= useState();
   const [week, setweek] = useState([]);
-  console.log(week, "weekweek");
   const [monthDates, setMonthDates] = useState([]);
   const [appState] = useAppContext();
   const classes = useStyles();
@@ -62,6 +54,11 @@ export default function EditActivityModal(props: any) {
   const [wardrobes, setWardrobes] = useState([]);
   const [acitivityList, setAcitivityList] = useState([]);
   const [activitylist, setactivitylist] = useState([]);
+  const [startTimefield, handleStartTimefield] = useState(new Date());
+  const [endTimefield, handleEndTimefield] = useState(new Date());
+  const [errorMsg , setErrorMsg] = useState("")
+  const [errorMsgMonth , setErrorMsgMonth] = useState("")
+  const [errorMsgweekly , setErrorMsgweekly] = useState("")
 
   const { activityType } = useFetchActivityType();
   //Recurring
@@ -71,15 +68,15 @@ export default function EditActivityModal(props: any) {
   ];
 
   const weekdays = [
-    { name: "Monday" },
-    { name: "Tuesday" },
-    { name: "Wednesday" },
-    { name: "Thursday" },
-    { name: "Friday" },
-    { name: "Saturday" },
-    { name: "Sunday" },
+    { name: "monday" },
+    { name: "tuesday" },
+    { name: "wednesday" },
+    { name: "thursday" },
+    { name: "friday" },
+    { name: "saturday" },
+    { name: "sunday" },
   ];
-  let dates = [];
+  let dates:any = [];
   for (let i = 1; i <= 31; i++) {
     dates.push(i);
   }
@@ -96,12 +93,11 @@ export default function EditActivityModal(props: any) {
 
   // const[currenteditactivity,setCurrenteditactivity] = useState(null)
   //data
-  const { EditActivitydata } = useFetchEditActivities(
+  const { EditActivitydata ,loading} = useFetchEditActivities(
     editActivity,
     editActivitystarttime,
-    activityendtime
+    editActivitystarttime
   );
-  console.log(EditActivitydata, "llll");
   //recurring_item
  
   const { addActivity } = ActivityService;
@@ -137,7 +133,7 @@ export default function EditActivityModal(props: any) {
         (res: any, index: number) => ({
           name: res.value,
           isMatch: res.isMatch,
-          id: index,
+          id: index+1,
         })
       );
       setactivitylist(newactivityType);
@@ -160,19 +156,19 @@ export default function EditActivityModal(props: any) {
     }
     formik.setValues(formikField);
   };
-
+  
   const initialFormValues = {
-    team: "",
+    team: "0",
     orTeam: "",
     start_date: selectedDate,
     start_time: "",
     end_date: selectedDate,
     end_time: "",
-    location: "",
-    warderobe: "",
+    location: "0",
+    warderobe: "0",
     extWarBef15: false,
     extWarBef30: false,
-    activity: "",
+    activity: "0",
     description: "",
     away_team: "",
     away_team_wardrobe: "",
@@ -205,64 +201,55 @@ export default function EditActivityModal(props: any) {
     }
   };
 
-  const handleValueChange = (value: any) => {
-    if (value === null) {
-      formik.setValues({
-        ...formik.values,
-        start_time: "",
-      });
-    } else {
-      formik.setValues({
-        ...formik.values,
-        start_time: value && value.format("HH:mm"),
-      });
-    }
-  };
+ 
   //weeks
-
-  const handleValueChangeend = (value: any) => {
-    if (value === null) {
-      formik.setValues({
-        ...formik.values,
-        end_time: "",
-      });
-    } else {
-      formik.setValues({
-        ...formik.values,
-        end_time: value && value.format("HH:mm"),
-      });
-    }
-  };
 
   const formik = useFormik({
     initialValues: initialFormValues,
-    // validationSchema: Yup.object({
-    //   recurring: Yup.number(),
-    //   week_day: Yup.string().when("recurring", {
-    //     is: 1,
-    //     then: Yup.string().required("Field is required"),
-    //   }),
+    validationSchema: Yup.object({
+      // recurring: Yup.number(),
+      // week_day: Yup.string().when("recurring", {
+      //   is: 1,
+      //   then: Yup.string().required("Field is required"),
+      // }),
 
-    //   recurringby: Yup.number(),
-    //   month_day: Yup.string().when("recurringby", {
-    //     is: 3,
-    //     then: Yup.string().required("Field is required"),
-    //   }),
+      // recurringby: Yup.number(),
+      // month_day: Yup.string().when("recurringby", {
+      //   is: 3,
+      //   then: Yup.string().required("Field is required"),
+      // }),
 
-    //   end_date: Yup.date().min(
-    //     Yup.ref("start_date"),
-    //     "End date can't be before start date"
-    //   ),
+      activity: Yup.number()
+      .min(1, "Activity is Required")
+      .required("Activity is Required"),
 
-    //   start_time: Yup.string().required("Time is Required"),
-    //   end_time: Yup.string().required("Time is Required"),
-    //   location: Yup.string().required("Location is Required"),
-    //   start_date: Yup.date(),
-    //   end_date_recurring: Yup.date().min(
-    //     Yup.ref("start_date"),
-    //     "End date can't be before start date"
-    //   ),
-    // }),
+      end_date: Yup.date().min(
+        Yup.ref("start_date"),
+        "End date can't be before start date"
+      ),
+
+      start_time: Yup.string().required("Time is Required"),
+      end_time: Yup.string()
+      .required("Time is Required")
+      .test(
+        "is-greater",
+        "end time should be greater than start time",
+        function(value) {
+          const { start_time } = this.parent;
+          return moment(value, "HH:mm").isSameOrAfter(
+            moment(start_time, "HH:mm")
+          );
+        }
+      ),
+    
+      location: Yup.number()
+        .min(1, "Location is Required")
+        .required("Location is Required"),
+
+      start_date: Yup.date(),
+      end_date_recurring: Yup
+      .date().min(Yup.ref("start_date"),"Reccuring End date has to be more than start date"),
+    }),
 
     onSubmit: async (formValues) => {
       const {
@@ -278,11 +265,12 @@ export default function EditActivityModal(props: any) {
         moment(start_date).format("YYYY-MM-DDT") + start_time;
       const newEndTime = moment(start_date).format("YYYY-MM-DDT") + end_time;
       let activity: string;
-      activitylist.forEach((res) => {
-        if (res.id == formValues.activity) {
-          activity = res.name;
-        }
-      });
+     
+      activitylist.forEach((res,index)=>{
+        let formVal = Number(formValues.activity)-1
+        if(formVal===index)  activity=res.name
+      })
+
       const newobj = {
         access_token: appState.authentication.accessToken,
         updateType: "update",
@@ -305,8 +293,8 @@ export default function EditActivityModal(props: any) {
         ...(formValues.recurringby === 3 && {
           recurring_details: `monthly:${monthDates.toString()}`,
         }),
-        ...(formValues.team.length && { team_id: formValues.team }),
-        team_text: formValues.orTeam,
+        ...(formValues.team !== "" && { team_id: formValues.team }),
+        ...(formValues.orTeam !== "" && { team_text: formValues.orTeam }),
         away_team_text: formValues.away_team,
         wardrobe_id: formValues.warderobe,
         wardrobe_id_away: formValues.away_team_wardrobe,
@@ -319,7 +307,7 @@ export default function EditActivityModal(props: any) {
           recurring_endDate: endrecurring_date,
         }),
       };
-
+    if(errorMsg.length<1 && errorMsgMonth.length<1 && errorMsgweekly.length<1){
       let res = addActivity(newobj);
       if (res) {
         props.onClose();
@@ -328,8 +316,36 @@ export default function EditActivityModal(props: any) {
       } else {
         enqueueSnackbar("err", { variant: "error" });
       }
+     }
     },
   });
+
+  useEffect(()=>{
+    if(formik.values.recurring==1 && formik.values.recurringby==2 && week.length<1){
+      setErrorMsg("please select week days")
+    }else{
+      setErrorMsg("")
+    }
+    if(formik.values.recurring==1 && formik.values.recurringby==1 && week.length<1){
+      setErrorMsgweekly("please select week days")
+    }else{
+      setErrorMsgweekly("")
+    }
+    if(formik.values.recurring==1 && formik.values.recurringby==3 && monthDates.length<1){
+      setErrorMsgMonth("please select month dates")
+      console.log("true true monthly ")
+    }else{
+      setErrorMsgMonth("")
+    }
+  },[formik.values.recurring,formik.values.recurringby,monthDates,week])
+ 
+  useEffect(() => {
+    formik.setValues({
+      ...formik.values,
+      start_time: moment(startTimefield).format("HH:mm"), //if time change it will update formik
+      end_time: moment(endTimefield).format("HH:mm"),
+    });
+  }, [startTimefield, endTimefield]);
 
   useEffect(() => {
     if (formik.values.activity === "Match") {
@@ -346,47 +362,61 @@ export default function EditActivityModal(props: any) {
   }, [formik.values.activity]);
 
   useEffect(() => {
-    if (teamsList && EditActivitydata && EditActivitydata.length > 0) {
-      const teamName = teamsList.find(
-        (res) => res.id === EditActivitydata[0].team_id
-      );
-
-      if (teamName) {
-        formik.setValues({ ...formik.values, team: teamName.id });
-      }
-    }
-  }, [teamsList, EditActivitydata]);
-
-  useEffect(() => {
+   
     if (acitivityList[0]) {
       const starttime = acitivityList[0].startTime;
       const mstarttime = moment(starttime).format("HH:mm");
       const endtime = acitivityList[0].endTime;
       const mendtime = moment(endtime).format("HH:mm");
+      let newActivity:any=0;
+      
+      
+      weekdays.forEach(res=>{
+       if(acitivityList[0].recurring_details.includes(res.name)){
+          setweek(prev=>([...prev , res.name]))
+       }
+      })
+      
+      let selectedDate  = acitivityList[0].recurring_details.slice(acitivityList[0].recurring_details.indexOf(":")+1).split(",")
+      selectedDate.forEach((date:number)=>{
+        setMonthDates(prev=>([...prev , Number(date)]))
+      })
+    
+      handleStartTimefield(acitivityList[0].startTime)
+      handleEndTimefield(acitivityList[0].endTime)
 
-      formik.setValues({
-        ...formik.values,
-        warderobe: acitivityList[0].wardrobe_id,
-        location: acitivityList[0].location_id,
-        team: acitivityList[0].team_id,
-        description: acitivityList[0].description,
-        away_team: acitivityList[0].away_team_text,
-        away_team_wardrobe: acitivityList[0].wardrobe_id_away,
-        referee_wardrobe: acitivityList[0].wardrobe_id_referee,
-        start_date: acitivityList[0].startTime,
-        end_date: acitivityList[0].endTime,
-        start_time: mstarttime,
-        end_time: mendtime,
-        extWarBef15: acitivityList[0].wardrobe_extra_time == 15 && true,
-        extWarBef30: acitivityList[0].wardrobe_extra_time == 30 && true,
-        recurring: acitivityList[0].recurring_item == true && 1,
-        end_date_recurring: acitivityList[0].end_date_recurring,
-      });
+      if(EditActivitydata && EditActivitydata[0]){
+        activitylist.forEach(res=>{
+          if(res.name==EditActivitydata[0].activity_type.toLowerCase()){
+            // formik.setValues({ ...formik.values, activity: res.id});
+            newActivity=res.id
+          } 
+        })
+        formik.setValues({
+          ...formik.values,
+          warderobe: acitivityList[0].wardrobe_id,
+          location: acitivityList[0].location_id,
+          team: acitivityList[0].team_id,  
+          activity: newActivity,
+          description: acitivityList[0].description,
+          away_team: acitivityList[0].away_team_text,
+          away_team_wardrobe: acitivityList[0].wardrobe_id_away,
+          referee_wardrobe: acitivityList[0].wardrobe_id_referee,
+          start_date: acitivityList[0].startTime,
+          end_date: acitivityList[0].endTime,
+          start_time: mstarttime,
+          end_time: mendtime,
+          extWarBef15: acitivityList[0].wardrobe_extra_time == 15 && true,
+          extWarBef30: acitivityList[0].wardrobe_extra_time == 30 && true,
+          recurring: acitivityList[0].recurring_item == true ? 1 : 0,
+          recurringby:acitivityList[0].recurring_details.includes("weekly") && 1 || acitivityList[0].recurring_details.includes("bi-weekly") && 2 || acitivityList[0].recurring_details.includes("monthly") && 3,
+          end_date_recurring: acitivityList[0].end_date_recurring,
+        });
+      }
     }
-  }, [acitivityList]);
 
-  //startTime
-  //moment(res.startTime).format("HH:mm")
+  }, [EditActivitydata]);
+
 
   const handleChangedays = (event: any) => {
     formik.setValues({ ...formik.values, recurringby: event.target.value });
@@ -444,7 +474,7 @@ export default function EditActivityModal(props: any) {
                     id="orTeam"
                     variant="outlined"
                     value={values.orTeam}
-                    disabled={values.team && true}
+                    disabled={values.team!=="0" && true}
                     onChange={handleChange}
                   />
                 </Box>
@@ -488,14 +518,20 @@ export default function EditActivityModal(props: any) {
                   >
                     Time
                   </Box>
-
+{/* 
                   <TimePicker
                     className="timepicker"
                     placement={"bottomLeft"}
                     defaultValue={moment()}
                     showSecond={false}
                     onChange={handleValueChange}
-                  />
+                  /> */}
+                    <KeyboardTimePicker
+                        ampm={false}
+                        variant="inline"
+                        value={startTimefield}
+                        onChange={handleStartTimefield}
+                    />
                 </Box>
                 {errors.start_time && (
                   <span
@@ -557,12 +593,18 @@ export default function EditActivityModal(props: any) {
                   >
                     Time
                   </Box>
-                  <TimePicker
+                  {/* <TimePicker
                     className="timepicker"
                     defaultValue={moment()}
                     showSecond={false}
                     onChange={handleValueChangeend}
-                  />
+                  /> */}
+                    <KeyboardTimePicker
+                        ampm={false}
+                        variant="inline"
+                        value={endTimefield}
+                        onChange={handleEndTimefield}
+                      />
                 </Box>
                 {errors.end_time && touched.end_time && (
                   <span
@@ -671,16 +713,12 @@ export default function EditActivityModal(props: any) {
                     md="2"
                     style={{ marginBottom: "15px" }}
                   >
-                    {values.recurringby === 1 && (
+                    {(values.recurringby === 1  || values.recurringby === 2) && (
                       <h5 style={{ fontSize: "14px", marginBottom: "15px" }}>
                         Select Recurring Days
                       </h5>
                     )}
-                    {values.recurringby === 2 && (
-                      <h5 style={{ fontSize: "14px", marginBottom: "15px" }}>
-                        Select Recurring Days
-                      </h5>
-                    )}
+
                     {values.recurringby === 3 && (
                       <h5 style={{ fontSize: "14px", marginBottom: "15px" }}>
                         Select Recurring Dates
@@ -732,7 +770,7 @@ export default function EditActivityModal(props: any) {
                             {res}
                           </Box>
                         ))}
-                        {errors.month_day && touched.month_day && (
+                        {errorMsgMonth && (
                           <span
                             style={{
                               color: "red",
@@ -740,7 +778,7 @@ export default function EditActivityModal(props: any) {
                               fontSize: "12px",
                             }}
                           >
-                            {errors.month_day}
+                            {errorMsgMonth}
                           </span>
                         )}
                       </Box>
@@ -783,10 +821,10 @@ export default function EditActivityModal(props: any) {
                             }}
                             onClick={() => handledays1(res.name)}
                           >
-                            {res.name.charAt(0)}
+                            {res.name.charAt(0).toUpperCase()}
                           </Box>
                         ))}
-                        {errors.week_day && touched.week_day && (
+                        {errorMsgweekly && (
                           <span
                             style={{
                               color: "red",
@@ -794,7 +832,7 @@ export default function EditActivityModal(props: any) {
                               fontSize: "12px",
                             }}
                           >
-                            {errors.week_day}
+                            {errorMsgweekly}
                           </span>
                         )}
                       </Box>
@@ -836,10 +874,10 @@ export default function EditActivityModal(props: any) {
                             }}
                             onClick={() => handledays1(res.name)}
                           >
-                            {res.name.charAt(0)}
+                            {res.name.charAt(0).toUpperCase()}  
                           </Box>
                         ))}
-                        {errors.week_day && touched.week_day && (
+                        {errorMsg && (
                           <span
                             style={{
                               color: "red",
@@ -847,7 +885,7 @@ export default function EditActivityModal(props: any) {
                               fontSize: "12px",
                             }}
                           >
-                            {errors.week_day}
+                            {errorMsg}
                           </span>
                         )}
                       </Box>
@@ -1045,6 +1083,18 @@ export default function EditActivityModal(props: any) {
                   onChange={handleChange}
                   id="activity"
                 />
+                 {errors.activity && touched.activity && (
+                      <span
+                        className={classes.errorColor}
+                        style={{
+                          color: "red",
+                          display: "inline-block",
+                          fontSize: "12px",
+                        }}
+                      >
+                        {errors.activity}
+                      </span>
+                    )}
               </GridItem>
               <GridItem
                 xs="12"
@@ -1101,7 +1151,7 @@ export default function EditActivityModal(props: any) {
                 />
               </GridItem>
 
-              {Number(values.activity) == 0 && (
+              {Number(values.activity) == 1 && (
                 <>
                   <Divider
                     style={{
@@ -1168,7 +1218,7 @@ export default function EditActivityModal(props: any) {
               </Button>
             </div>
           </form>
-          <Backdrop className={classes.backdrop} open={formik.isSubmitting}>
+          <Backdrop className={classes.backdrop} open={formik.isSubmitting || loading}>
             <CircularProgress color="inherit" />
           </Backdrop>
         </Box>

@@ -86,7 +86,6 @@ const UpcomingActivities = ({
   const [modalshow, setModalshow] = useState(false);
   const [activityIdForEdit, setActivityIdForEdit] = useState(null);
   const [activitystarttime, setactivitystarttime] = useState(null);
-  const [activityendtime, setactivityendtime] = useState(null);
   const [acitivityList, setAcitivityList] = useState([]);
   const [appState] = useAppContext();
   const [revaldatestate, setrevaldate] = useState(null);
@@ -289,12 +288,10 @@ const UpcomingActivities = ({
     confirmMessage: "Activity will be publish for good!",
   });
 
-  const handleEditActivity = (id: number, sdate: any, edate: any) => {
+  const handleEditActivity = (id: number, sdate: any,) => {
     setActivityIdForEdit(id);
     setactivitystarttime(sdate);
-    setactivityendtime(edate);
-
-    setModalshow(true);
+    setModalshow(true);  
   };
 
   useEffect(() => {
@@ -343,9 +340,14 @@ const UpcomingActivities = ({
   };
 
   const publishedActivity = () => {
-    let isSelectedForpublish = acitivityList.some(
-      (res) => res.isSelected === true
-    );
+    let isSelectedForpublish = acitivityList.some((res) => {
+      if (res.isSelected === true) {
+        return res;
+      }
+      if (res.recuring) {
+        return res.recuring.some((value: any) => value.isSelected === true);
+      }
+    });
     if (isSelectedForpublish) {
       showPublicDialoge();
     }
@@ -405,10 +407,8 @@ const UpcomingActivities = ({
         // activitystartdate={}
         activityId={activityIdForEdit}
         activitystarttime={activitystarttime}
-        activityendtime={activityendtime}
         callUpcomingActivity={() => setsuccessedit(false)}
       />
-
       <Card>
         <CardHeader>
           <h4>Upcoming Activities</h4>
@@ -542,7 +542,6 @@ const UpcomingActivities = ({
                                   handleEditActivity(
                                     res.activity_id,
                                     res.startTime,
-                                    res.endTime
                                   )
                                 }
                               >
@@ -638,8 +637,7 @@ const UpcomingActivities = ({
                                   onClick={() =>
                                     handleEditActivity(
                                       recuringValue.activity_id,
-                                      res.startTime,
-                                      res.endTime
+                                      recuringValue.startTime,
                                     )
                                   }
                                 >
@@ -715,7 +713,7 @@ const UpcomingActivities = ({
               </Button>
               <Button
                 color="danger"
-                style={{ maxWidth: "100%" }}
+                style={{ maxWidth: "100%", display:"none" }}
                 onClick={publishedActivity}
               >
                 Published Selected Activities

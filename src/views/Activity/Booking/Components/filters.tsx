@@ -198,6 +198,7 @@ export default function Filters({
               <InputBase
                 type="search"
                 placeholder="Search…"
+                style={{ height: "40px" }}
                 classes={{
                   root: classes.inputRoot,
                   input: classes.inputInput,
