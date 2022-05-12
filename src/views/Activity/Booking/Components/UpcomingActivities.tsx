@@ -179,7 +179,6 @@ const UpcomingActivities = ({
     }
   }, [deleteNonRecuring, deleteRecuring]);
 
-  console.log(deleteNonRecuring, deleteRecuring, "cccccccc");
 
   const deleteActivity = () => {
     // const deletesingleBooking = acitivityList
@@ -319,10 +318,11 @@ const UpcomingActivities = ({
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
     }
-    if (successedit === false) {
+    if (successedit===true) {
       revalidate();
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
+      setsuccessedit(false)
     }
   }, [Activitydata, data, successedit]);
   const handleDeleteSelected = () => {
@@ -388,8 +388,6 @@ const UpcomingActivities = ({
     }
   };
 
-  console.log(acitivityList, "acitivityList");
-
   return (
     <div className="parent">
       {alert}
@@ -403,11 +401,10 @@ const UpcomingActivities = ({
       </Backdrop>
       <EditActivityModal
         open={modalshow}
-        onClose={() => setModalshow(false)}
-        // activitystartdate={}
-        activityId={activityIdForEdit}
+        onClose={()=>setModalshow(false)}
+        callupcoming={()=>setsuccessedit(false)}
+        activityid={activityIdForEdit}
         activitystarttime={activitystarttime}
-        callUpcomingActivity={() => setsuccessedit(false)}
       />
       <Card>
         <CardHeader>

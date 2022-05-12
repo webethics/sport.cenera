@@ -23,7 +23,6 @@ import { useFetchGetLocations } from "@cenera/common/hooks/api-hooks/activity";
 import { useFetchTeams } from "@cenera/common/hooks/api-hooks";
 import { useFetchWardrobes } from "@cenera/common/hooks/api-hooks/activity";
 import { useFetchEditActivities } from "@cenera/common/hooks/api-hooks/activity";
-import { useFetchActivities } from "@cenera/common/hooks/api-hooks/activity";
 import { useAppContext } from "@cenera/app-context";
 import { ActivityService } from "@cenera/services/api/activity";
 import moment from "moment";
@@ -37,7 +36,7 @@ import { KeyboardTimePicker } from "@material-ui/pickers";
 const useStyles = makeStyles(styles as any);
 
 export default function EditActivityModal(props: any) {
-  const editActivity = props.activityId;
+  const editActivity = props.activityid;
   const editActivitystarttime = props.activitystarttime;
   const [week, setweek] = useState([]);
   const [monthDates, setMonthDates] = useState([]);
@@ -52,7 +51,7 @@ export default function EditActivityModal(props: any) {
   const [teamsList, setTeamsList] = useState([]);
   const { Wardrobesdata } = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
-  const [acitivityList, setAcitivityList] = useState([]);
+  // const [acitivityList, setAcitivityList] = useState([]);
   const [activitylist, setactivitylist] = useState([]);
   const [startTimefield, handleStartTimefield] = useState(new Date());
   const [endTimefield, handleEndTimefield] = useState(new Date());
@@ -81,32 +80,17 @@ export default function EditActivityModal(props: any) {
     dates.push(i);
   }
 
-  //end
-
-  const newobj = {
-    access_token: appState.authentication.accessToken,
-    club_id: appState.user.club_id,
-    activity_id_list: [editActivity],
-  };
-
-  const { Activitydata } = useFetchActivities(newobj);
-
-  // const[currenteditactivity,setCurrenteditactivity] = useState(null)
-  //data
   const { EditActivitydata ,loading} = useFetchEditActivities(
     editActivity,
     editActivitystarttime,
     editActivitystarttime
   );
-  //recurring_item
+
  
   const { addActivity } = ActivityService;
 
   useEffect(() => {
-    if (Activitydata) {
-      setAcitivityList(Activitydata);
-    }
-
+   
     if (locationData) {
       const newArr = locationData.map((res: any) => ({
         id: res.location_id,
@@ -138,7 +122,7 @@ export default function EditActivityModal(props: any) {
       );
       setactivitylist(newactivityType);
     }
-  }, [Activitydata, locationData, teams, Wardrobesdata, activityType]);
+  }, [locationData, teams, Wardrobesdata, activityType]);
 
   const handleDateChange = (pickerType: string, value: any) => {
     SetselectedDate(value);
@@ -200,9 +184,6 @@ export default function EditActivityModal(props: any) {
       setMonthDates((prevvalues) => [...prevvalues, el]);
     }
   };
-
- 
-  //weeks
 
   const formik = useFormik({
     initialValues: initialFormValues,
@@ -275,7 +256,7 @@ export default function EditActivityModal(props: any) {
         access_token: appState.authentication.accessToken,
         updateType: "update",
         club_id: appState.user.club_id,
-        activity_id: props.activityId,
+        activity_id: props.activityid,
         startTime: newStartTime,
         endTime: newEndTime,
         location_id: formValues.location,
@@ -308,11 +289,11 @@ export default function EditActivityModal(props: any) {
         }),
       };
     if(errorMsg.length<1 && errorMsgMonth.length<1 && errorMsgweekly.length<1){
-      let res = addActivity(newobj);
-      if (res) {
+      let res = await addActivity(newobj);
+      if (res.data.message) {
         props.onClose();
+        props.callupcoming(props.activityid)
         enqueueSnackbar("Activity Edited Successfully", { variant: "success" });
-        props.callUpcomingActivity();
       } else {
         enqueueSnackbar("err", { variant: "error" });
       }
@@ -363,27 +344,27 @@ export default function EditActivityModal(props: any) {
 
   useEffect(() => {
    
-    if (acitivityList[0]) {
-      const starttime = acitivityList[0].startTime;
+    if (EditActivitydata[0]) {
+      const starttime = EditActivitydata[0].startTime;
       const mstarttime = moment(starttime).format("HH:mm");
-      const endtime = acitivityList[0].endTime;
+      const endtime = EditActivitydata[0].endTime;
       const mendtime = moment(endtime).format("HH:mm");
       let newActivity:any=0;
       
       
       weekdays.forEach(res=>{
-       if(acitivityList[0].recurring_details.includes(res.name)){
+       if(EditActivitydata[0].recurring_details.includes(res.name)){
           setweek(prev=>([...prev , res.name]))
        }
       })
       
-      let selectedDate  = acitivityList[0].recurring_details.slice(acitivityList[0].recurring_details.indexOf(":")+1).split(",")
+      let selectedDate  = EditActivitydata[0].recurring_details.slice(EditActivitydata[0].recurring_details.indexOf(":")+1).split(",")
       selectedDate.forEach((date:number)=>{
         setMonthDates(prev=>([...prev , Number(date)]))
       })
     
-      handleStartTimefield(acitivityList[0].startTime)
-      handleEndTimefield(acitivityList[0].endTime)
+      handleStartTimefield(EditActivitydata[0].startTime)
+      handleEndTimefield(EditActivitydata[0].endTime)
 
       if(EditActivitydata && EditActivitydata[0]){
         activitylist.forEach(res=>{
@@ -394,29 +375,28 @@ export default function EditActivityModal(props: any) {
         })
         formik.setValues({
           ...formik.values,
-          warderobe: acitivityList[0].wardrobe_id,
-          location: acitivityList[0].location_id,
-          team: acitivityList[0].team_id,  
+          warderobe: EditActivitydata[0].wardrobe_id,
+          location: EditActivitydata[0].location_id,
+          team: EditActivitydata[0].team_id,  
           activity: newActivity,
-          description: acitivityList[0].description,
-          away_team: acitivityList[0].away_team_text,
-          away_team_wardrobe: acitivityList[0].wardrobe_id_away,
-          referee_wardrobe: acitivityList[0].wardrobe_id_referee,
-          start_date: acitivityList[0].startTime,
-          end_date: acitivityList[0].endTime,
+          description: EditActivitydata[0].description,
+          away_team: EditActivitydata[0].away_team_text,
+          away_team_wardrobe: EditActivitydata[0].wardrobe_id_away,
+          referee_wardrobe: EditActivitydata[0].wardrobe_id_referee,
+          start_date: EditActivitydata[0].startTime,
+          end_date: EditActivitydata[0].endTime,
           start_time: mstarttime,
           end_time: mendtime,
-          extWarBef15: acitivityList[0].wardrobe_extra_time == 15 && true,
-          extWarBef30: acitivityList[0].wardrobe_extra_time == 30 && true,
-          recurring: acitivityList[0].recurring_item == true ? 1 : 0,
-          recurringby:acitivityList[0].recurring_details.includes("weekly") && 1 || acitivityList[0].recurring_details.includes("bi-weekly") && 2 || acitivityList[0].recurring_details.includes("monthly") && 3,
-          end_date_recurring: acitivityList[0].end_date_recurring,
+          extWarBef15: EditActivitydata[0].wardrobe_extra_time == 15 && true,
+          extWarBef30: EditActivitydata[0].wardrobe_extra_time == 30 && true,
+          recurring: EditActivitydata[0].recurring_item == true ? 1 : 0,
+          recurringby:EditActivitydata[0].recurring_details.includes("weekly") && 1 || EditActivitydata[0].recurring_details.includes("bi-weekly") && 2 || EditActivitydata[0].recurring_details.includes("monthly") && 3,
+          end_date_recurring: EditActivitydata[0].end_date_recurring,
         });
       }
     }
 
   }, [EditActivitydata]);
-
 
   const handleChangedays = (event: any) => {
     formik.setValues({ ...formik.values, recurringby: event.target.value });
@@ -1226,3 +1206,4 @@ export default function EditActivityModal(props: any) {
     </div>
   );
 }
+ 
