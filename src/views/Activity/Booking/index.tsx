@@ -80,7 +80,7 @@ export const Booking: FC = () => {
   for (let i = 1; i <= 31; i++) {
     dates.push(i);
   }
-
+  
   //end
   useEffect(() => {
     if (locationData) {
@@ -116,6 +116,7 @@ export const Booking: FC = () => {
     }
   }, [locationData, teams, Wardrobesdata, activityType]);
 
+  
   const handleDateChange = (pickerType: string, value: any) => {
     SetselectedDate(value);
 
@@ -377,7 +378,7 @@ export const Booking: FC = () => {
               <h4>Book Activity</h4>
             </CardHeader>
             <CardBody>
-              <form onSubmit={formik.handleSubmit}>
+              <form >
                 <GridContainer>
                   <GridItem xs="12" sm="2" md="2" sx={{ mb: 3 }}>
                     <h5 style={{ fontSize: "14px" }}>Team</h5>
@@ -762,12 +763,13 @@ export const Booking: FC = () => {
                             }}
                           >
                             {dates.map((res: any) => (
-                              <Box
-                                className={
+                              <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays2(res)}>
+                                <Box   
+                                className={ 
                                   monthDates.some((elm) => elm === res)
                                     ? "active_dates"
                                     : ""
-                                }
+                                }  
                                 component="span"
                                 sx={{
                                   width: "32px",
@@ -787,10 +789,12 @@ export const Booking: FC = () => {
                                     color: "#fff",
                                   },
                                 }}
-                                onClick={() => handledays2(res)}
+                                
                               >
                                 {res}
                               </Box>
+                              </Button>
+                              
                             ))}
                             {errorMsgMonth && (
                               <span
@@ -815,7 +819,8 @@ export const Booking: FC = () => {
                           >
                             {weekdays.map((res) => (
                               //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
-                              <Box
+                              <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays1(res.name)}>
+                                 <Box
                                 className={
                                   week.some((elm) => elm === res.name)
                                     ? "active_day"
@@ -841,10 +846,12 @@ export const Booking: FC = () => {
                                     color: "#fff",
                                   },
                                 }}
-                                onClick={() => handledays1(res.name)}
+                                
                               >
                                 {res.name.charAt(0)}
                               </Box>
+                              </Button>
+        
                             ))}
                             {errorMsgweekly && (
                               <span
@@ -870,6 +877,7 @@ export const Booking: FC = () => {
                             }}
                           >
                             {weekdays.map((res) => (
+                              <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays1(res.name)}>
                               <Box
                                 className={
                                   week.some((elm) => elm === res.name)
@@ -895,10 +903,11 @@ export const Booking: FC = () => {
                                     color: "#fff",
                                   },
                                 }}
-                                onClick={() => handledays1(res.name)}
+                               
                               >
                                 {res.name.charAt(0)}
                               </Box>
+                              </Button>
                             ))}
                             {errorMsg && (
                               <span
@@ -1098,13 +1107,25 @@ export const Booking: FC = () => {
                           id="extWarBef15"
                           checked={values.extWarBef15}
                           style={{ color: "#00acc1" }}
-                          onChange={(e) => {
+                          onClick={(e) => {
                             formik.setValues({
                               ...formik.values,
                               extWarBef30: false,
                             });
                             handleChange(e);
                           }}
+
+                          onKeyPress={(e) => {
+                            if(e.key === 'Enter'){
+                              formik.setValues({
+                                ...formik.values,
+                                extWarBef15: !formik.values.extWarBef15,
+                                extWarBef30:false
+                              });
+                            }
+                          }
+                          }
+                          
                         />
                       }
                       label="15 Min"
@@ -1115,13 +1136,25 @@ export const Booking: FC = () => {
                           id="extWarBef30"
                           checked={values.extWarBef30}
                           style={{ color: "#00acc1" }}
-                          onChange={(e) => {
-                            formik.setValues({
-                              ...formik.values,
-                              extWarBef15: false,
-                            });
-                            handleChange(e);
+                          onClick={(e) => {
+                              formik.setValues({
+                                ...formik.values,
+                                extWarBef15: false,
+                              });
+                              handleChange(e);
+                            // }
                           }}
+
+                          onKeyPress={(e) => {
+                            if(e.key === 'Enter'){
+                              formik.setValues({
+                                ...formik.values,
+                                extWarBef30: !formik.values.extWarBef30,
+                                extWarBef15:false  
+                              });
+                            }
+                          }
+                          }
                         />
                       }
                       label="30 Min"
@@ -1269,6 +1302,15 @@ export const Booking: FC = () => {
                           checked={values.show_public}
                           style={{ color: "#00acc1" }}
                           onChange={handleChange}
+
+                          onKeyPress={(e) => {
+                            if(e.key === 'Enter'){
+                              formik.setValues({
+                                ...formik.values,
+                                show_public: !formik.values.show_public,
+                              });
+                            }
+                          }}
                         />
                       }
                       label={
@@ -1348,7 +1390,8 @@ export const Booking: FC = () => {
                   <Button
                     color="info"
                     className={classes.btnSubmit}
-                    type="submit"
+                    type="button"
+                    onClick={formik.handleSubmit}
                   >
                     Book Activity
                   </Button>

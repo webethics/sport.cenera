@@ -390,7 +390,7 @@ export default function EditActivityModal(props: any) {
           extWarBef15: EditActivitydata[0].wardrobe_extra_time == 15 && true,
           extWarBef30: EditActivitydata[0].wardrobe_extra_time == 30 && true,
           recurring: EditActivitydata[0].recurring_item == true ? 1 : 0,
-          recurringby:EditActivitydata[0].recurring_details.includes("weekly") && 1 || EditActivitydata[0].recurring_details.includes("bi-weekly") && 2 || EditActivitydata[0].recurring_details.includes("monthly") && 3,
+          recurringby:EditActivitydata[0].recurring_details.includes("weekly") && 1 || EditActivitydata[0].recurring_details.includes("bi-weekly") && 2 || EditActivitydata[0].recurring_details.includes("monthly") && 3 || !EditActivitydata[0].recurring_details && 1,
           end_date_recurring: EditActivitydata[0].end_date_recurring,
         });
       }
@@ -416,7 +416,7 @@ export default function EditActivityModal(props: any) {
           </Box>
           <Divider style={{ width: "100%", marginBottom: "15px" }} />
 
-          <form onSubmit={formik.handleSubmit}>
+          <form>
             <GridContainer>
               <GridItem xs="12" sm="2" md="2" sx={{ mb: 3 }}>
                 <h5 style={{ fontSize: "14px" }}>Team</h5>
@@ -720,6 +720,7 @@ export default function EditActivityModal(props: any) {
                         }}
                       >
                         {dates.map((res: any) => (
+                          <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays2(res)}>
                           <Box
                             className={
                               monthDates.some((elm) => elm === res)
@@ -745,10 +746,10 @@ export default function EditActivityModal(props: any) {
                                 color: "#fff",
                               },
                             }}
-                            onClick={() => handledays2(res)}
                           >
                             {res}
                           </Box>
+                          </Button>
                         ))}
                         {errorMsgMonth && (
                           <span
@@ -773,6 +774,7 @@ export default function EditActivityModal(props: any) {
                       >
                         {weekdays.map((res) => (
                           //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
+                          <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays1(res.name)}>
                           <Box
                             className={
                               week.some((elm) => elm === res.name)
@@ -799,10 +801,11 @@ export default function EditActivityModal(props: any) {
                                 color: "#fff",
                               },
                             }}
-                            onClick={() => handledays1(res.name)}
+                            
                           >
                             {res.name.charAt(0).toUpperCase()}
                           </Box>
+                          </Button>
                         ))}
                         {errorMsgweekly && (
                           <span
@@ -827,6 +830,7 @@ export default function EditActivityModal(props: any) {
                         }}
                       >
                         {weekdays.map((res) => (
+                          <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays1(res.name)}>
                           <Box
                             className={
                               week.some((elm) => elm === res.name)
@@ -852,10 +856,10 @@ export default function EditActivityModal(props: any) {
                                 color: "#fff",
                               },
                             }}
-                            onClick={() => handledays1(res.name)}
                           >
                             {res.name.charAt(0).toUpperCase()}  
                           </Box>
+                          </Button>
                         ))}
                         {errorMsg && (
                           <span
@@ -1018,6 +1022,16 @@ export default function EditActivityModal(props: any) {
                         });
                         handleChange(e);
                       }}
+                      onKeyPress={(e) => {
+                        if(e.key === 'Enter'){
+                          formik.setValues({
+                            ...formik.values,
+                            extWarBef15: !formik.values.extWarBef15,
+                            extWarBef30:false
+                          });
+                        }
+                      }
+                      }
                     />
                   }
                   label="15 Min"
@@ -1035,6 +1049,18 @@ export default function EditActivityModal(props: any) {
                         });
                         handleChange(e);
                       }}
+
+                      onKeyPress={(e) => {
+                        if(e.key === 'Enter'){
+                          formik.setValues({
+                            ...formik.values,
+                            extWarBef30: !formik.values.extWarBef30,
+                            extWarBef15:false  
+                          });
+                        }
+                       }
+                      }
+
                     />
                   }
                   label="30 Min"
@@ -1121,6 +1147,14 @@ export default function EditActivityModal(props: any) {
                       checked={values.show_public}
                       style={{ color: "#00acc1" }}
                       onChange={handleChange}
+                      onKeyPress={(e) => {
+                        if(e.key === 'Enter'){
+                          formik.setValues({
+                            ...formik.values,
+                            show_public: !formik.values.show_public,
+                          });
+                        }
+                      }}
                     />
                   }
                   label={
@@ -1193,7 +1227,7 @@ export default function EditActivityModal(props: any) {
             </GridContainer>
 
             <div className={`btn-wrap ${classes.btnContainer}`}>
-              <Button color="info" className={classes.btnSubmit} type="submit">
+              <Button color="info" className={classes.btnSubmit} type="button" onClick={formik.handleSubmit}>
                 Edit Activity
               </Button>
             </div>
