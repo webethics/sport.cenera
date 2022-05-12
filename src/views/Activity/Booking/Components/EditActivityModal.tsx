@@ -412,10 +412,15 @@ export default function EditActivityModal(props: any) {
           extWarBef15: EditActivitydata[0].wardrobe_extra_time == 15 && true,
           extWarBef30: EditActivitydata[0].wardrobe_extra_time == 30 && true,
           recurring: EditActivitydata[0].recurring_item == true ? 1 : 0,
-          recurringby:EditActivitydata[0].recurring_details.includes("weekly") && 1 || EditActivitydata[0].recurring_details.includes("bi-weekly") && 2 || EditActivitydata[0].recurring_details.includes("monthly") && 3 || !EditActivitydata[0].recurring_details && 1,
+          recurringby:
+            (EditActivitydata[0].recurring_details.includes("weekly") && 1) ||
+            (EditActivitydata[0].recurring_details.includes("bi-weekly") &&
+              2) ||
+            (EditActivitydata[0].recurring_details.includes("monthly") && 3) ||
+            (!EditActivitydata[0].recurring_details && 1),
           end_date_recurring: EditActivitydata[0].end_date_recurring,
         });
-      } 
+      }
     }
   }, [EditActivitydata]);
 
@@ -714,35 +719,44 @@ export default function EditActivityModal(props: any) {
                         }}
                       >
                         {dates.map((res: any) => (
-                          <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays2(res)}>
-                          <Box
-                            className={
-                              monthDates.some((elm) => elm === res)
-                                ? "active_dates"
-                                : ""
-                            }
-                            component="span"
-                            sx={{
-                              width: "32px",
-                              height: "32px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              border: "1px solid #ddd",
-                              margin: "5px",
-                              borderRadius: "50%",
-                              fontSize: "12px",
-                              fontWeight: "400",
-                              color: "#565656",
-                              lineHeight: "0",
-                              "&.active_dates": {
-                                backgroundColor: "#00acc1",
-                                color: "#fff",
-                              },
+                          <Button
+                            style={{
+                              color: "none",
+                              background: "none",
+                              margin: "0px",
+                              width: "none",
+                              padding: "0px",
                             }}
+                            onClick={() => handledays2(res)}
                           >
-                            {res}
-                          </Box>
+                            <Box
+                              className={
+                                monthDates.some((elm) => elm === res)
+                                  ? "active_dates"
+                                  : ""
+                              }
+                              component="span"
+                              sx={{
+                                width: "32px",
+                                height: "32px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                border: "1px solid #ddd",
+                                margin: "5px",
+                                borderRadius: "50%",
+                                fontSize: "12px",
+                                fontWeight: "400",
+                                color: "#565656",
+                                lineHeight: "0",
+                                "&.active_dates": {
+                                  backgroundColor: "#00acc1",
+                                  color: "#fff",
+                                },
+                              }}
+                            >
+                              {res}
+                            </Box>
                           </Button>
                         ))}
                         {errorMsgMonth && (
@@ -768,37 +782,45 @@ export default function EditActivityModal(props: any) {
                       >
                         {weekdays.map((res) => (
                           //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
-                          <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays1(res.name)}>
-                          <Box
-                            className={
-                              week.some((elm) => elm === res.name)
-                                ? "active_days"
-                                : ""
-                            }
-                            component="span"
-                            sx={{
-                              width: "32px",
-                              height: "32px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              border: "1px solid #ddd",
-                              margin: "5px",
-                              borderRadius: "50%",
-                              fontSize: "12px",
-                              fontWeight: "400",
-                              color: "#565656",
-                              lineHeight: "0",
-
-                              "&.active_days": {
-                                backgroundColor: "#00acc1",
-                                color: "#fff",
-                              },
+                          <Button
+                            style={{
+                              color: "none",
+                              background: "none",
+                              margin: "0px",
+                              width: "none",
+                              padding: "0px",
                             }}
-                            
+                            onClick={() => handledays1(res.name)}
                           >
-                            {res.name.charAt(0).toUpperCase()}
-                          </Box>
+                            <Box
+                              className={
+                                week.some((elm) => elm === res.name)
+                                  ? "active_days"
+                                  : ""
+                              }
+                              component="span"
+                              sx={{
+                                width: "32px",
+                                height: "32px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                border: "1px solid #ddd",
+                                margin: "5px",
+                                borderRadius: "50%",
+                                fontSize: "12px",
+                                fontWeight: "400",
+                                color: "#565656",
+                                lineHeight: "0",
+
+                                "&.active_days": {
+                                  backgroundColor: "#00acc1",
+                                  color: "#fff",
+                                },
+                              }}
+                            >
+                              {res.name.charAt(0).toUpperCase()}
+                            </Box>
                           </Button>
                         ))}
                         {errorMsgweekly && (
@@ -824,38 +846,49 @@ export default function EditActivityModal(props: any) {
                         }}
                       >
                         {weekdays.map((res) => (
-                          <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays1(res.name)}>
-                          <Box
-                            className={
-                              week.some((elm) => elm === res.name)
-                                ? "active_day"
-                                : ""
-                            }
-                            component="span"
-                            sx={{
-                              width: "32px",
-                              height: "32px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              border: "1px solid #ddd",
-                              margin: "5px",
-                              borderRadius: "50%",
-                              fontSize: "12px",
-                              fontWeight: "400",
-                              color: "#565656",
-                              lineHeight: "0",
-                              "&.active_days": {
-                                backgroundColor: "#00acc1",
-                                color: "#fff",
-                              },
+                          //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
+                          <Button
+                            style={{
+                              color: "none",
+                              background: "none",
+                              margin: "0px",
+                              width: "none",
+                              padding: "0px",
                             }}
+                            onClick={() => handledays1(res.name)}
                           >
-                            {res.name.charAt(0).toUpperCase()}
-                          </Box>
+                            <Box
+                              className={
+                                week.some((elm) => elm === res.name)
+                                  ? "active_days"
+                                  : ""
+                              }
+                              component="span"
+                              sx={{
+                                width: "32px",
+                                height: "32px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                border: "1px solid #ddd",
+                                margin: "5px",
+                                borderRadius: "50%",
+                                fontSize: "12px",
+                                fontWeight: "400",
+                                color: "#565656",
+                                lineHeight: "0",
+
+                                "&.active_days": {
+                                  backgroundColor: "#00acc1",
+                                  color: "#fff",
+                                },
+                              }}
+                            >
+                              {res.name.charAt(0).toUpperCase()}
+                            </Box>
                           </Button>
                         ))}
-                        {errorMsg && (
+                        {errorMsgweekly && (
                           <span
                             style={{
                               color: "red",
@@ -863,7 +896,7 @@ export default function EditActivityModal(props: any) {
                               fontSize: "12px",
                             }}
                           >
-                            {errorMsg}
+                            {errorMsgweekly}
                           </span>
                         )}
                       </Box>
@@ -1017,15 +1050,14 @@ export default function EditActivityModal(props: any) {
                         handleChange(e);
                       }}
                       onKeyPress={(e) => {
-                        if(e.key === 'Enter'){
+                        if (e.key === "Enter") {
                           formik.setValues({
                             ...formik.values,
                             extWarBef15: !formik.values.extWarBef15,
-                            extWarBef30:false
+                            extWarBef30: false,
                           });
                         }
-                      }
-                      }
+                      }}
                     />
                   }
                   label="15 Min"
@@ -1043,18 +1075,15 @@ export default function EditActivityModal(props: any) {
                         });
                         handleChange(e);
                       }}
-
                       onKeyPress={(e) => {
-                        if(e.key === 'Enter'){
+                        if (e.key === "Enter") {
                           formik.setValues({
                             ...formik.values,
                             extWarBef30: !formik.values.extWarBef30,
-                            extWarBef15:false  
+                            extWarBef15: false,
                           });
                         }
-                       }
-                      }
-
+                      }}
                     />
                   }
                   label="30 Min"
@@ -1142,7 +1171,7 @@ export default function EditActivityModal(props: any) {
                       style={{ color: "#00acc1" }}
                       onChange={handleChange}
                       onKeyPress={(e) => {
-                        if(e.key === 'Enter'){
+                        if (e.key === "Enter") {
                           formik.setValues({
                             ...formik.values,
                             show_public: !formik.values.show_public,
@@ -1221,7 +1250,12 @@ export default function EditActivityModal(props: any) {
             </GridContainer>
 
             <div className={`btn-wrap ${classes.btnContainer}`}>
-              <Button color="info" className={classes.btnSubmit} type="button" onClick={formik.handleSubmit}>
+              <Button
+                color="info"
+                className={classes.btnSubmit}
+                type="button"
+                onClick={formik.handleSubmit}
+              >
                 Edit Activity
               </Button>
             </div>
@@ -1237,4 +1271,3 @@ export default function EditActivityModal(props: any) {
     </div>
   );
 }
- 

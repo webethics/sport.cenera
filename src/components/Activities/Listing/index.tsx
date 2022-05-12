@@ -16,7 +16,7 @@ const useStyles = makeStyles(listingStyle as any);
 export default function Listing() {
   const { GetPublicClubs } = ActivityService;
   const [publicClubs, setPublicClubs] = useState([]);
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fetchPublicClubs = async () => {
     setLoading(true);
@@ -26,7 +26,6 @@ export default function Listing() {
       setPublicClubs(data);
     }
   };
-
 
   useEffect(() => {
     fetchPublicClubs();
@@ -43,11 +42,17 @@ export default function Listing() {
               <Grid item lg={3} md={4} sm={6} key={res.club_id}>
                 <Card className={classes.card}>
                   <CardActionArea>
-                    <Link to={`/activitiesdetail/${res.club_id}/${res.club_name}`}>
+                    <Link
+                      to={{
+                        pathname: `/activitiesdetail/${res.club_id}`,
+                        state: { name: res.club_name },
+                      }}
+                    >
                       <CardMedia
                         className={classes.media}
                         image={
-                          `${process.env.REACT_APP_SERVER_IMAGE_URL}`+res.club_image
+                          `${process.env.REACT_APP_SERVER_IMAGE_URL}` +
+                          res.club_image
                         }
                         title="Club Image"
                       />
@@ -68,11 +73,8 @@ export default function Listing() {
             ))}
         </Grid>
       </Container>
-      <Backdrop
-        className={classes.backdrop}
-        open={loading}
-      >
-       <CircularProgress color="inherit" />
+      <Backdrop className={classes.backdrop} open={loading}>
+        <CircularProgress color="inherit" />
       </Backdrop>
     </div>
   );

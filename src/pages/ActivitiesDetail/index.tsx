@@ -51,6 +51,8 @@ export default function ActivitiesDetail() {
     }
   }, [acitivityData, loading, revalidate, error, searchtext]);
 
+
+
   return (
     <>
       <Box bgcolor="primary.contrastText" className={classes.wrapper}>
