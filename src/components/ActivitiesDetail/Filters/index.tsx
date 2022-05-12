@@ -126,8 +126,6 @@ export default function Filters({
       team_id: res.team_id,
     }));
 
-  console.log(acitivityData, "listofactivity");
-
   return (
     <Container className={classes.Container}>
       <Box

@@ -73,7 +73,8 @@ const UpcomingActivities = ({
 }) => {
   const [filterActivity, setfilterActivity] = useState("0");
   const [filterdate, setFilterdate] = useState(7);
-  const [successedit, setsuccessedit] = useState(true);
+  const [successedit, setsuccessedit] = useState();
+
   const [data, setdata] = useState(null);
   const [searchtext, setSearchtext] = useState("");
   const [searchteam, setsearchteam] = useState(0);
@@ -146,7 +147,7 @@ const UpcomingActivities = ({
     Promise.all(
       formatedDeleteDate.map(async (res: any) => {
         let params = { deleteDates: res.dateDeletes, activity_id: res.id };
-        console.log(params);
+
         const response = await deleteRecurringActivity(
           appState.authentication.accessToken,
           params
@@ -182,8 +183,6 @@ const UpcomingActivities = ({
       deleteAllSelected();
     }
   }, [deleteNonRecuring, deleteRecuring]);
-
-  console.log(deleteNonRecuring, deleteRecuring, "cccccccc");
 
   const deleteActivity = () => {
     // const deletesingleBooking = acitivityList
@@ -323,12 +322,14 @@ const UpcomingActivities = ({
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
     }
-    if (successedit === false) {  
+    if (successedit) {
       revalidate();
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
+      // setsuccessedit(true);
     }
   }, [Activitydata, data, successedit]);
+
   const handleDeleteSelected = () => {
     let isSelectedForDelete = acitivityList.some((res) => {
       if (res.isSelected === true) {
@@ -392,8 +393,6 @@ const UpcomingActivities = ({
     }
   };
 
-  console.log(acitivityList, "acitivityList");
-
   return (
     <div className="parent">
       {alert}
@@ -408,10 +407,9 @@ const UpcomingActivities = ({
       <EditActivityModal
         open={modalshow}
         onClose={() => setModalshow(false)}
-        // activitystartdate={}
-        activityId={activityIdForEdit}
+        callupcoming={(v: any) => setsuccessedit(v)}
+        activityid={activityIdForEdit}
         activitystarttime={activitystarttime}
-        callUpcomingActivity={() => setsuccessedit(false)}
       />
       <Card>
         <CardHeader>

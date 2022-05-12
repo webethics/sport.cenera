@@ -204,11 +204,11 @@ export default function CustomizedTables({
 
   const Loadmorebtn = () => {
     setnumberofpage(numberofpage + 5);
-   
   };
 
   const classes = useStyles();
-  
+  // console.log(activityList, "withoutfiltered");
+  // console.log(newactivity, "filtereddata");
   return (
     <div className={classes.bgContainer}>
       <Container className={classes.Container}>

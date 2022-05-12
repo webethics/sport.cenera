@@ -195,8 +195,8 @@ export const Booking: FC = () => {
       // }),
 
       activity: Yup.number()
-        .min(1, "Activity is Required")
-        .required("Activity is Required"),
+        .min(1, "Activity is required")
+        .required("Activity is required"),
 
       end_date: Yup.date().min(
         Yup.ref("start_date"),
@@ -210,7 +210,7 @@ export const Booking: FC = () => {
         .required("End time could not be equal to start time")
         .test(
           "is-greater",
-          "end time should be greater than start time",
+          "End time should be greater than start time",
           function(value) {
             const { start_time } = this.parent;
             return moment(value, "HH:mm").isSameOrAfter(
@@ -220,8 +220,8 @@ export const Booking: FC = () => {
         ),
 
       location: Yup.number()
-        .min(1, "Location is Required")
-        .required("Location is Required"),
+        .min(1, "Location is required")
+        .required("Location is required"),
       start_date: Yup.date(),
       end_date_recurring: Yup.date().min(
         Yup.ref("start_date"),
@@ -713,20 +713,15 @@ export const Booking: FC = () => {
                         md="2"
                         style={{ marginBottom: "15px" }}
                       >
-                        {values.recurringby === 1 && (
+                        {(values.recurringby === 1 ||
+                          values.recurringby === 2) && (
                           <h5
                             style={{ fontSize: "14px", marginBottom: "15px" }}
                           >
                             Select Recurring Days
                           </h5>
                         )}
-                        {values.recurringby === 2 && (
-                          <h5
-                            style={{ fontSize: "14px", marginBottom: "15px" }}
-                          >
-                            Select Recurring Days
-                          </h5>
-                        )}
+
                         {values.recurringby === 3 && (
                           <h5
                             style={{ fontSize: "14px", marginBottom: "15px" }}
@@ -780,7 +775,7 @@ export const Booking: FC = () => {
                                 {res}
                               </Box>
                             ))}
-                      
+
                             {errorMsgMonth && (
                               <span
                                 style={{
@@ -889,7 +884,7 @@ export const Booking: FC = () => {
                                 {res.name.charAt(0)}
                               </Box>
                             ))}
-                         
+
                             {errorMsg && (
                               <span
                                 style={{
@@ -961,7 +956,7 @@ export const Booking: FC = () => {
                           minDate={new Date()}
                           format="MM/dd/yyyy"
                         />
-                       
+
                         {errors.end_date_recurring &&
                           touched.end_date_recurring && (
                             <span

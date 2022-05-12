@@ -29,13 +29,11 @@ export default function ActivitiesDetail() {
 
   const classes = useStyles();
   const { id } = useParams<any>();
- 
 
   const data = {
     club_id: id,
     ...(filterteam !== 0 && { team_id: filterteam }),
     ...(filterlocation !== 0 && { location_id: filterlocation }),
-    // ...(searchtext !== "" && { text_search: searchtext }),
     ...(searchtext !== "" && { text_search: searchtext }),
     ...(filterActivity !== "0" && { activity_type: filterActivity }),
     startTime: currentdate,
@@ -52,7 +50,6 @@ export default function ActivitiesDetail() {
       setActivityList(acitivityData);
     }
   }, [acitivityData, loading, revalidate, error, searchtext]);
-  
 
   return (
     <>
