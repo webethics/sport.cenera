@@ -25,7 +25,7 @@ export default function ActivitiesDetail() {
   const [searchtext, setSearchtext] = useState("");
   const [filterlocation, setfilterlocation] = useState(0);
   const [filterteam, setfilterteam] = useState(0);
-  const [filterActivity, setfilterActivity] = useState("");
+  const [filterActivity, setfilterActivity] = useState("0");
 
   const classes = useStyles();
   const { id } = useParams<any>();
@@ -34,8 +34,9 @@ export default function ActivitiesDetail() {
     club_id: id,
     ...(filterteam !== 0 && { team_id: filterteam }),
     ...(filterlocation !== 0 && { location_id: filterlocation }),
-    ...(searchtext.length == 0 && { text_search: searchtext }),
-    ...(filterActivity.length !== 0 && { activity_type: filterActivity }),
+    // ...(searchtext !== "" && { text_search: searchtext }),
+    ...(searchtext !== "" && { text_search: searchtext }),
+    ...(filterActivity !== "0" && { activity_type: filterActivity }),
     startTime: currentdate,
     endTime: nextdate,
   };
@@ -50,8 +51,6 @@ export default function ActivitiesDetail() {
       setActivityList(acitivityData);
     }
   }, [acitivityData, loading, revalidate, error, searchtext]);
-
-  console.log(acitivityData, "acitivityData");
 
   return (
     <>
@@ -96,7 +95,7 @@ export default function ActivitiesDetail() {
               }}
               //setfilterActivity
               onFilteractivity={(res: any) => {
-                if (res === "") {
+                if (res === 0) {
                   setfilterActivity("0");
                 } else {
                   setfilterActivity(res);
@@ -107,7 +106,7 @@ export default function ActivitiesDetail() {
             <Table activityList={activityList} />
           </>
         )}
-        
+
         {!acitivityData && (
           <h4 style={{ textAlign: "center" }}>No Activity Found</h4>
         )}

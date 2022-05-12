@@ -11,7 +11,6 @@ import { CardHeader, Card, CardBody } from "@cenera/components/Card";
 import { Button } from "@cenera/components/Button/Button";
 import { styles } from "./styles";
 import ItemPicker from "./Components/ItemPicker";
-// import { DatePicker } from "@material-ui/pickers";
 import { TextField, Divider } from "@material-ui/core";
 import UpcomingActivities from "./Components/UpcomingActivities";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -27,13 +26,12 @@ import { ActivityService } from "@cenera/services/api/activity";
 import { useAppContext } from "@cenera/app-context";
 import moment from "moment";
 import * as Yup from "yup";
-import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
 import Box from "@mui/material/Box";
 
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-
+import { KeyboardTimePicker } from "@material-ui/pickers";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 
 const useStyles = makeStyles(styles as any);
@@ -56,6 +54,8 @@ export const Booking: FC = () => {
   const [wardrobes, setWardrobes] = useState([]);
   const { addActivity } = ActivityService;
   const [fetchupcoming, setFetchupcoming] = useState(0);
+  const [startTimefield, handleStartTimefield] = useState(new Date());
+  const [endTimefield, handleEndTimefield] = useState(new Date());
   // const[weekerror,setweekerror]= useState(false);
 
   //Recurring
@@ -106,7 +106,7 @@ export const Booking: FC = () => {
         (res: any, index: number) => ({
           name: res.value,
           isMatch: res.isMatch,
-          id: index,
+          id: index + 1,
         })
       );
       setactivitylist(newactivityType);
@@ -144,7 +144,7 @@ export const Booking: FC = () => {
     extWarBef30: false,
     extWarAf15: false,
     extWarAf30: false,
-    activity: "0.5",
+    activity: "0",
     description: "",
     away_team: "",
     away_team_wardrobe: "",
@@ -153,7 +153,6 @@ export const Booking: FC = () => {
     recurring: 0,
     recurringby: 1,
     end_date_recurring: selectedDate,
-
     week_day: "",
     month_day: "",
   };
@@ -177,36 +176,6 @@ export const Booking: FC = () => {
     }
   };
 
-  const handleValueChange = (value: any) => {
-    if (value === null) {
-      formik.setValues({
-        ...formik.values,
-        start_time: "",
-      });
-    } else {
-      formik.setValues({
-        ...formik.values,
-        start_time: value && value.format("HH:mm"),
-      });
-    }
-  };
-
-  //weeks
-
-  const handleValueChangeend = (value: any) => {
-    if (value === null) {
-      formik.setValues({
-        ...formik.values,
-        end_time: "",
-      });
-    } else {
-      formik.setValues({
-        ...formik.values,
-        end_time: value && value.format("HH:mm"),
-      });
-    }
-  };
-  //month_day
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: Yup.object({
@@ -222,14 +191,30 @@ export const Booking: FC = () => {
       //   then: Yup.string().required("Field is required"),
       // }),
 
-      // end_date: Yup.date().min(
-      //   Yup.ref("start_date"),
-      //   "End date can't be before start date"
-      // ),
+      end_date: Yup.date().min(
+        Yup.ref("start_date"),
+        "End date can't be before start date"
+      ),
+      start_time: Yup.string().required(
+        "start time could not be equal to end time"
+      ),
 
-      start_time: Yup.string().required("Time is Required"),
-      end_time: Yup.string().required("Time is Required"),
-      location: Yup.string().required("Location is Required"),
+      end_time: Yup.string()
+        .required("endtime could not be equal to start time")
+        .test(
+          "is-greater",
+          "end time should be greater than start time",
+          function(value) {
+            const { start_time } = this.parent;
+            return moment(value, "HH:mm").isSameOrAfter(
+              moment(start_time, "HH:mm")
+            );
+          }
+        ),
+
+      location: Yup.number()
+        .min(1, "Location is Required")
+        .required("Location is Required"),
       start_date: Yup.date(),
       end_date_recurring: Yup.date().min(
         Yup.ref("start_date"),
@@ -251,15 +236,19 @@ export const Booking: FC = () => {
         moment(start_date).format("YYYY-MM-DDT") + start_time;
       const newEndTime = moment(start_date).format("YYYY-MM-DDT") + end_time;
 
-      var activity: any;
-      var Activitytype: any;
-      activitylist.forEach((res) => {
-        if (res.id == formValues.activity) {
-          Activitytype = res.name;
-          activity = Activitytype;
-        }
-      });
-      console.log(activity, "activityactivity");
+      let activity: string;
+      if (formValues.activity == "1") {
+        activity = "match";
+      } else if (formValues.activity == "2") {
+        activity = "training";
+      } else if (formValues.activity == "3") {
+        activity = "maintenance";
+      } else if (formValues.activity == "4") {
+        activity = "rental";
+      } else if (formValues.activity == "0") {
+        activity = "";
+      }
+
       const newobj = {
         access_token: appState.authentication.accessToken,
         updateType: "create",
@@ -310,6 +299,14 @@ export const Booking: FC = () => {
       }
     },
   });
+
+  useEffect(() => {
+    formik.setValues({
+      ...formik.values,
+      start_time: moment(startTimefield).format("HH:mm"), //if time change it will update formik
+      end_time: moment(endTimefield).format("HH:mm"),
+    });
+  }, [startTimefield, endTimefield]);
 
   useEffect(() => {
     if (formik.values.activity === "Match") {
@@ -471,12 +468,18 @@ export const Booking: FC = () => {
                         Time
                       </Box>
 
-                      <TimePicker
+                      {/* <TimePicker
                         className="timepicker"
                         placement={"bottomLeft"}
                         defaultValue={moment()}
                         showSecond={false}
                         onChange={handleValueChange}
+                      /> */}
+                      <KeyboardTimePicker
+                        ampm={false}
+                        variant="inline"
+                        value={startTimefield}
+                        onChange={handleStartTimefield}
                       />
                     </Box>
                     {errors.start_time && touched.start_time && (
@@ -564,11 +567,18 @@ export const Booking: FC = () => {
                       >
                         Time
                       </Box>
-                      <TimePicker
+                      {/* <TimePicker
                         className="timepicker"
                         defaultValue={moment()}
                         showSecond={false}
                         onChange={handleValueChangeend}
+                      /> */}
+
+                      <KeyboardTimePicker
+                        ampm={false}
+                        variant="inline"
+                        value={endTimefield}
+                        onChange={handleEndTimefield}
                       />
                     </Box>
                     {errors.end_time && touched.end_time && (
@@ -1239,7 +1249,7 @@ export const Booking: FC = () => {
                     />
                   </GridItem>
 
-                  {Number(values.activity) == 0 && (
+                  {Number(values.activity) == 1 && (
                     <>
                       {/* for away team */}
 

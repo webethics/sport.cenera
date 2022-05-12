@@ -54,19 +54,19 @@ const BodyTableCell = withStyles(() =>
   })
 )(TableCell);
 
-function createDataExpand(
-  awayfield: string,
-  awaydata: string,
-  warderobefield: string,
-  warderobedata: string
-) {
-  return { awayfield, awaydata, warderobefield, warderobedata };
-}
+// function createDataExpand(
+//   awayfield: string,
+//   awaydata: string,
+//   warderobefield: string,
+//   warderobedata: string
+// ) {
+//   return { awayfield, awaydata, warderobefield, warderobedata };
+// }
 
-const rowsexpand = [
-  createDataExpand("Away Team:", "Dataserver", "Warderobe B", "Room 2"),
-  createDataExpand("Referee:", "", "Warderobe C", "Room 3"),
-];
+// const rowsexpand = [
+//   createDataExpand("Away Team:", "Dataserver", "Warderobe B", "Room 2"),
+//   createDataExpand("Referee:", "", "Warderobe C", "Room 3"),
+// ];
 
 const useStyles = makeStyles({
   bgContainer: {
@@ -175,7 +175,7 @@ export default function CustomizedTables({
 }: {
   activityList: any;
 }) {
-  const [acitivity, setAcitivity] = useState([]);
+  const [newactivity, setNewactivity] = useState([]);
 
   const showDuration = (start: string, end: string) => {
     let startDate = moment(start).format("YYYY-MM-DD");
@@ -191,24 +191,25 @@ export default function CustomizedTables({
     }
   };
 
-  const [btn, setbtn] = useState(true);
-  const [numberofpage, setnumberofpage] = useState(2);
-
-  const Loadmorebtn = () => {
-    setnumberofpage(numberofpage + 1);
-    if (numberofpage === activityList.length) {
-      setbtn(false);
-    }
-  };
+  // const [btn, setbtn] = useState(true);
+  const [numberofpage, setnumberofpage] = useState(5);
 
   useEffect(() => {
     if (activityList) {
       let temp = getFormatedData(activityList);
-      setAcitivity(temp);
+      setNewactivity(temp);
+      setnumberofpage(5);
     }
   }, [activityList]);
 
-  console.log(acitivity, "nnnnn");
+  const Loadmorebtn = () => {
+    setnumberofpage(numberofpage + 5);
+    console.log(activityList.length, "mkll");
+    // if (numberofpage < acitivity.length) {
+    //   setbtn(false);
+    // }
+  };
+
   const classes = useStyles();
   return (
     <div className={classes.bgContainer}>
@@ -219,7 +220,7 @@ export default function CustomizedTables({
               component={Paper}
               className={classes.tableContainer}
             >
-              {acitivity.slice(0, numberofpage).map((res: any) => (
+              {newactivity.slice(0, numberofpage).map((res: any) => (
                 <Table className={classes.table} aria-label="customized table">
                   <TableHead>
                     <TableRow>
@@ -270,37 +271,30 @@ export default function CustomizedTables({
                           align="left"
                         >
                           {res.activity_type}
+                          {res.activity_type === "" && "Nan"}
                         </BodyTableCell>
                       </StyledTableRow>
 
                       {res.activity_type === "Match" && (
-                        <>
-                          {rowsexpand.map((row) => (
-                            <StyledTableRow
-                              className={classes.bottomTableRow}
-                              key={row.awayfield}
-                            >
-                              <BodyTableCell scope="row"></BodyTableCell>
-                              <BodyTableCell align="left"></BodyTableCell>
-                              <BodyTableCell
-                                className={classes.label}
-                                align="left"
-                              >
-                                {row.awayfield}
-                              </BodyTableCell>
-                              <BodyTableCell align="left">
-                                {row.awaydata}jj
-                              </BodyTableCell>
-                              <BodyTableCell align="left">
-                                {row.warderobefield}
-                              </BodyTableCell>
-                              <BodyTableCell align="left">
-                                {row.warderobedata}jj
-                              </BodyTableCell>
-                              {/* <BodyTableCell align="left"></BodyTableCell> */}
-                            </StyledTableRow>
-                          ))}
-                        </>
+                        <StyledTableRow className={classes.bottomTableRow}>
+                          <BodyTableCell scope="row"></BodyTableCell>
+                          <BodyTableCell align="left"></BodyTableCell>
+                          <BodyTableCell className={classes.label} align="left">
+                            Away Team
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            {res.away_team_text}
+                          </BodyTableCell>
+                          <BodyTableCell align="left" className={classes.label}>
+                            Warderobe
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            {res.wardrobe_name_away
+                              ? res.wardrobe_name_away
+                              : "NA"}
+                          </BodyTableCell>
+                          {/* <BodyTableCell align="left"></BodyTableCell> */}
+                        </StyledTableRow>
                       )}
                     </TableBody>
                   )}
@@ -321,13 +315,14 @@ export default function CustomizedTables({
                             )}
                           </BodyTableCell>
                           <BodyTableCell align="left">
-                            {recuringValue.team} {recuringValue.team_text}
+                            {recuringValue.team || recuringValue.team_text}
                           </BodyTableCell>
                           <BodyTableCell align="left">
                             {recuringValue.location_name}
                           </BodyTableCell>
                           <BodyTableCell align="left">
                             {recuringValue.wardrobe_name}
+                            {recuringValue.wardrobe_name === "" && "Nan"}
                           </BodyTableCell>
                           <BodyTableCell
                             className={`${recuringValue.activity_type ===
@@ -335,6 +330,7 @@ export default function CustomizedTables({
                             align="left"
                           >
                             {recuringValue.activity_type}
+                            {recuringValue.activity_type === "" && "Nan"}
                           </BodyTableCell>
                         </StyledTableRow>
 
@@ -350,13 +346,18 @@ export default function CustomizedTables({
                               Away Team
                             </BodyTableCell>
                             <BodyTableCell align="left">
-                              {recuringValue.away_team}
+                              {recuringValue.away_team_text}
                             </BodyTableCell>
-                            <BodyTableCell align="left">
+                            <BodyTableCell
+                              align="left"
+                              className={classes.label}
+                            >
                               Warderobe
                             </BodyTableCell>
                             <BodyTableCell align="left">
-                              {recuringValue.away_team_text}
+                              {recuringValue.wardrobe_name_away
+                                ? recuringValue.wardrobe_name_away
+                                : "NA"}
                             </BodyTableCell>
                             {/* <BodyTableCell align="left"></BodyTableCell> */}
                           </StyledTableRow>
@@ -366,15 +367,18 @@ export default function CustomizedTables({
                     ))}
                 </Table>
               ))}
-              {activityList && activityList.length < 1 && "No Activity Found"}
+
             </TableContainer>
           </Grid>
         </Grid>
+        <span style={{ color: "red", marginLeft: "40%" }}>
+                {activityList && activityList.length < 1 && "No Activity Found"}
+              </span>
         <div
           className=""
           style={{ textAlign: "center", paddingBottom: "40px" }}
         >
-          {btn && (
+          {numberofpage < newactivity.length && (
             <Button
               onClick={Loadmorebtn}
               variant="text"

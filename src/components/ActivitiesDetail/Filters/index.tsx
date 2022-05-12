@@ -55,7 +55,7 @@ export default function Filters({
     onFilter(event.target.value);
   };
 
-  const [activity, setActivity] = React.useState("");
+  const [activity, setActivity] = React.useState("0");
   const handleChange4 = (event: React.ChangeEvent<{ value: unknown }>) => {
     onFilteractivity(event.target.value);
     setActivity(event.target.value as string);
@@ -93,12 +93,41 @@ export default function Filters({
     }
   }, [acitivityData]);
 
-  const ids = activitytype.map((o) => o.id);
-  const filtered = activitytype.filter(
-    ({ id }, index) => !ids.includes(id, index + 1)
-  );
+  // Remove Duplicate Activity Type
+  const filteractivity = new Set();
+  const filteredArr = activitytype.filter((el) => {
+    const duplicate = filteractivity.has(el.activity_type);
+    filteractivity.add(el.activity_type);
+    return !duplicate;
+  });
 
-  // const arrTwo = acitivityData.filter((item, index) => activity_type.indexOf(item) == index);
+  // Remove Duplicate Location Type
+
+  const Filteredlocation = new Set();
+  const filteredLocation = locationdata.filter((el) => {
+    const duplicate = Filteredlocation.has(el.location_id);
+    Filteredlocation.add(el.location_id);
+    return !duplicate;
+  });
+  //Remove Duplicate  Teams
+
+  const Filteredteam = new Set();
+  const filteredteams = teamdata.filter((el) => {
+    const duplicate = Filteredteam.has(el.team_id);
+    Filteredteam.add(el.team_id);
+    return !duplicate;
+  });
+
+  //Remove empty id and text from team
+  const newteam = filteredteams
+    .filter((res: any) => res.team_id !== "" && res.team_text !== "")
+    .map((res: any) => ({
+      team_text: res.team_text,
+      team_id: res.team_id,
+    }));
+
+  console.log(newteam, "hhh");
+
   return (
     <Container className={classes.Container}>
       <Box
@@ -123,8 +152,8 @@ export default function Filters({
               label="Team"
             >
               <MenuItem value={0}>All</MenuItem>
-              {teamdata &&
-                teamdata.map((res: any) => (
+              {newteam &&
+                newteam.map((res: any) => (
                   <MenuItem value={res.team_id}>{res.team_text} </MenuItem>
                 ))}
               {/* <MenuItem value={10}>Ten</MenuItem>
@@ -147,8 +176,8 @@ export default function Filters({
             >
               <MenuItem value={0}>All</MenuItem>
 
-              {locationdata &&
-                locationdata.map((res: any) => (
+              {filteredLocation &&
+                filteredLocation.map((res: any) => (
                   <MenuItem value={res.location_id}>
                     {res.location_name}{" "}
                   </MenuItem>
@@ -172,8 +201,8 @@ export default function Filters({
               label="Team"
             >
               <MenuItem value={0}>All</MenuItem>
-              {filtered &&
-                filtered.map((res: any) => (
+              {filteredArr &&
+                filteredArr.map((res: any) => (
                   <MenuItem value={res.activity_type}>
                     {res.activity_type}
                   </MenuItem>
@@ -181,6 +210,7 @@ export default function Filters({
             </Select>
           </FormControl>
         </Box>
+
         <Box p={1} className={classes.formGroup}>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -188,6 +218,7 @@ export default function Filters({
             </div>
             <InputBase
               placeholder="Search…"
+              style={{ height: "40px" }}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,

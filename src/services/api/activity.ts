@@ -45,19 +45,14 @@ const addActivity = (newobj: any): any => {
   return axios.post<any>(`${configs.app.api}/booking/updateActivity`, newobj);
 };
 
-const deleteRecurringActivity = (
-  access_token: string,
-  club_id: number,
-  params: any
-): any => {
-  return axios.post<any>(`${configs.app.api}/booking/updateActivity`, {
+const deleteRecurringActivity = (access_token:string,params:any):any =>{
+  return axios.post<any>(`${configs.app.api}/booking/updateActivity`,{
     access_token: access_token,
     updateType: "delete",
-    delete_type: "single-occurance",
-    club_id: club_id,
-    ...params,
-  });
-};
+    deleteType: "single-occurance",
+    ...params
+  })}
+
 
 //Get activity
 
@@ -91,30 +86,26 @@ const getEditActivities = (
 const GetActivities = (data: any): any => {
   return {
     url: `${configs.app.api}/booking/getActivities`,
-    method: "post",
-    data: data,
-    // access_token: access_token,
-    // club_id: club_id,
-    // team_id: team_id,
-    // location_id: 1,
-    // activity_type: 5,
-    // wardrobe_id: 1,
-    // // activity_id_list: [1,2,3],
-    // text_search:"value",
-    // startTime: "2022-03-29T14:00",
-    // endTime: "2022-03-29T15:00"
-  };
+    method: 'post',
+    data: data
+      // access_token: access_token,
+      // club_id: club_id,
+      // team_id: team_id,
+      // location_id: 1,
+      // activity_type: 5,
+      // wardrobe_id: 1,
+      // // activity_id_list: [1,2,3],
+      // text_search:"value",
+      // startTime: "2022-03-29T14:00",
+      // endTime: "2022-03-29T15:00"
+  }
 };
 
-const deleteMultipleActivities = (
-  access_token: string,
-  club_id: number,
-  params: any
-) => {
-  return axios.post<any>(`${configs.app.api}/booking/multiDeleteActivities`, {
+const deleteMultipleActivities = (access_token: string,club_id:number,params: any) => {
+  return axios.post<any>(`${configs.app.api}/booking/multiDeleteActivities` ,{
     access_token: access_token,
-    club_id: club_id,
-    ...params,
+    club_id:club_id,  
+    ...params
     // activity_id_list: activity_id_list,
   });
 };
