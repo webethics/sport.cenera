@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   withStyles,
   Theme,
@@ -18,6 +18,8 @@ import { blackColor, sectionSpacer } from "@cenera/common/styles/common-styles";
 import dotpattrenV from "@cenera/assets/images/dotpattren-v.svg";
 import Button from "@material-ui/core/Button";
 import moment from "moment";
+import { getFormatedData, getduraiton } from "@cenera/utils/services";
+//,getFormatedReccuringDate,getduraiton
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -52,63 +54,19 @@ const BodyTableCell = withStyles(() =>
   })
 )(TableCell);
 
-// function createData(
-//   startime: string,
-//   endtime: string,
-//   duration: string,
-//   team: string,
-//   location: string,
-//   warderobe: string,
-//   activity: string
+// function createDataExpand(
+//   awayfield: string,
+//   awaydata: string,
+//   warderobefield: string,
+//   warderobedata: string
 // ) {
-//   return { startime, endtime, duration, team, location, warderobe, activity };
-//   // return { startime, endtime, team, location, warderobe, activity };
+//   return { awayfield, awaydata, warderobefield, warderobedata };
 // }
 
-// const rows = [
-//   createData(
-//     "12:00",
-//     "14:00",
-//     "2:00",
-//     "Art Boxing Club",
-//     "United Kingdom",
-//     "Ingen",
-//     "Training"
-//   ),
-//   createData("16:00", "17:00", "1:00", "Monaco", "Spain", "Ingen", "Training"),
-//   createData(
-//     "17:00",
-//     "19:00",
-//     "2:00",
-//     "Real Soccer",
-//     "Italy",
-//     "Ingen",
-//     "Training"
-//   ),
-//   createData(
-//     "19:00",
-//     "21:00",
-//     "2:00",
-//     "Oxigeno club",
-//     "Germany",
-//     "Ingen",
-//     "Match"
-//   ),
+// const rowsexpand = [
+//   createDataExpand("Away Team:", "Dataserver", "Warderobe B", "Room 2"),
+//   createDataExpand("Referee:", "", "Warderobe C", "Room 3"),
 // ];
-
-function createDataExpand(
-  awayfield: string,
-  awaydata: string,
-  warderobefield: string,
-  warderobedata: string
-) {
-  return { awayfield, awaydata, warderobefield, warderobedata };
-}
-
-const rowsexpand = [
-  createDataExpand("Away Team:", "Dataserver", "Warderobe B", "Room 2"),
-  createDataExpand("Referee:", "", "Warderobe C", "Room 3"),
-];
 
 const useStyles = makeStyles({
   bgContainer: {
@@ -217,34 +175,40 @@ export default function CustomizedTables({
 }: {
   activityList: any;
 }) {
+  const [newactivity, setNewactivity] = useState([]);
 
-  const duraiton = (t1:any, t2:any) => {
-    let a = moment(t1);
-    let b = moment(t2);
-
-    const milliseconds =  b.diff(a);
-    const  minutes =  (milliseconds / (1000*60)) % 60;
-    const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
-    return  `${hours}:${minutes} h`
-    
-  }
-
-  const  showDuration = (start:string,end:string) =>{
+  const showDuration = (start: string, end: string) => {
     let startDate = moment(start).format("YYYY-MM-DD");
     let endDate = moment(end).format("YYYY-MM-DD");
 
-    let endTime=moment(end).format("HH:mm");
+    let endTime = moment(end).format("HH:mm");
     let finalEndTime = moment(startDate + " " + endTime);
-    
-    if(startDate===endDate){
-     return  duraiton(start,end)
-    }else{
-     return duraiton(start,finalEndTime)
+
+    if (startDate === endDate) {
+      return getduraiton(start, end);
+    } else {
+      return getduraiton(start, finalEndTime);
     }
-                                  
-  }
+  };
 
+  // const [btn, setbtn] = useState(true);
+  const [numberofpage, setnumberofpage] = useState(5);
 
+  useEffect(() => {
+    if (activityList) {
+      let temp = getFormatedData(activityList);
+      setNewactivity(temp);
+      setnumberofpage(5);
+    }
+  }, [activityList]);
+
+  const Loadmorebtn = () => {
+    setnumberofpage(numberofpage + 5);
+    console.log(activityList.length, "mkll");
+    // if (numberofpage < acitivity.length) {
+    //   setbtn(false);
+    // }
+  };
 
   const classes = useStyles();
   return (
@@ -256,13 +220,16 @@ export default function CustomizedTables({
               component={Paper}
               className={classes.tableContainer}
             >
-  
-              {activityList.map((res: any) => (
+              {newactivity.slice(0, numberofpage).map((res: any) => (
                 <Table className={classes.table} aria-label="customized table">
                   <TableHead>
                     <TableRow>
                       <StyledTableCell colSpan={7}>
-                        {moment(res.startTime).format('dddd MMMM DD, YYYY')}
+                        {res.recuring && res.recuring.length > 0
+                          ? moment(res.recuring[0].startTime).format(
+                              "DD-MM-YYYY"
+                            )
+                          : moment(res.startTime).format("DD-MM-YYYY")}
                       </StyledTableCell>
                     </TableRow>
                     <TableRow className={classes.customeTableRow}>
@@ -276,76 +243,155 @@ export default function CustomizedTables({
                       <StyledTableCell align="left">Activity</StyledTableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
-               
+
+                  {!res.recuring && (
+                    <TableBody>
                       <StyledTableRow>
                         <BodyTableCell scope="row">
                           {moment(res.startTime).format("HH:mm")}
                         </BodyTableCell>
                         <BodyTableCell align="left">
                           {moment(res.endTime).format("HH:mm")}
-                        </BodyTableCell> 
-                        <BodyTableCell align="left">{showDuration(res.startTime,res.endTime)}</BodyTableCell>
-                        <BodyTableCell align="left">{res.team} {res.team_text}</BodyTableCell>
-                        <BodyTableCell align="left">
-                           {res.location_name}
                         </BodyTableCell>
                         <BodyTableCell align="left">
-                           {res.wardrobe_name}
+                          {showDuration(res.startTime, res.endTime)}
+                        </BodyTableCell>
+                        <BodyTableCell align="left">
+                          {res.team || res.team_text}
+                        </BodyTableCell>
+                        <BodyTableCell align="left">
+                          {res.location_name}
+                        </BodyTableCell>
+                        <BodyTableCell align="left">
+                          {res.wardrobe_name}
                         </BodyTableCell>
                         <BodyTableCell
-                          className={`${res.activity === "Match" &&
+                          className={`${res.activity_type === "Match" &&
                             classes.matched}`}
                           align="left"
                         >
-                          {res.activity_type_name}
+                          {res.activity_type}
+                          {res.activity_type === "" && "Nan"}
                         </BodyTableCell>
                       </StyledTableRow>
-             
-                    {rowsexpand.map((row) => (
-                      <StyledTableRow
-                        className={classes.bottomTableRow}
-                        key={row.awayfield}
-                      >
-                        <BodyTableCell scope="row"></BodyTableCell>
-                        <BodyTableCell align="left"></BodyTableCell>
-                        <BodyTableCell className={classes.label} align="left">
-                          {row.awayfield}
-                        </BodyTableCell>
-                        <BodyTableCell align="left">
-                          {row.awaydata}
-                        </BodyTableCell>
-                        <BodyTableCell align="left">
-                          {row.warderobefield}
-                        </BodyTableCell>
-                        <BodyTableCell align="left">
-                          {row.warderobedata}
-                        </BodyTableCell>
-                        {/* <BodyTableCell align="left"></BodyTableCell> */}
-                      </StyledTableRow>
+
+                      {res.activity_type === "Match" && (
+                        <StyledTableRow className={classes.bottomTableRow}>
+                          <BodyTableCell scope="row"></BodyTableCell>
+                          <BodyTableCell align="left"></BodyTableCell>
+                          <BodyTableCell className={classes.label} align="left">
+                            Away Team
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            {res.away_team_text}
+                          </BodyTableCell>
+                          <BodyTableCell align="left" className={classes.label}>
+                            Warderobe
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            {res.wardrobe_name_away
+                              ? res.wardrobe_name_away
+                              : "NA"}
+                          </BodyTableCell>
+                          {/* <BodyTableCell align="left"></BodyTableCell> */}
+                        </StyledTableRow>
+                      )}
+                    </TableBody>
+                  )}
+                  {res.recuring &&
+                    res.recuring.map((recuringValue: any) => (
+                      <TableBody>
+                        <StyledTableRow>
+                          <BodyTableCell scope="row">
+                            {moment(recuringValue.startTime).format("HH:mm")}
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            {moment(recuringValue.endTime).format("HH:mm")}
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            {showDuration(
+                              recuringValue.startTime,
+                              recuringValue.endTime
+                            )}
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            {recuringValue.team || recuringValue.team_text}
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            {recuringValue.location_name}
+                          </BodyTableCell>
+                          <BodyTableCell align="left">
+                            {recuringValue.wardrobe_name}
+                            {recuringValue.wardrobe_name === "" && "Nan"}
+                          </BodyTableCell>
+                          <BodyTableCell
+                            className={`${recuringValue.activity_type ===
+                              "Match" && classes.matched}`}
+                            align="left"
+                          >
+                            {recuringValue.activity_type}
+                            {recuringValue.activity_type === "" && "Nan"}
+                          </BodyTableCell>
+                        </StyledTableRow>
+
+                        {/* for away team  */}
+                        {recuringValue.activity_type === "Match" && (
+                          <StyledTableRow className={classes.bottomTableRow}>
+                            <BodyTableCell scope="row"></BodyTableCell>
+                            <BodyTableCell align="left"></BodyTableCell>
+                            <BodyTableCell
+                              className={classes.label}
+                              align="left"
+                            >
+                              Away Team
+                            </BodyTableCell>
+                            <BodyTableCell align="left">
+                              {recuringValue.away_team_text}
+                            </BodyTableCell>
+                            <BodyTableCell
+                              align="left"
+                              className={classes.label}
+                            >
+                              Warderobe
+                            </BodyTableCell>
+                            <BodyTableCell align="left">
+                              {recuringValue.wardrobe_name_away
+                                ? recuringValue.wardrobe_name_away
+                                : "NA"}
+                            </BodyTableCell>
+                            {/* <BodyTableCell align="left"></BodyTableCell> */}
+                          </StyledTableRow>
+                        )}
+                        {/* for away team end here */}
+                      </TableBody>
                     ))}
-                  </TableBody>
                 </Table>
               ))}
-              {activityList && activityList.length<1 && "No Activity Found"}
+
             </TableContainer>
           </Grid>
         </Grid>
+        <span style={{ color: "red", marginLeft: "40%" }}>
+                {activityList && activityList.length < 1 && "No Activity Found"}
+              </span>
         <div
           className=""
           style={{ textAlign: "center", paddingBottom: "40px" }}
         >
-          <Button
-            variant="text"
-            style={{
-              backgroundColor: "#0079BC",
-              color: "#ffffff",
-              width: "150px",
-              maxWidth: "100%",
-            }}
-          >
-            See More
-          </Button>
+          {numberofpage < newactivity.length && (
+            <Button
+              onClick={Loadmorebtn}
+              variant="text"
+              style={{
+                backgroundColor: "#0079BC",
+                color: "#ffffff",
+                width: "150px",
+                maxWidth: "100%",
+              }}
+            >
+              See More
+            </Button>
+          )}
         </div>
       </Container>
     </div>

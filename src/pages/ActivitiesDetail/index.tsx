@@ -9,52 +9,51 @@ import Filters from "@cenera/components/ActivitiesDetail/Filters";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles, CircularProgress, Backdrop } from "@material-ui/core";
 import { activitiesDetailStyle } from "./styles";
-import { Link ,useParams} from "react-router-dom";
-import { useFetchGetActivites} from "@cenera/common/hooks/api-hooks/activity";
-import moment from "moment"
+import { Link, useParams } from "react-router-dom";
+import { useFetchGetActivites } from "@cenera/common/hooks/api-hooks/activity";
+import moment from "moment";
 
 const useStyles = makeStyles(activitiesDetailStyle as any);
 
 export default function ActivitiesDetail() {
-
-  const[filterdate,setFilterdate] = useState(7);
+  const [filterdate, setFilterdate] = useState(7);
   var date = new Date();
   date.setDate(date.getDate() + filterdate);
-  const nextdate = moment(date).format('YYYY-MM-DDTHH:MM');
-  const currentdate =   moment(Date()).format('YYYY-MM-DDTHH:MM');
+  const nextdate = moment(date).format("YYYY-MM-DDTHH:MM");
+  const currentdate = moment(Date()).format("YYYY-MM-DDTHH:MM");
 
-  const[searchtext,setSearchtext] = useState("");
-  const[filterlocation,setfilterlocation]=useState(0);
-  const[filterteam,setfilterteam]=useState(0);
+  const [searchtext, setSearchtext] = useState("");
+  const [filterlocation, setfilterlocation] = useState(0);
+  const [filterteam, setfilterteam] = useState(0);
+  const [filterActivity, setfilterActivity] = useState("0");
 
   const classes = useStyles();
-  const {id} = useParams<any>();
+  const { id } = useParams<any>();
 
   const data = {
-    "club_id":id,
-    ...(filterteam!==0 && {"team_id": filterteam}),
-    ...(filterlocation!==0 && {"location_id": filterlocation}),
-    ...(searchtext.length==0 && {"text_search": searchtext}),
-    "startTime": currentdate,
-    "endTime": nextdate
-  }   
-  
-  const {acitivityData,loading,revalidate,error} = useFetchGetActivites(data); 
-  const [activityList , setActivityList] = useState(null);
+    club_id: id,
+    ...(filterteam !== 0 && { team_id: filterteam }),
+    ...(filterlocation !== 0 && { location_id: filterlocation }),
+    // ...(searchtext !== "" && { text_search: searchtext }),
+    ...(searchtext !== "" && { text_search: searchtext }),
+    ...(filterActivity !== "0" && { activity_type: filterActivity }),
+    startTime: currentdate,
+    endTime: nextdate,
+  };
 
- 
-   useEffect(() => {
-    if(acitivityData){
+  const { acitivityData, loading, revalidate, error } = useFetchGetActivites(
+    data
+  );
+  const [activityList, setActivityList] = useState(null);
+
+  useEffect(() => {
+    if (acitivityData) {
       setActivityList(acitivityData);
     }
-   
-   },[acitivityData,loading,revalidate,error,searchtext])
-
-   console.log(acitivityData,"acitivityData");
+  }, [acitivityData, loading, revalidate, error, searchtext]);
 
   return (
     <>
-
       <Box bgcolor="primary.contrastText" className={classes.wrapper}>
         <AppBar position="static" className={classes.appbar}>
           <Box className={classes.justifyContentCenter}>
@@ -70,32 +69,47 @@ export default function ActivitiesDetail() {
         </AppBar>
         <Banner />
 
-        {activityList &&
-        (<>
-         <Filters 
-         clubid={id}
-         searchingtext={(res:any)=>{
-          setSearchtext(res)
-         }}
+        {activityList && (
+          <>
+            <Filters
+              clubid={id}
+              searchingtext={(res: any) => {
+                setSearchtext(res);
+              }}
+              onFilter={(res: any) => {
+                setFilterdate(res);
+              }}
+              filterTeam={(res: any) => {
+                if (res === 0) {
+                  setfilterteam(0);
+                } else {
+                  setfilterteam(res);
+                }
+              }}
+              filterLocation={(res: any) => {
+                if (res === 0) {
+                  setfilterlocation(0);
+                } else {
+                  setfilterlocation(res);
+                }
+              }}
+              //setfilterActivity
+              onFilteractivity={(res: any) => {
+                if (res === 0) {
+                  setfilterActivity("0");
+                } else {
+                  setfilterActivity(res);
+                }
+              }}
+            />
 
-         onFilter={(res:any)=>{
-          setFilterdate(res)
-         }} 
-         filterTeam={(res:any)=>{
-            if(res===0){
-              setfilterteam(0)
-            }else{setfilterteam(res)}
-         }}
-         filterLocation={(res:any)=>{
-            if(res===0){
-              setfilterlocation(0)
-            }else{setfilterlocation(res)}
-         }}
-         />
-         <Table activityList={activityList} /> 
-        </>) }
+            <Table activityList={activityList} />
+          </>
+        )}
 
-        {!acitivityData && <h4 style={{textAlign:"center"}}>No Activity Found</h4>}
+        {!acitivityData && (
+          <h4 style={{ textAlign: "center" }}>No Activity Found</h4>
+        )}
         <footer className={classes.footer}>
           <Grid container>
             <Grid item xs={12}>

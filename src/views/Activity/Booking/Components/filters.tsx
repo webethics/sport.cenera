@@ -25,6 +25,7 @@ export default function Filters({
   Textvalue,
   setteamid,
   setlocationid,
+  setActivitytype,
 }: {
   onFilter: any;
   searchingtext: any;
@@ -32,13 +33,14 @@ export default function Filters({
   Textvalue: any;
   setteamid: any;
   setlocationid: any;
+  setActivitytype: any;
 }) {
   const [activitylist, setactivitylist] = useState([]);
   const classes = useStyles();
   const [text, setText] = useState("");
   const [team, setTeam] = React.useState("0");
   const [filter, setfilter] = React.useState(7);
-  const [activity, setActivity] = React.useState("0.5");
+  const [activity, setActivity] = React.useState("0");
   // const [searchtext, setSearchtext] = React.useState("");
 
   const handleChange1 = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -59,18 +61,17 @@ export default function Filters({
 
   const handleChange4 = (event: React.ChangeEvent<{ value: unknown }>) => {
     setActivity(event.target.value as string);
+    setActivitytype(event.target.value);
   };
 
   const changeText = (e: any) => {
     setText(e.target.value);
   };
 
-
-  
-  const getText = (event:any) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-       searchingtext(text)
+  const getText = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      searchingtext(text);
     } else {
     }
   };
@@ -83,6 +84,7 @@ export default function Filters({
   const { enqueueSnackbar } = useSnackbar();
   const { locationData, error } = useFetchGetLocations();
   const [locations, setLocations] = useState([]);
+
   const { teams } = useFetchTeams();
   const [teamsList, setTeamsList] = useState([]);
   const { activityType } = useFetchActivityType();
@@ -115,7 +117,7 @@ export default function Filters({
         (res: any, index: number) => ({
           name: res.value,
           isMatch: res.isMatch,
-          id: index,
+          id: index + 1,
         })
       );
       setactivitylist(newactivityType);
@@ -181,10 +183,10 @@ export default function Filters({
               onChange={handleChange4}
               label="Team"
             >
-              <MenuItem value={0.5}>All</MenuItem>
+              <MenuItem value={0}>All</MenuItem>
 
               {activitylist.map((res) => (
-                <MenuItem value={res.id}>{res.name} </MenuItem>
+                <MenuItem value={res.name}>{res.name} </MenuItem>
               ))}
             </Select>
           </FormControl>

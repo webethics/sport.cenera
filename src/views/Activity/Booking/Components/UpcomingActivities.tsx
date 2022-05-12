@@ -71,6 +71,7 @@ const UpcomingActivities = ({
 }: {
   fetchupcomingactivity: any;
 }) => {
+  const [filterActivity, setfilterActivity] = useState("0");
   const [filterdate, setFilterdate] = useState(7);
   const [successedit, setsuccessedit] = useState(true);
   const [data, setdata] = useState(null);
@@ -100,7 +101,9 @@ const UpcomingActivities = ({
     club_id: appState.user.club_id,
     ...(searchteam !== 0 && { team_id: searchteam }),
     ...(searchlocation !== 0 && { location_id: searchlocation }),
-    text_search: searchtext && searchtext,
+    // text_search: searchtext && searchtext,
+    ...(searchtext !== "" && { text_search: searchtext }),
+    ...(filterActivity !== "0" && { activity_type: filterActivity }),
     startTime: currentdate,
     endTime: nextdate,
   };
@@ -113,7 +116,6 @@ const UpcomingActivities = ({
   } = ActivityService;
 
   const deleteNonReccuring = async (deletesingleBooking: any) => {
-    console.log("non recuring called");
     setDeleting(true);
     let params = {
       activity_id_list: deletesingleBooking.activity_id,
@@ -124,10 +126,11 @@ const UpcomingActivities = ({
       appState.user.club_id,
       params
     );
-    console.log(response, "lololo");
+
     if (response) {
-      // await revalidate();
-      console.log(deletesingleBooking, deleteMultipleActivities, "bololo");
+      if (!deleteNonRecuring && !deleteRecuring) {
+        await revalidate();
+      }
       // setrevaldate(1);
       enqueueSnackbar("Activity Deleted Successfully", {
         variant: "success",
@@ -155,8 +158,10 @@ const UpcomingActivities = ({
     ).then(async (res) => {
       console.log(res, "promise response");
       if (deleteStatus === true) {
-        // await revalidate();
-        console.log("revalidate will run");
+        if (!deleteNonRecuring && !deleteRecuring) {
+          await revalidate();
+        }
+
         // setrevaldate(1);
         enqueueSnackbar("Activity Deleted Successfully", {
           variant: "success",
@@ -167,7 +172,6 @@ const UpcomingActivities = ({
   };
 
   const deleteAllSelected = async () => {
-    console.log("both wala function");
     await deleteNonReccuring(deleteNonRecuring);
     await deleteReccuring(deleteRecuring);
     await revalidate();
@@ -439,6 +443,13 @@ const UpcomingActivities = ({
                     }}
                     Filterdate={filterdate}
                     Textvalue={searchtext}
+                    setActivitytype={(res: any) => {
+                      if (res === 0) {
+                        setfilterActivity("0");
+                      } else {
+                        setfilterActivity(res);
+                      }
+                    }}
                   />
                 </>
               )}
@@ -498,7 +509,6 @@ const UpcomingActivities = ({
                           <StyledTableCell align="left"></StyledTableCell>
                         </TableRow>
                       </TableHead>
-
                       {!res.recuring && (
                         <TableBody>
                           <StyledTableRow>
@@ -512,7 +522,7 @@ const UpcomingActivities = ({
                               {showDuration(res.startTime, res.endTime)}
                             </BodyTableCell>
                             <BodyTableCell align="left">
-                              {res.team} {res.team_text}
+                              {res.team || res.team_text}
                             </BodyTableCell>
                             <BodyTableCell align="left">
                               {res.location_name}
