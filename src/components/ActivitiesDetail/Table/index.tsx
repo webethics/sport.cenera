@@ -191,7 +191,6 @@ export default function CustomizedTables({
     }
   };
 
-  // const [btn, setbtn] = useState(true);
   const [numberofpage, setnumberofpage] = useState(5);
 
   useEffect(() => {
@@ -207,8 +206,7 @@ export default function CustomizedTables({
   };
 
   const classes = useStyles();
-  // console.log(activityList, "withoutfiltered");
-  // console.log(newactivity, "filtereddata");
+
   return (
     <div className={classes.bgContainer}>
       <Container className={classes.Container}>
@@ -216,7 +214,7 @@ export default function CustomizedTables({
           <Grid item xs={12}>
             <TableContainer
               component={Paper}
-              className={classes.tableContainer}
+              className={`${classes.tableContainer} bodyWithChildrenItems`}
             >
               {newactivity.slice(0, numberofpage).map((res: any) => (
                 <Table className={classes.table} aria-label="customized table">

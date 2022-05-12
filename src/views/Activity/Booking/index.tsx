@@ -80,7 +80,7 @@ export const Booking: FC = () => {
   for (let i = 1; i <= 31; i++) {
     dates.push(i);
   }
-  
+
   //end
   useEffect(() => {
     if (locationData) {
@@ -116,7 +116,6 @@ export const Booking: FC = () => {
     }
   }, [locationData, teams, Wardrobesdata, activityType]);
 
-  
   const handleDateChange = (pickerType: string, value: any) => {
     SetselectedDate(value);
 
@@ -146,8 +145,6 @@ export const Booking: FC = () => {
     warderobe: "0",
     extWarBef15: false,
     extWarBef30: false,
-    extWarAf15: false,
-    extWarAf30: false,
     activity: "0",
     description: "",
     away_team: "",
@@ -183,18 +180,6 @@ export const Booking: FC = () => {
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: Yup.object({
-      // recurring: Yup.number(),
-      // week_day: Yup.string().when("recurring", {
-      //   is: 1,
-      //   then: Yup.string().required("Field is required"),
-      // }),
-
-      // recurringby: Yup.number(),
-      // month_day: Yup.string().when("recurringby", {
-      //   is: 3,
-      //   then: Yup.string().required("Field is required"),
-      // }),
-
       activity: Yup.number()
         .min(1, "Activity is required")
         .required("Activity is required"),
@@ -226,7 +211,7 @@ export const Booking: FC = () => {
       start_date: Yup.date(),
       end_date_recurring: Yup.date().min(
         Yup.ref("start_date"),
-        "recuring End date has to be more than start date"
+        "Recuring End date has to be more than start date"
       ),
     }),
 
@@ -333,7 +318,6 @@ export const Booking: FC = () => {
       monthDates.length < 1
     ) {
       setErrorMsgMonth("Please select month dates");
-      console.log("true true monthly ");
     } else {
       setErrorMsgMonth("");
     }
@@ -347,37 +331,19 @@ export const Booking: FC = () => {
     });
   }, [startTimefield, endTimefield]);
 
-  useEffect(() => {
-    if (formik.values.activity === "Match") {
-      formik.setValues({
-        ...formik.values,
-        extWarBef30: true,
-        extWarAf30: true,
-      });
-    } else {
-      formik.setValues({
-        ...formik.values,
-        extWarBef30: false,
-        extWarAf30: false,
-      });
-    }
-  }, [formik.values.activity]);
-
-  useEffect(() => {
-    if (week.length > 0) {
-      formik.setValues({ ...formik.values, week_day: "okk" });
-    } else {
-      formik.setValues({ ...formik.values, week_day: "" });
-    }
-  }, [week, monthDates]);
-
-  useEffect(() => {
-    if (monthDates.length > 0) {
-      formik.setValues({ ...formik.values, month_day: "okk" });
-    } else {
-      formik.setValues({ ...formik.values, month_day: "" });
-    }
-  }, [monthDates]);
+  // useEffect(() => {
+  //   if (formik.values.activity === "Match") {
+  //     formik.setValues({
+  //       ...formik.values,
+  //       extWarBef30: true,
+  //     });
+  //   } else {
+  //     formik.setValues({
+  //       ...formik.values,
+  //       extWarBef30: false,
+  //     });
+  //   }
+  // }, [formik.values.activity]);
 
   const { values, handleChange, errors, touched } = formik;
 
@@ -390,7 +356,7 @@ export const Booking: FC = () => {
               <h4>Book Activity</h4>
             </CardHeader>
             <CardBody>
-              <form >
+              <form>
                 <GridContainer>
                   <GridItem xs="12" sm="2" md="2" sx={{ mb: 3 }}>
                     <h5 style={{ fontSize: "14px" }}>Team</h5>
@@ -746,38 +712,45 @@ export const Booking: FC = () => {
                             }}
                           >
                             {dates.map((res: any) => (
-                              <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays2(res)}>
-                                <Box   
-                                className={ 
-                                  monthDates.some((elm) => elm === res)
-                                    ? "active_dates"
-                                    : ""
-                                }  
-                                component="span"
-                                sx={{
-                                  width: "32px",
-                                  height: "32px",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  border: "1px solid #ddd",
-                                  margin: "5px",
-                                  borderRadius: "50%",
-                                  fontSize: "12px",
-                                  fontWeight: "400",
-                                  color: "#565656",
-                                  lineHeight: "0",
-                                  "&.active_dates": {
-                                    backgroundColor: "#00acc1",
-                                    color: "#fff",
-                                  },
+                              <Button
+                                style={{
+                                  color: "none",
+                                  background: "none",
+                                  margin: "0px",
+                                  width: "none",
+                                  padding: "0px",
                                 }}
-                                
+                                onClick={() => handledays2(res)}
                               >
-                                {res}
-                              </Box>
+                                <Box
+                                  className={
+                                    monthDates.some((elm) => elm === res)
+                                      ? "active_dates"
+                                      : ""
+                                  }
+                                  component="span"
+                                  sx={{
+                                    width: "32px",
+                                    height: "32px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    border: "1px solid #ddd",
+                                    margin: "5px",
+                                    borderRadius: "50%",
+                                    fontSize: "12px",
+                                    fontWeight: "400",
+                                    color: "#565656",
+                                    lineHeight: "0",
+                                    "&.active_dates": {
+                                      backgroundColor: "#00acc1",
+                                      color: "#fff",
+                                    },
+                                  }}
+                                >
+                                  {res}
+                                </Box>
                               </Button>
-                              
                             ))}
 
                             {errorMsgMonth && (
@@ -793,7 +766,8 @@ export const Booking: FC = () => {
                             )}
                           </Box>
                         )}
-                        {values.recurringby === 1 && (
+                        {(values.recurringby === 1 ||
+                          values.recurringby === 2) && (
                           <Box
                             sx={{
                               display: "flex",
@@ -803,41 +777,48 @@ export const Booking: FC = () => {
                           >
                             {weekdays.map((res) => (
                               //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
-                              <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays1(res.name)}>
-                                 <Box
-                                className={
-                                  week.some((elm) => elm === res.name)
-                                    ? "active_day"
-                                    : ""
-                                }
-                                component="span"
-                                sx={{
-                                  width: "32px",
-                                  height: "32px",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  border: "1px solid #ddd",
-                                  margin: "5px",
-                                  borderRadius: "50%",
-                                  fontSize: "12px",
-                                  fontWeight: "400",
-                                  color: "#565656",
-                                  lineHeight: "0",
-
-                                  "&.active_day": {
-                                    backgroundColor: "#00acc1",
-                                    color: "#fff",
-                                  },
+                              <Button
+                                style={{
+                                  color: "none",
+                                  background: "none",
+                                  margin: "0px",
+                                  width: "none",
+                                  padding: "0px",
                                 }}
-                                
+                                onClick={() => handledays1(res.name)}
                               >
-                                {res.name.charAt(0)}
-                              </Box>
+                                <Box
+                                  className={
+                                    week.some((elm) => elm === res.name)
+                                      ? "active_day"
+                                      : ""
+                                  }
+                                  component="span"
+                                  sx={{
+                                    width: "32px",
+                                    height: "32px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    border: "1px solid #ddd",
+                                    margin: "5px",
+                                    borderRadius: "50%",
+                                    fontSize: "12px",
+                                    fontWeight: "400",
+                                    color: "#565656",
+                                    lineHeight: "0",
+
+                                    "&.active_day": {
+                                      backgroundColor: "#00acc1",
+                                      color: "#fff",
+                                    },
+                                  }}
+                                >
+                                  {res.name.charAt(0)}
+                                </Box>
                               </Button>
-        
                             ))}
-                            {errorMsgweekly && (
+                            {(errorMsgweekly || errorMsg) && (
                               <span
                                 style={{
                                   color: "red",
@@ -845,64 +826,7 @@ export const Booking: FC = () => {
                                   fontSize: "12px",
                                 }}
                               >
-                                {errorMsgweekly}
-                              </span>
-                            )}
-                            {console.log(errorMsgweekly, "errorMsgfrom file")}
-                          </Box>
-                        )}
-
-                        {values.recurringby === 2 && (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              flexWrap: "wrap",
-                            }}
-                          >
-                            {weekdays.map((res) => (
-                              <Button style={{color:"none" , background:"none", margin:"0px" , width:"none" , padding:"0px"}} onClick={() => handledays1(res.name)}>
-                              <Box
-                                className={
-                                  week.some((elm) => elm === res.name)
-                                    ? "active_day"
-                                    : ""
-                                }
-                                component="span"
-                                sx={{
-                                  width: "32px",
-                                  height: "32px",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  border: "1px solid #ddd",
-                                  margin: "5px",
-                                  borderRadius: "50%",
-                                  fontSize: "12px",
-                                  fontWeight: "400",
-                                  color: "#565656",
-                                  lineHeight: "0",
-                                  "&.active_day": {
-                                    backgroundColor: "#00acc1",
-                                    color: "#fff",
-                                  },
-                                }}
-                               
-                              >
-                                {res.name.charAt(0)}
-                              </Box>
-                              </Button>
-                            ))}
-
-                            {errorMsg && (
-                              <span
-                                style={{
-                                  color: "red",
-                                  marginLeft: "12px",
-                                  fontSize: "12px",
-                                }}
-                              >
-                                {errorMsg}
+                                {errorMsgweekly || errorMsg}
                               </span>
                             )}
                           </Box>
@@ -1100,18 +1024,15 @@ export const Booking: FC = () => {
                             });
                             handleChange(e);
                           }}
-
                           onKeyPress={(e) => {
-                            if(e.key === 'Enter'){
+                            if (e.key === "Enter") {
                               formik.setValues({
                                 ...formik.values,
                                 extWarBef15: !formik.values.extWarBef15,
-                                extWarBef30:false
+                                extWarBef30: false,
                               });
                             }
-                          }
-                          }
-                          
+                          }}
                         />
                       }
                       label="15 Min"
@@ -1123,24 +1044,22 @@ export const Booking: FC = () => {
                           checked={values.extWarBef30}
                           style={{ color: "#00acc1" }}
                           onClick={(e) => {
-                              formik.setValues({
-                                ...formik.values,
-                                extWarBef15: false,
-                              });
-                              handleChange(e);
+                            formik.setValues({
+                              ...formik.values,
+                              extWarBef15: false,
+                            });
+                            handleChange(e);
                             // }
                           }}
-
                           onKeyPress={(e) => {
-                            if(e.key === 'Enter'){
+                            if (e.key === "Enter") {
                               formik.setValues({
                                 ...formik.values,
                                 extWarBef30: !formik.values.extWarBef30,
-                                extWarBef15:false  
+                                extWarBef15: false,
                               });
                             }
-                          }
-                          }
+                          }}
                         />
                       }
                       label="30 Min"
@@ -1287,9 +1206,8 @@ export const Booking: FC = () => {
                           checked={values.show_public}
                           style={{ color: "#00acc1" }}
                           onChange={handleChange}
-
                           onKeyPress={(e) => {
-                            if(e.key === 'Enter'){
+                            if (e.key === "Enter") {
                               formik.setValues({
                                 ...formik.values,
                                 show_public: !formik.values.show_public,

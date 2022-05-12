@@ -191,18 +191,6 @@ export default function EditActivityModal(props: any) {
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: Yup.object({
-      // recurring: Yup.number(),
-      // week_day: Yup.string().when("recurring", {
-      //   is: 1,
-      //   then: Yup.string().required("Field is required"),
-      // }),
-
-      // recurringby: Yup.number(),
-      // month_day: Yup.string().when("recurringby", {
-      //   is: 3,
-      //   then: Yup.string().required("Field is required"),
-      // }),
-
       activity: Yup.number()
         .min(1, "Activity is Required")
         .required("Activity is Required"),
@@ -212,7 +200,7 @@ export default function EditActivityModal(props: any) {
         "End date can't be before start date"
       ),
 
-      start_time: Yup.string().required("Time is Required"),
+      start_time: Yup.string().required(""),
       end_time: Yup.string()
         .required("Time is Required")
         .test(
@@ -318,7 +306,7 @@ export default function EditActivityModal(props: any) {
       formik.values.recurringby == 2 &&
       week.length < 1
     ) {
-      setErrorMsg("please select week days");
+      setErrorMsg("Please select week days");
     } else {
       setErrorMsg("");
     }
@@ -327,7 +315,7 @@ export default function EditActivityModal(props: any) {
       formik.values.recurringby == 1 &&
       week.length < 1
     ) {
-      setErrorMsgweekly("please select week days");
+      setErrorMsgweekly("Please select week days");
     } else {
       setErrorMsgweekly("");
     }
@@ -337,7 +325,6 @@ export default function EditActivityModal(props: any) {
       monthDates.length < 1
     ) {
       setErrorMsgMonth("please select month dates");
-      console.log("true true monthly ");
     } else {
       setErrorMsgMonth("");
     }
@@ -351,19 +338,19 @@ export default function EditActivityModal(props: any) {
     });
   }, [startTimefield, endTimefield]);
 
-  useEffect(() => {
-    if (formik.values.activity === "Match") {
-      formik.setValues({
-        ...formik.values,
-        extWarBef30: true,
-      });
-    } else {
-      formik.setValues({
-        ...formik.values,
-        extWarBef30: false,
-      });
-    }
-  }, [formik.values.activity]);
+  // useEffect(() => {
+  //   if (formik.values.activity === "Match") {
+  //     formik.setValues({
+  //       ...formik.values,
+  //       extWarBef30: true,
+  //     });
+  //   } else {
+  //     formik.setValues({
+  //       ...formik.values,
+  //       extWarBef30: false,
+  //     });
+  //   }
+  // }, [formik.values.activity]);
 
   useEffect(() => {
     if (EditActivitydata[0]) {
@@ -772,7 +759,7 @@ export default function EditActivityModal(props: any) {
                         )}
                       </Box>
                     )}
-                    {values.recurringby === 1 && (
+                    {(values.recurringby === 1 || values.recurringby === 2) && (
                       <Box
                         sx={{
                           display: "flex",
@@ -781,7 +768,6 @@ export default function EditActivityModal(props: any) {
                         }}
                       >
                         {weekdays.map((res) => (
-                          //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
                           <Button
                             style={{
                               color: "none",
@@ -823,7 +809,7 @@ export default function EditActivityModal(props: any) {
                             </Box>
                           </Button>
                         ))}
-                        {errorMsgweekly && (
+                        {(errorMsgweekly || errorMsg) && (
                           <span
                             style={{
                               color: "red",
@@ -831,72 +817,7 @@ export default function EditActivityModal(props: any) {
                               fontSize: "12px",
                             }}
                           >
-                            {errorMsgweekly}
-                          </span>
-                        )}
-                      </Box>
-                    )}
-
-                    {values.recurringby === 2 && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          flexWrap: "wrap",
-                        }}
-                      >
-                        {weekdays.map((res) => (
-                          //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
-                          <Button
-                            style={{
-                              color: "none",
-                              background: "none",
-                              margin: "0px",
-                              width: "none",
-                              padding: "0px",
-                            }}
-                            onClick={() => handledays1(res.name)}
-                          >
-                            <Box
-                              className={
-                                week.some((elm) => elm === res.name)
-                                  ? "active_days"
-                                  : ""
-                              }
-                              component="span"
-                              sx={{
-                                width: "32px",
-                                height: "32px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                border: "1px solid #ddd",
-                                margin: "5px",
-                                borderRadius: "50%",
-                                fontSize: "12px",
-                                fontWeight: "400",
-                                color: "#565656",
-                                lineHeight: "0",
-
-                                "&.active_days": {
-                                  backgroundColor: "#00acc1",
-                                  color: "#fff",
-                                },
-                              }}
-                            >
-                              {res.name.charAt(0).toUpperCase()}
-                            </Box>
-                          </Button>
-                        ))}
-                        {errorMsgweekly && (
-                          <span
-                            style={{
-                              color: "red",
-                              marginLeft: "12px",
-                              fontSize: "12px",
-                            }}
-                          >
-                            {errorMsgweekly}
+                            {errorMsgweekly || errorMsg}
                           </span>
                         )}
                       </Box>

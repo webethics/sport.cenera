@@ -61,6 +61,12 @@ input.MuiInputBase-input.MuiInput-input.MuiInputBase-inputAdornedEnd {
 body .MuiOutlinedInput-input {
   padding: 11.5px 14px;
 }
+.bodyWithChildrenItems tr:first-child td {
+  border-bottom: none;
+}
+.bodyWithChildrenItems tr:last-child td {
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
+}
 @media screen and (max-width: 600px) {
   .custom-form-control {
     max-width: 100% !important;

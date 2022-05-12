@@ -1,13 +1,13 @@
 import { blackColor, sectionSpacer } from "@cenera/common/styles/common-styles";
 import { alpha, Theme } from "@material-ui/core/styles";
-import { selectStyles } from '@cenera/common/styles/select-styles';
-export const styles = (theme:Theme) => ({
+import { selectStyles } from "@cenera/common/styles/select-styles";
+export const styles = (theme: Theme) => ({
   errorLabel: {
     color: `#f64953`,
     fontSize: `12px`,
     fontWeight: `500`,
-    display: 'block',
-    marginTop: '-12px',
+    display: "block",
+    marginTop: "-12px",
   },
   bgContainer: {
     position: "relative",
@@ -87,27 +87,26 @@ export const styles = (theme:Theme) => ({
 
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
+    color: "#fff",
   },
-
 });
 
 export const modalStyle = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
   boxShadow: 24,
-  transition: 'all',
-  p: 4, 
+  transition: "all",
+  p: 4,
   overflow: "scroll",
   height: "95%",
 
-  '@media (max-width: 1280px)': {
-    width:"80%"
+  "@media (max-width: 1280px)": {
+    width: "80%",
   },
-}
+};
 
 export const filtersStyle = (theme: Theme) => ({
   // filterWrap: {
@@ -176,5 +175,3 @@ export const filtersStyle = (theme: Theme) => ({
     },
   },
 });
-
-

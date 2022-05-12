@@ -185,30 +185,6 @@ const UpcomingActivities = ({
   }, [deleteNonRecuring, deleteRecuring]);
 
   const deleteActivity = () => {
-    // const deletesingleBooking = acitivityList
-    //   .filter((res) => res.isSelected === true && res.recurring_item === false)
-    //   .map((res) => res.activity_id); //returning array of id
-
-    // acitivityList.forEach((res) =>{
-    //   if(res.isSelected === true && res.recurring_item === false){
-    //     nonRecuringDeleteDates.push(res)
-    //     console.log("upper")
-    //     }
-    //     if(res.recuring){
-    //         res.recuring.forEach((value:any)=>{
-    //           if(value.isSelected===true && res.recurring_item === false){
-    //             console.log("under")
-    //             nonRecuringDeleteDates.push(value)
-    //           }
-    //         })
-    //     }
-    //   })
-
-    //   let nonrecDelete =  nonRecuringDeleteDates.map((res:any) => ({
-    //     id: res.activity_id,
-    //     dateDeletes: [moment(res.startTime).format("YYYY-MM-DD")],
-    //   }));
-
     const nonRecuringDeleteDates: any = { activity_id: [], date: [] };
     const recuringDeleteDates: any = [];
     acitivityList.forEach((res) => {
@@ -326,7 +302,7 @@ const UpcomingActivities = ({
       revalidate();
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
-      // setsuccessedit(true);
+ 
     }
   }, [Activitydata, data, successedit]);
 
@@ -341,6 +317,10 @@ const UpcomingActivities = ({
     });
     if (isSelectedForDelete) {
       showConfirmDialog();
+    } else {
+      enqueueSnackbar("Please Select Activity", {
+        variant: "error",
+      });
     }
   };
 
@@ -370,7 +350,7 @@ const UpcomingActivities = ({
           if (recVal.randomId == id) {
             newArr[index].recuring[i] = {
               ...recVal,
-              isSelected: !res.isSelected,
+              isSelected: !recVal.isSelected,
             };
           }
         });
@@ -474,7 +454,7 @@ const UpcomingActivities = ({
                 {acitivityList &&
                   acitivityList.map((res: any) => (
                     <Table
-                      className={classes.table}
+                      className={`${classes.table} upcoming-tables`}
                       aria-label="customized table"
                     >
                       <TableHead>
@@ -511,7 +491,7 @@ const UpcomingActivities = ({
                         </TableRow>
                       </TableHead>
                       {!res.recuring && (
-                        <TableBody>
+                        <TableBody className="bodyWithChildrenItems">
                           <StyledTableRow>
                             <BodyTableCell scope="row">
                               {moment(res.startTime).format("HH:mm")}
@@ -533,6 +513,7 @@ const UpcomingActivities = ({
                               {res.wardrobe_name}
                               {res.wardrobe_name === "" && "NA"}
                             </BodyTableCell>
+
                             <BodyTableCell
                               className={`${res.activity_type === "Match" &&
                                 classes.matched}`}
@@ -573,32 +554,65 @@ const UpcomingActivities = ({
 
                           {/* for away team  */}
                           {res.activity_type === "Match" && (
-                            <StyledTableRow className={classes.bottomTableRow}>
-                              <BodyTableCell scope="row"></BodyTableCell>
-                              <BodyTableCell align="left"></BodyTableCell>
-                              <BodyTableCell
-                                className={classes.label}
-                                align="left"
+                            <>
+                              <StyledTableRow
+                                className={classes.bottomTableRow}
                               >
-                                Away Team
-                              </BodyTableCell>
-                              <BodyTableCell align="left">
-                                {res.away_team_text}
-                                {res.away_team_text === "" && "NA"}
-                              </BodyTableCell>
-                              <BodyTableCell
-                                align="left"
-                                className={classes.label}
+                                <BodyTableCell scope="row"></BodyTableCell>
+                                <BodyTableCell align="left"></BodyTableCell>
+                                <BodyTableCell
+                                  className={classes.label}
+                                  align="left"
+                                >
+                                  Away Team
+                                </BodyTableCell>
+                                <BodyTableCell align="left">
+                                  {res.away_team_text}
+                                  {res.away_team_text === "" && "NA"}
+                                </BodyTableCell>
+                                <BodyTableCell
+                                  align="left"
+                                  className={classes.label}
+                                >
+                                  Warderobe
+                                </BodyTableCell>
+                                <BodyTableCell align="left">
+                                  {res.wardrobe_name_away
+                                    ? res.wardrobe_name_away
+                                    : "NA"}
+                                </BodyTableCell>
+                                {/* <BodyTableCell align="left"></BodyTableCell> */}
+                                <BodyTableCell align="left"></BodyTableCell>
+                                <BodyTableCell align="left"></BodyTableCell>
+                                <BodyTableCell align="left"></BodyTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow
+                                className={classes.bottomTableRow}
                               >
-                                Warderobe
-                              </BodyTableCell>
-                              <BodyTableCell align="left">
-                                {res.wardrobe_name_away
-                                  ? res.wardrobe_name_away
-                                  : "NA"}
-                              </BodyTableCell>
-                              {/* <BodyTableCell align="left"></BodyTableCell> */}
-                            </StyledTableRow>
+                                <BodyTableCell scope="row"></BodyTableCell>
+                                <BodyTableCell align="left"></BodyTableCell>
+                                <BodyTableCell
+                                  className={classes.label}
+                                  align="left"
+                                ></BodyTableCell>
+                                <BodyTableCell align="left"></BodyTableCell>
+                                <BodyTableCell
+                                  align="left"
+                                  className={classes.label}
+                                >
+                                  Referee
+                                </BodyTableCell>
+                                <BodyTableCell align="left">
+                                  {res.wardrobe_name_referee
+                                    ? res.wardrobe_name_referee
+                                    : "NA"}
+                                </BodyTableCell>
+                                {/* <BodyTableCell align="left"></BodyTableCell> */}
+                                <BodyTableCell align="left"></BodyTableCell>
+                                <BodyTableCell align="left"></BodyTableCell>
+                                <BodyTableCell align="left"></BodyTableCell>
+                              </StyledTableRow>
+                            </>
                           )}
                           {/* for away team end here */}
                         </TableBody>
@@ -606,7 +620,7 @@ const UpcomingActivities = ({
 
                       {res.recuring &&
                         res.recuring.map((recuringValue: any) => (
-                          <TableBody>
+                          <TableBody className="bodyWithChildrenItems">
                             <StyledTableRow>
                               <BodyTableCell scope="row">
                                 {moment(recuringValue.startTime).format(
@@ -643,6 +657,7 @@ const UpcomingActivities = ({
                                 {recuringValue.activity_type}
                                 {recuringValue.activity_type === "" && "NA"}
                               </BodyTableCell>
+
                               <BodyTableCell align="left">
                                 <Button
                                   color="info"
@@ -677,34 +692,66 @@ const UpcomingActivities = ({
 
                             {/* for away team  */}
                             {recuringValue.activity_type === "Match" && (
-                              <StyledTableRow
-                                className={classes.bottomTableRow}
-                              >
-                                <BodyTableCell scope="row"></BodyTableCell>
-                                <BodyTableCell align="left"></BodyTableCell>
-                                <BodyTableCell
-                                  className={classes.label}
-                                  align="left"
+                              <>
+                                <StyledTableRow
+                                  className={classes.bottomTableRow}
                                 >
-                                  Away Team
-                                </BodyTableCell>
-                                <BodyTableCell align="left">
-                                  {recuringValue.away_team_text}
-                                  {recuringValue.away_team_text === "" && "NA"}
-                                </BodyTableCell>
-                                <BodyTableCell
-                                  align="left"
-                                  className={classes.label}
+                                  <BodyTableCell scope="row"></BodyTableCell>
+                                  <BodyTableCell align="left"></BodyTableCell>
+                                  <BodyTableCell
+                                    className={classes.label}
+                                    align="left"
+                                  >
+                                    Away Team
+                                  </BodyTableCell>
+                                  <BodyTableCell align="left">
+                                    {recuringValue.away_team_text}
+                                    {recuringValue.away_team_text === "" &&
+                                      "NA"}
+                                  </BodyTableCell>
+                                  <BodyTableCell
+                                    align="left"
+                                    className={classes.label}
+                                  >
+                                    Warderobe
+                                  </BodyTableCell>
+                                  <BodyTableCell align="left">
+                                    {recuringValue.wardrobe_name_away
+                                      ? recuringValue.wardrobe_name_away
+                                      : "NA"}
+                                  </BodyTableCell>
+                                  {/* <BodyTableCell align="left"></BodyTableCell> */}
+                                  <BodyTableCell align="left"></BodyTableCell>
+                                  <BodyTableCell align="left"></BodyTableCell>
+                                  <BodyTableCell align="left"></BodyTableCell>
+                                </StyledTableRow>
+                                <StyledTableRow
+                                  className={classes.bottomTableRow}
                                 >
-                                  Warderobe
-                                </BodyTableCell>
-                                <BodyTableCell align="left">
-                                  {recuringValue.wardrobe_name_away
-                                    ? recuringValue.wardrobe_name_away
-                                    : "NA"}
-                                </BodyTableCell>
-                                {/* <BodyTableCell align="left"></BodyTableCell> */}
-                              </StyledTableRow>
+                                  <BodyTableCell scope="row"></BodyTableCell>
+                                  <BodyTableCell align="left"></BodyTableCell>
+                                  <BodyTableCell
+                                    className={classes.label}
+                                    align="left"
+                                  ></BodyTableCell>
+                                  <BodyTableCell align="left"></BodyTableCell>
+                                  <BodyTableCell
+                                    align="left"
+                                    className={classes.label}
+                                  >
+                                    Referee
+                                  </BodyTableCell>
+                                  <BodyTableCell align="left">
+                                    {recuringValue.wardrobe_name_referee
+                                      ? recuringValue.wardrobe_name_referee
+                                      : "NA"}
+                                  </BodyTableCell>
+                                  {/* <BodyTableCell align="left"></BodyTableCell> */}
+                                  <BodyTableCell align="left"></BodyTableCell>
+                                  <BodyTableCell align="left"></BodyTableCell>
+                                  <BodyTableCell align="left"></BodyTableCell>
+                                </StyledTableRow>
+                              </>
                             )}
                             {/* for away team end here */}
                           </TableBody>
