@@ -15,6 +15,9 @@ code {
   font-size: 14px;
   color: #1769ff;
 }
+input.MuiInputBase-input.MuiInput-input.MuiInputBase-inputAdornedEnd {
+  color: #1769ff;
+}
 .datepicker {
   max-width: 200px !important;
   width: 100%;

@@ -81,6 +81,10 @@ export const styles = (theme: Theme) => ({
   fileInput: {
     display: "none",
   },
+  
+  // Mui-selected: {
+  //   background-color: #fff,
+  // },
   teamLogo: {
     maxWidth: "40%",
     margin: "24px auto",

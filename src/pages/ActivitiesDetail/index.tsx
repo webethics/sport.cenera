@@ -29,6 +29,7 @@ export default function ActivitiesDetail() {
 
   const classes = useStyles();
   const { id } = useParams<any>();
+ 
 
   const data = {
     club_id: id,
@@ -51,6 +52,7 @@ export default function ActivitiesDetail() {
       setActivityList(acitivityData);
     }
   }, [acitivityData, loading, revalidate, error, searchtext]);
+  
 
   return (
     <>

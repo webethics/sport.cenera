@@ -204,13 +204,11 @@ export default function CustomizedTables({
 
   const Loadmorebtn = () => {
     setnumberofpage(numberofpage + 5);
-    console.log(activityList.length, "mkll");
-    // if (numberofpage < acitivity.length) {
-    //   setbtn(false);
-    // }
+   
   };
 
   const classes = useStyles();
+  
   return (
     <div className={classes.bgContainer}>
       <Container className={classes.Container}>
@@ -258,12 +256,14 @@ export default function CustomizedTables({
                         </BodyTableCell>
                         <BodyTableCell align="left">
                           {res.team || res.team_text}
+                          {!res.team && !res.team_text && "NA"}
                         </BodyTableCell>
                         <BodyTableCell align="left">
                           {res.location_name}
                         </BodyTableCell>
                         <BodyTableCell align="left">
                           {res.wardrobe_name}
+                          {res.wardrobe_name === "" && "NA"}
                         </BodyTableCell>
                         <BodyTableCell
                           className={`${res.activity_type === "Match" &&
@@ -271,7 +271,7 @@ export default function CustomizedTables({
                           align="left"
                         >
                           {res.activity_type}
-                          {res.activity_type === "" && "Nan"}
+                          {res.activity_type === "" && "NA"}
                         </BodyTableCell>
                       </StyledTableRow>
 
@@ -284,6 +284,7 @@ export default function CustomizedTables({
                           </BodyTableCell>
                           <BodyTableCell align="left">
                             {res.away_team_text}
+                            {res.away_team_text === "" && "NA"}
                           </BodyTableCell>
                           <BodyTableCell align="left" className={classes.label}>
                             Warderobe
@@ -316,13 +317,16 @@ export default function CustomizedTables({
                           </BodyTableCell>
                           <BodyTableCell align="left">
                             {recuringValue.team || recuringValue.team_text}
+                            {!recuringValue.team &&
+                              !recuringValue.team_text &&
+                              "NA"}
                           </BodyTableCell>
                           <BodyTableCell align="left">
                             {recuringValue.location_name}
                           </BodyTableCell>
                           <BodyTableCell align="left">
                             {recuringValue.wardrobe_name}
-                            {recuringValue.wardrobe_name === "" && "Nan"}
+                            {recuringValue.wardrobe_name === "" && "NA"}
                           </BodyTableCell>
                           <BodyTableCell
                             className={`${recuringValue.activity_type ===
@@ -330,7 +334,7 @@ export default function CustomizedTables({
                             align="left"
                           >
                             {recuringValue.activity_type}
-                            {recuringValue.activity_type === "" && "Nan"}
+                            {recuringValue.activity_type === "" && "NA"}
                           </BodyTableCell>
                         </StyledTableRow>
 
@@ -347,6 +351,7 @@ export default function CustomizedTables({
                             </BodyTableCell>
                             <BodyTableCell align="left">
                               {recuringValue.away_team_text}
+                              {recuringValue.away_team_text === "" && "NA"}
                             </BodyTableCell>
                             <BodyTableCell
                               align="left"
@@ -367,13 +372,12 @@ export default function CustomizedTables({
                     ))}
                 </Table>
               ))}
-
             </TableContainer>
           </Grid>
         </Grid>
         <span style={{ color: "red", marginLeft: "40%" }}>
-                {activityList && activityList.length < 1 && "No Activity Found"}
-              </span>
+          {activityList && activityList.length < 1 && "No Activity Found"}
+        </span>
         <div
           className=""
           style={{ textAlign: "center", paddingBottom: "40px" }}

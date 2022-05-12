@@ -4,10 +4,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import { bannerStyle } from "./styles";
 import Container from "@material-ui/core/Container";
 import grungePattren from "@cenera/assets/images/grunge-pattren.png";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles(bannerStyle as any);
 
 export default function Banner() {
+  const { name } = useParams<any>();
   const classes = useStyles();
 
   return (
@@ -16,7 +18,7 @@ export default function Banner() {
         <Grid container alignItems="center" justifyContent="center">
           <Grid item>
             <h1>Activity Calendar</h1>
-            <h2>Indian Ice Hockey</h2>
+            <h2>{name}</h2>
           </Grid>
         </Grid>
       </Container>

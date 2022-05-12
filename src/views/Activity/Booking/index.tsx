@@ -1,16 +1,12 @@
 import React, { FC, useState, useEffect } from "react";
 import { useFormik } from "formik";
-import {
-  makeStyles,
-  CircularProgress,
-  Backdrop,
-  FormControl,
-} from "@material-ui/core";
+import { makeStyles, CircularProgress, Backdrop } from "@material-ui/core";
 import { GridContainer, GridItem } from "@cenera/components/Grid";
 import { CardHeader, Card, CardBody } from "@cenera/components/Card";
 import { Button } from "@cenera/components/Button/Button";
 import { styles } from "./styles";
 import ItemPicker from "./Components/ItemPicker";
+import RecurringPicker from "./Components/recurringPicker";
 import { TextField, Divider } from "@material-ui/core";
 import UpcomingActivities from "./Components/UpcomingActivities";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -29,8 +25,6 @@ import * as Yup from "yup";
 import "rc-time-picker/assets/index.css";
 import Box from "@mui/material/Box";
 
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import { KeyboardTimePicker } from "@material-ui/pickers";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 
@@ -56,15 +50,21 @@ export const Booking: FC = () => {
   const [fetchupcoming, setFetchupcoming] = useState(0);
   const [startTimefield, handleStartTimefield] = useState(new Date());
   const [endTimefield, handleEndTimefield] = useState(new Date());
-  const [errorMsg , setErrorMsg] = useState("")
-  const [errorMsgMonth , setErrorMsgMonth] = useState("")
-  const [errorMsgweekly , setErrorMsgweekly] = useState("")
+  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsgMonth, setErrorMsgMonth] = useState("");
+  const [errorMsgweekly, setErrorMsgweekly] = useState("");
   // const[weekerror,setweekerror]= useState(false);
 
   //Recurring
   const recurring = [
     { name: "Yes", id: 1 },
     { name: "No", id: 2 },
+  ];
+
+  const interval = [
+    { name: "weekly", id: 1 },
+    { name: "bi-weekly", id: 2 },
+    { name: "monthly", id: 3 },
   ];
 
   const weekdays = [
@@ -195,19 +195,19 @@ export const Booking: FC = () => {
       // }),
 
       activity: Yup.number()
-      .min(1, "Activity is Required")
-      .required("Activity is Required"),
+        .min(1, "Activity is Required")
+        .required("Activity is Required"),
 
       end_date: Yup.date().min(
         Yup.ref("start_date"),
         "End date can't be before start date"
       ),
       start_time: Yup.string().required(
-        "start time could not be equal to end time"
+        "Start time could not be equal to end time"
       ),
 
       end_time: Yup.string()
-        .required("endtime could not be equal to start time")
+        .required("End time could not be equal to start time")
         .test(
           "is-greater",
           "end time should be greater than start time",
@@ -223,10 +223,12 @@ export const Booking: FC = () => {
         .min(1, "Location is Required")
         .required("Location is Required"),
       start_date: Yup.date(),
-      end_date_recurring: Yup
-      .date().min(Yup.ref("start_date"),"recuring End date has to be more than start date"),
+      end_date_recurring: Yup.date().min(
+        Yup.ref("start_date"),
+        "recuring End date has to be more than start date"
+      ),
     }),
- 
+
     onSubmit: async (formValues) => {
       const {
         start_date,
@@ -243,11 +245,10 @@ export const Booking: FC = () => {
 
       let activity: string;
 
-
-      activitylist.forEach((res,index)=>{
-        let formVal = Number(formValues.activity)-1
-        if(formVal===index)  activity=res.name
-      })
+      activitylist.forEach((res, index) => {
+        let formVal = Number(formValues.activity) - 1;
+        if (formVal === index) activity = res.name;
+      });
 
       const newobj = {
         access_token: appState.authentication.accessToken,
@@ -272,7 +273,7 @@ export const Booking: FC = () => {
         ...(formValues.recurringby === 3 && {
           recurring_details: `monthly:${monthDates.toString()}`,
         }),
-        ...(formValues.team !== "" && { team_id: formValues.team }),
+        ...(formValues.team > "0" && { team_id: formValues.team }),
         ...(formValues.orTeam !== "" && { team_text: formValues.orTeam }),
         away_team_text: formValues.away_team,
         wardrobe_id: formValues.warderobe,
@@ -286,7 +287,11 @@ export const Booking: FC = () => {
           recurring_endDate: endrecurring_date,
         }),
       };
-      if(errorMsg.length<1 && errorMsgMonth.length<1 && errorMsgweekly.length<1){
+      if (
+        errorMsg.length < 1 &&
+        errorMsgMonth.length < 1 &&
+        errorMsgweekly.length < 1
+      ) {
         try {
           let res = await addActivity(newobj);
           if (res) {
@@ -302,26 +307,37 @@ export const Booking: FC = () => {
     },
   });
 
-  useEffect(()=>{
-    if(formik.values.recurring==1 && formik.values.recurringby==2 && week.length<1){
-      setErrorMsg("please select week days")
-    }else{
-      setErrorMsg("")
+  useEffect(() => {
+    if (
+      formik.values.recurring == 1 &&
+      formik.values.recurringby == 2 &&
+      week.length < 1
+    ) {
+      setErrorMsg("Please select week days");
+    } else {
+      setErrorMsg("");
     }
-    if(formik.values.recurring==1 && formik.values.recurringby==1 && week.length<1){
-      setErrorMsgweekly("please select week days")
-    }else{
-      setErrorMsgweekly("")
+    if (
+      formik.values.recurring == 1 &&
+      formik.values.recurringby == 1 &&
+      week.length < 1
+    ) {
+      setErrorMsgweekly("Please select week days");
+    } else {
+      setErrorMsgweekly("");
     }
-    if(formik.values.recurring==1 && formik.values.recurringby==3 && monthDates.length<1){
-      setErrorMsgMonth("please select month dates")
-      console.log("true true monthly ")
-    }else{
-      setErrorMsgMonth("")
+    if (
+      formik.values.recurring == 1 &&
+      formik.values.recurringby == 3 &&
+      monthDates.length < 1
+    ) {
+      setErrorMsgMonth("Please select month dates");
+      console.log("true true monthly ");
+    } else {
+      setErrorMsgMonth("");
     }
-  },[formik.values.recurring,formik.values.recurringby,monthDates,week])
-  
- 
+  }, [formik.values.recurring, formik.values.recurringby, monthDates, week]);
+
   useEffect(() => {
     formik.setValues({
       ...formik.values,
@@ -361,10 +377,6 @@ export const Booking: FC = () => {
       formik.setValues({ ...formik.values, month_day: "" });
     }
   }, [monthDates]);
-
-  const handleChangedays = (event: any) => {
-    formik.setValues({ ...formik.values, recurringby: event.target.value });
-  };
 
   const { values, handleChange, errors, touched } = formik;
 
@@ -424,7 +436,7 @@ export const Booking: FC = () => {
                         id="orTeam"
                         variant="outlined"
                         value={values.orTeam}
-                        disabled={values.team !=='0' && true}
+                        disabled={values.team !== "0" && true}
                         onChange={handleChange}
                       />
                     </Box>
@@ -510,6 +522,7 @@ export const Booking: FC = () => {
                         style={{
                           color: "red",
                           paddingLeft: "65px",
+                          fontSize: "12px",
                         }}
                       >
                         {errors.start_time}
@@ -560,7 +573,11 @@ export const Booking: FC = () => {
                     {errors.end_date && (
                       <span
                         className={classes.errorColor}
-                        style={{ color: "red", display: "inline-block" }}
+                        style={{
+                          color: "red",
+                          display: "inline-block",
+                          fontSize: "12px",
+                        }}
                       >
                         {errors.end_date}
                       </span>
@@ -609,6 +626,7 @@ export const Booking: FC = () => {
                         style={{
                           color: "red",
                           paddingLeft: "65px",
+                          fontSize: "12px",
                         }}
                       >
                         {errors.end_time}
@@ -668,43 +686,13 @@ export const Booking: FC = () => {
                           >
                             Interval
                           </Box>
-                          {/* <ItemPicker
-                            placeholder="selectType"
-                            data={recurringby}
+
+                          <RecurringPicker
+                            data={interval}
                             value={values.recurringby}
                             onChange={handleChange}
-                            id="recurringby"     
-                          /> */}
-                          <FormControl
-                            style={{ maxWidth: 200, width: "100%" }}
-                            className="custom-form-control"
-                          >
-                            <Select
-                              id="recurringby"
-                              value={values.recurringby}
-                              onChange={handleChangedays}
-                              style={{ fontSize: "13px", fontWeight: "300" }}
-                            >
-                              <MenuItem
-                                style={{ fontSize: "13px", fontWeight: "300" }}
-                                value={1}
-                              >
-                                weekly
-                              </MenuItem>
-                              <MenuItem
-                                style={{ fontSize: "13px", fontWeight: "300" }}
-                                value={2}
-                              >
-                                bi-weekly
-                              </MenuItem>
-                              <MenuItem
-                                style={{ fontSize: "13px", fontWeight: "300" }}
-                                value={3}
-                              >
-                                monthly
-                              </MenuItem>
-                            </Select>
-                          </FormControl>
+                            id="recurringby"
+                          />
                         </>
                       )}
                     </Box>
@@ -792,6 +780,7 @@ export const Booking: FC = () => {
                                 {res}
                               </Box>
                             ))}
+                      
                             {errorMsgMonth && (
                               <span
                                 style={{
@@ -857,7 +846,7 @@ export const Booking: FC = () => {
                                 {errorMsgweekly}
                               </span>
                             )}
-                            {console.log(errorMsgweekly,"errorMsgfrom file")}
+                            {console.log(errorMsgweekly, "errorMsgfrom file")}
                           </Box>
                         )}
 
@@ -900,6 +889,7 @@ export const Booking: FC = () => {
                                 {res.name.charAt(0)}
                               </Box>
                             ))}
+                         
                             {errorMsg && (
                               <span
                                 style={{
@@ -971,15 +961,16 @@ export const Booking: FC = () => {
                           minDate={new Date()}
                           format="MM/dd/yyyy"
                         />
-
-                        {errors.end_date_recurring && touched.end_date_recurring && (
-                          <span
-                            className={classes.errorColor}
-                            style={{ color: "red", display: "inline-block" }}
-                          >
-                            {errors.end_date_recurring}
-                          </span>
-                        )}
+                       
+                        {errors.end_date_recurring &&
+                          touched.end_date_recurring && (
+                            <span
+                              className={classes.errorColor}
+                              style={{ color: "red", display: "inline-block" }}
+                            >
+                              {errors.end_date_recurring}
+                            </span>
+                          )}
                       </GridItem>
                       <GridItem
                         xs="6"
@@ -1196,7 +1187,7 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                       id="activity"
                     />
-            
+
                     {errors.activity && touched.activity && (
                       <span
                         className={classes.errorColor}
@@ -1209,7 +1200,6 @@ export const Booking: FC = () => {
                         {errors.activity}
                       </span>
                     )}
-
                   </GridItem>
                   <GridItem
                     xs="12"

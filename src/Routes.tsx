@@ -21,7 +21,7 @@ export const AppRoutes = () => {
   return (
     <Switch>
       <Route path="/" exact={true} component={Activities} />
-      <Route path="/activitiesdetail/:id" exact={true} component={ActivitiesDetail} />
+      <Route path="/activitiesdetail/:id/:name" exact={true} component={ActivitiesDetail} />
       <Route path="/login" exact={true} component={Login} />
       <Route path="/resetpassword" exact={true} component={PasswordReset} />
       <PrivateRoute path="/admin" component={Admin} />

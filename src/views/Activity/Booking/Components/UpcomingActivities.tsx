@@ -292,10 +292,10 @@ const UpcomingActivities = ({
     confirmMessage: "Activity will be publish for good!",
   });
 
-  const handleEditActivity = (id: number, sdate: any,) => {
+  const handleEditActivity = (id: number, sdate: any) => {
     setActivityIdForEdit(id);
     setactivitystarttime(sdate);
-    setModalshow(true);  
+    setModalshow(true);
   };
 
   useEffect(() => {
@@ -323,7 +323,7 @@ const UpcomingActivities = ({
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
     }
-    if (successedit === false) {
+    if (successedit === false) {  
       revalidate();
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
@@ -526,12 +526,14 @@ const UpcomingActivities = ({
                             </BodyTableCell>
                             <BodyTableCell align="left">
                               {res.team || res.team_text}
+                              {!res.team && !res.team_text && "NA"}
                             </BodyTableCell>
                             <BodyTableCell align="left">
                               {res.location_name}
                             </BodyTableCell>
                             <BodyTableCell align="left">
                               {res.wardrobe_name}
+                              {res.wardrobe_name === "" && "NA"}
                             </BodyTableCell>
                             <BodyTableCell
                               className={`${res.activity_type === "Match" &&
@@ -539,6 +541,7 @@ const UpcomingActivities = ({
                               align="left"
                             >
                               {res.activity_type}
+                              {res.activity_type === "" && "NA"}
                             </BodyTableCell>
                             <BodyTableCell align="left">
                               <Button
@@ -551,7 +554,7 @@ const UpcomingActivities = ({
                                 onClick={() =>
                                   handleEditActivity(
                                     res.activity_id,
-                                    res.startTime,
+                                    res.startTime
                                   )
                                 }
                               >
@@ -583,6 +586,7 @@ const UpcomingActivities = ({
                               </BodyTableCell>
                               <BodyTableCell align="left">
                                 {res.away_team_text}
+                                {res.away_team_text === "" && "NA"}
                               </BodyTableCell>
                               <BodyTableCell
                                 align="left"
@@ -621,13 +625,17 @@ const UpcomingActivities = ({
                                 )}
                               </BodyTableCell>
                               <BodyTableCell align="left">
-                                {recuringValue.team} {recuringValue.team_text}
+                                {recuringValue.team || recuringValue.team_text}
+                                {!recuringValue.team &&
+                                  !recuringValue.team_text &&
+                                  "NA"}
                               </BodyTableCell>
                               <BodyTableCell align="left">
                                 {recuringValue.location_name}
                               </BodyTableCell>
                               <BodyTableCell align="left">
                                 {recuringValue.wardrobe_name}
+                                {recuringValue.wardrobe_name === "" && "NA"}
                               </BodyTableCell>
                               <BodyTableCell
                                 className={`${recuringValue.activity_type ===
@@ -635,6 +643,7 @@ const UpcomingActivities = ({
                                 align="left"
                               >
                                 {recuringValue.activity_type}
+                                {recuringValue.activity_type === "" && "NA"}
                               </BodyTableCell>
                               <BodyTableCell align="left">
                                 <Button
@@ -647,7 +656,7 @@ const UpcomingActivities = ({
                                   onClick={() =>
                                     handleEditActivity(
                                       recuringValue.activity_id,
-                                      recuringValue.startTime,
+                                      recuringValue.startTime
                                     )
                                   }
                                 >
@@ -683,6 +692,7 @@ const UpcomingActivities = ({
                                 </BodyTableCell>
                                 <BodyTableCell align="left">
                                   {recuringValue.away_team_text}
+                                  {recuringValue.away_team_text === "" && "NA"}
                                 </BodyTableCell>
                                 <BodyTableCell
                                   align="left"
@@ -723,7 +733,7 @@ const UpcomingActivities = ({
               </Button>
               <Button
                 color="danger"
-                style={{ maxWidth: "100%", display:"none" }}
+                style={{ maxWidth: "100%", display: "none" }}
                 onClick={publishedActivity}
               >
                 Published Selected Activities
