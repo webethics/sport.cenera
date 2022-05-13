@@ -704,67 +704,42 @@ export const Booking: FC = () => {
                         style={{ marginBottom: "15px" }}
                       >
                         {values.recurringby === 3 && (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              flexWrap: "wrap",
-                            }}
-                          >
-                            {dates.map((res: any) => (
-                              <Button
-                                style={{
-                                  color: "none",
-                                  background: "none",
-                                  margin: "0px",
-                                  width: "none",
-                                  padding: "0px",
-                                }}
-                                onClick={() => handledays2(res)}
-                              >
-                                <Box
+                          <>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                flexWrap: "wrap",
+                              }}
+                            >
+                              {dates.map((res: any) => (
+                                <Button
+                                  onClick={() => handledays2(res)}
                                   className={
                                     monthDates.some((elm) => elm === res)
-                                      ? "active_dates"
-                                      : ""
+                                      ? `${classes.dateButton} active_dates`
+                                      : classes.dateButton
                                   }
-                                  component="span"
-                                  sx={{
-                                    width: "32px",
-                                    height: "32px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    border: "1px solid #ddd",
-                                    margin: "5px",
-                                    borderRadius: "50%",
-                                    fontSize: "12px",
-                                    fontWeight: "400",
-                                    color: "#565656",
-                                    lineHeight: "0",
-                                    "&.active_dates": {
-                                      backgroundColor: "#00acc1",
-                                      color: "#fff",
-                                    },
-                                  }}
+                                  disableRipple
                                 >
                                   {res}
-                                </Box>
-                              </Button>
-                            ))}
-
-                            {errorMsgMonth && (
-                              <span
-                                style={{
-                                  color: "red",
-                                  marginLeft: "12px",
-                                  fontSize: "12px",
-                                }}
-                              >
-                                {errorMsgMonth}
-                              </span>
-                            )}
-                          </Box>
+                                </Button>
+                              ))}
+                            </Box>
+                            <Box>
+                              {errorMsgMonth && (
+                                <span
+                                  style={{
+                                    color: "red",
+                                    marginLeft: "12px",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  {errorMsgMonth}
+                                </span>
+                              )}
+                            </Box>
+                          </>
                         )}
                         {(values.recurringby === 1 ||
                           values.recurringby === 2) && (
@@ -778,44 +753,15 @@ export const Booking: FC = () => {
                             {weekdays.map((res) => (
                               //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
                               <Button
-                                style={{
-                                  color: "none",
-                                  background: "none",
-                                  margin: "0px",
-                                  width: "none",
-                                  padding: "0px",
-                                }}
                                 onClick={() => handledays1(res.name)}
+                                className={
+                                  week.some((elm) => elm === res.name)
+                                    ? `${classes.dateButton} active_dates`
+                                    : classes.dateButton
+                                }
+                                disableRipple
                               >
-                                <Box
-                                  className={
-                                    week.some((elm) => elm === res.name)
-                                      ? "active_day"
-                                      : ""
-                                  }
-                                  component="span"
-                                  sx={{
-                                    width: "32px",
-                                    height: "32px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    border: "1px solid #ddd",
-                                    margin: "5px",
-                                    borderRadius: "50%",
-                                    fontSize: "12px",
-                                    fontWeight: "400",
-                                    color: "#565656",
-                                    lineHeight: "0",
-
-                                    "&.active_day": {
-                                      backgroundColor: "#00acc1",
-                                      color: "#fff",
-                                    },
-                                  }}
-                                >
-                                  {res.name.charAt(0)}
-                                </Box>
+                                {res.name.charAt(0)}
                               </Button>
                             ))}
                             {(errorMsgweekly || errorMsg) && (

@@ -81,7 +81,7 @@ export const styles = (theme: Theme) => ({
   fileInput: {
     display: "none",
   },
-  
+
   // Mui-selected: {
   //   background-color: #fff,
   // },
@@ -94,6 +94,50 @@ export const styles = (theme: Theme) => ({
   recuring_custom_check: {
     "& MuiTypography-root": {
       fontSize: "12px",
+    },
+  },
+
+  dateButton: {
+    // color: "none",
+    background: "none",
+    // margin: "0px",
+    padding: "0px",
+    boxShadow: "none",
+    // borderRadius: "100%",
+
+    width: "32px",
+    height: "32px",
+    display: "block",
+    alignItems: "center",
+    justifyContent: "center",
+    border: "1px solid #ddd",
+    margin: "5px",
+    borderRadius: "50%",
+    fontSize: "12px",
+    fontWeight: "400",
+    color: "#565656",
+    lineHeight: "0",
+
+    "&:focus": {
+      boxShadow: "0 5px 10px -5px #9e9e9e",
+      background: "#cfcfcf",
+      color: "#3c4858",
+    },
+    "&:hover": {
+      boxShadow: "0 5px 10px -5px #9e9e9e",
+      color: "#3c4858",
+      background: "#cfcfcf",
+    },
+    "&.Mui-focuVisible": {
+      boxShadow: "0 5px 10px -5px #9e9e9e",
+      background: "#cfcfcf",
+      color: "#3c4858",
+    },
+    "&.active_dates": {
+      boxShadow: "0 5px 10px -5px #9e9e9e",
+      borderColor: "#00acc1",
+      backgroundColor: "#00acc1",
+      color: "#fff",
     },
   },
 });

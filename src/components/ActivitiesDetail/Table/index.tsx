@@ -229,7 +229,7 @@ export default function CustomizedTables({
                       </StyledTableCell>
                     </TableRow>
                     <TableRow className={classes.customeTableRow}>
-                      <StyledTableCell>Start Time</StyledTableCell>
+                      <StyledTableCell align="left">Start Time</StyledTableCell>
                       <StyledTableCell align="left">End Time</StyledTableCell>
                       <StyledTableCell align="left">Duration</StyledTableCell>
 
