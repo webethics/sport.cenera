@@ -209,16 +209,14 @@ export const Booking: FC = () => {
         .min(1, "Location is required")
         .required("Location is required"),
 
-      // recurring: Yup.string().default(0),
-      // end_date_recurring: Yup.date().when("recurring", {
-      //   is: (recurring) => {
-      //     return !!recurring ? 1 : 0;
-      //   },
-      //   then: Yup.date().min(
-      //     Yup.ref("start_date"),
-      //     "Recuring End date has to be more than start date"
-      //   ),
-      // }),
+      recurring: Yup.number(),
+      end_date_recurring: Yup.date().when("recurring", {
+        is: 1,
+        then: Yup.date().min(
+          Yup.ref("start_date"),
+          "Recuring End date has to be more than start date"
+        ),
+      }),
     }),
 
     onSubmit: async (formValues) => {
