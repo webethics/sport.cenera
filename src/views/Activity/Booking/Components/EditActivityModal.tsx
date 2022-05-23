@@ -218,16 +218,16 @@ export default function EditActivityModal(props: any) {
         .min(1, "Location is Required")
         .required("Location is Required"),
 
-      recurring: Yup.string().default(0),
-      end_date_recurring: Yup.date().when("recurring", {
-        is: (recurring) => {
-          return !!recurring ? 1 : 0;
-        },
-        then: Yup.date().min(
-          Yup.ref("start_date"),
-          "Recuring End date has to be more than start date"
-        ),
-      }),
+      // recurring: Yup.string().default(0),
+      // end_date_recurring: Yup.date().when("recurring", {
+      //   is: (recurring) => {
+      //     return !!recurring ? 1 : 0;
+      //   },
+      //   then: Yup.date().min(
+      //     Yup.ref("start_date"),
+      //     "Recuring End date has to be more than start date"
+      //   ),
+      // }),
     }),
 
     onSubmit: async (formValues) => {
