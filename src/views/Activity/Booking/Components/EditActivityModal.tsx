@@ -218,11 +218,16 @@ export default function EditActivityModal(props: any) {
         .min(1, "Location is Required")
         .required("Location is Required"),
 
-      start_date: Yup.date(),
-      end_date_recurring: Yup.date().min(
-        Yup.ref("start_date"),
-        "Reccuring End date has to be more than start date"
-      ),
+      recurring: Yup.string().default(0),
+      end_date_recurring: Yup.date().when("recurring", {
+        is: (recurring) => {
+          return !!recurring ? 1 : 0;
+        },
+        then: Yup.date().min(
+          Yup.ref("start_date"),
+          "Recuring End date has to be more than start date"
+        ),
+      }),
     }),
 
     onSubmit: async (formValues) => {
@@ -819,7 +824,11 @@ export default function EditActivityModal(props: any) {
                     {errors.end_date_recurring && (
                       <span
                         className={classes.errorColor}
-                        style={{ color: "red", display: "inline-block" }}
+                        style={{
+                          color: "red",
+                          display: "inline-block",
+                          fontSize: "12px",
+                        }}
                       >
                         {errors.end_date_recurring}
                       </span>
