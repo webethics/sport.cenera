@@ -335,19 +335,7 @@ export const Booking: FC = () => {
     });
   }, [startTimefield, endTimefield]);
 
-  // useEffect(() => {
-  //   if (formik.values.activity === "Match") {
-  //     formik.setValues({
-  //       ...formik.values,
-  //       extWarBef30: true,
-  //     });
-  //   } else {
-  //     formik.setValues({
-  //       ...formik.values,
-  //       extWarBef30: false,
-  //     });
-  //   }
-  // }, [formik.values.activity]);
+
 
   const { values, handleChange, errors, touched } = formik;
 
