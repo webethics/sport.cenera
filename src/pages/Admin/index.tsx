@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import cx from "classnames";
 import { Switch, Route, Redirect } from "react-router-dom";
-// import PerfectScrollbar from "perfect-scrollbar";
+import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,7 +17,7 @@ import { adminRoutes } from "./routes";
 import styles from "./adminStyle";
 
 const useStyles = makeStyles(styles as any);
-// let ps: any;
+let ps: any;
 
 const AdminPage = (props: any) => {
   const { ...rest } = props;
@@ -52,31 +52,31 @@ const AdminPage = (props: any) => {
     setMiniActive(!miniActive);
   };
 
-  // const resizeFunction = () => {
-  //   if (window.innerWidth >= 960) {
-  //     setMobileOpen(false);
-  //   }
-  // };
+  const resizeFunction = () => {
+    if (window.innerWidth >= 960) {
+      setMobileOpen(false);
+    }
+  };
 
   // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
-  // React.useEffect(() => {
-  //   if (navigator.platform.indexOf("Win") > -1) {
-  //     ps = new PerfectScrollbar(mainPanel.current, {
-  //       suppressScrollX: true,
-  //       suppressScrollY: false,
-  //     });
-  //     document.body.style.overflow = "hidden";
-  //   }
-  //   window.addEventListener("resize", resizeFunction);
+  React.useEffect(() => {
+    if (navigator.platform.indexOf("Win") > -1) {
+      ps = new PerfectScrollbar(mainPanel.current, {
+        suppressScrollX: true,
+        suppressScrollY: false,
+      });
+      document.body.style.overflow = "hidden";
+    }
+    window.addEventListener("resize", resizeFunction);
 
-  //   // Specify how to clean up after this effect:
-  //   return function cleanup() {
-  //     if (navigator.platform.indexOf("Win") > -1) {
-  //       ps.destroy();
-  //     }
-  //     window.removeEventListener("resize", resizeFunction);
-  //   };
-  // });
+    // Specify how to clean up after this effect:
+    return function cleanup() {
+      if (navigator.platform.indexOf("Win") > -1) {
+        ps.destroy();
+      }
+      window.removeEventListener("resize", resizeFunction);
+    };
+  });
 
   const getRoutes = (routes: any) => {
     return routes.map((prop: any, key: any) => {
