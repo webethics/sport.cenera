@@ -9,8 +9,8 @@ const appStyle = (theme: any) => ({
   wrapper: {
     position: "relative",
     top: "0",
-    // height: "100vh",
-    height: "-webkit-fill-available",
+    height: "100vh",
+    overflow: "hidden",
     "&:after": {
       display: "table",
       clear: "both",
