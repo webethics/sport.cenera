@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import cx from 'classnames';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import PerfectScrollbar from 'perfect-scrollbar';
-import 'perfect-scrollbar/css/perfect-scrollbar.css';
+import React, { useState } from "react";
+import cx from "classnames";
+import { Switch, Route, Redirect } from "react-router-dom";
+// import PerfectScrollbar from "perfect-scrollbar";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 
-import { AdminNavbar } from '@cenera/components/NavBars/AdminNavbar';
-import { Footer } from '@cenera/components/Footer/Footer.js';
-import Sidebar from '@cenera/components/Sidebar/Sidebar.js';
-import { useAppContext  } from '@cenera/app-context'; // new for showing selected team name
-import { useGetTypes } from '@cenera/common/hooks/api-hooks/get-types';
-import { useFetchClub } from '@cenera/common/hooks';
-import { adminRoutes } from './routes';
+import { AdminNavbar } from "@cenera/components/NavBars/AdminNavbar";
+import { Footer } from "@cenera/components/Footer/Footer.js";
+import Sidebar from "@cenera/components/Sidebar/Sidebar.js";
+import { useAppContext } from "@cenera/app-context"; // new for showing selected team name
+import { useGetTypes } from "@cenera/common/hooks/api-hooks/get-types";
+import { useFetchClub } from "@cenera/common/hooks";
+import { adminRoutes } from "./routes";
 
-import styles from './adminStyle';
+import styles from "./adminStyle";
 
 const useStyles = makeStyles(styles as any);
-let ps: any;
+// let ps: any;
 
 const AdminPage = (props: any) => {
   const { ...rest } = props;
@@ -28,9 +28,6 @@ const AdminPage = (props: any) => {
   let routes = adminRoutes;
 
   const { club, loading: clubLoading } = useFetchClub(appState.user.club_id);
-  
-  
- 
 
   // Get app types (Sports Types, team types, user types)
   useGetTypes();
@@ -38,10 +35,11 @@ const AdminPage = (props: any) => {
   const classes = useStyles();
   const mainPanelClasses =
     classes.mainPanel +
-    ' ' +
+    " " +
     cx({
       [classes.mainPanelSidebarMini]: miniActive,
-      [classes.mainPanelWithPerfectScrollbar]: navigator.platform.indexOf('Win') > -1,
+      [classes.mainPanelWithPerfectScrollbar]:
+        navigator.platform.indexOf("Win") > -1,
     });
   // ref for main panel div
   const mainPanel = React.createRef<HTMLDivElement>();
@@ -54,39 +52,45 @@ const AdminPage = (props: any) => {
     setMiniActive(!miniActive);
   };
 
-  const resizeFunction = () => {
-    if (window.innerWidth >= 960) {
-      setMobileOpen(false);
-    }
-  };
+  // const resizeFunction = () => {
+  //   if (window.innerWidth >= 960) {
+  //     setMobileOpen(false);
+  //   }
+  // };
 
   // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
-  React.useEffect(() => {
-    if (navigator.platform.indexOf('Win') > -1) {
-      ps = new PerfectScrollbar(mainPanel.current, {
-        suppressScrollX: true,
-        suppressScrollY: false,
-      });
-      document.body.style.overflow = 'hidden';
-    }
-    window.addEventListener('resize', resizeFunction);
+  // React.useEffect(() => {
+  //   if (navigator.platform.indexOf("Win") > -1) {
+  //     ps = new PerfectScrollbar(mainPanel.current, {
+  //       suppressScrollX: true,
+  //       suppressScrollY: false,
+  //     });
+  //     document.body.style.overflow = "hidden";
+  //   }
+  //   window.addEventListener("resize", resizeFunction);
 
-    // Specify how to clean up after this effect:
-    return function cleanup() {
-      if (navigator.platform.indexOf('Win') > -1) {
-        ps.destroy();
-      }
-      window.removeEventListener('resize', resizeFunction);
-    };
-  });
+  //   // Specify how to clean up after this effect:
+  //   return function cleanup() {
+  //     if (navigator.platform.indexOf("Win") > -1) {
+  //       ps.destroy();
+  //     }
+  //     window.removeEventListener("resize", resizeFunction);
+  //   };
+  // });
 
   const getRoutes = (routes: any) => {
     return routes.map((prop: any, key: any) => {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
-      if (prop.layout === '/admin') {
-        return <Route path={prop.layout + prop.path} component={prop.component} key={key} />;
+      if (prop.layout === "/admin") {
+        return (
+          <Route
+            path={prop.layout + prop.path}
+            component={prop.component}
+            key={key}
+          />
+        );
       }
       return null;
     });
@@ -94,7 +98,7 @@ const AdminPage = (props: any) => {
 
   // Returns the active route name property
   const getActiveRoute = (routes: any): string => {
-    const activeRoute = 'Cenera Sports Web';
+    const activeRoute = "Cenera Sports Web";
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < routes.length; i += 1) {
       if (routes[i].collapse) {
@@ -103,7 +107,9 @@ const AdminPage = (props: any) => {
           return collapseActiveRoute;
         }
       } else {
-        if (window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1) {
+        if (
+          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
+        ) {
           return routes[i].name;
         }
       }
@@ -111,36 +117,27 @@ const AdminPage = (props: any) => {
     return activeRoute;
   };
 
-  if (appState.user.user_type === 'teamAdmin') {
-    routes = adminRoutes.filter(r => r.state !== 'userManagementCollapse');
+  if (appState.user.user_type === "teamAdmin") {
+    routes = adminRoutes.filter((r) => r.state !== "userManagementCollapse");
   }
-
-
 
   return (
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
-        logoText={'Cenera Sports'}
-        logo={require('@cenera/assets/images/logo.png')}
-        image={require('@cenera/assets/images/sidebar-2.jpg')}
+        logoText={"Cenera Sports"}
+        logo={require("@cenera/assets/images/logo.png")}
+        image={require("@cenera/assets/images/sidebar-2.jpg")}
         handleDrawerToggle={handleDrawerToggle}
         open={mobileOpen}
         color={`blue`}
         bgColor={`black`}
         miniActive={miniActive}
         userName={appState.user.user_login}
-        clubName={!clubLoading && club ? club.club_name : '...'}
+        clubName={!clubLoading && club ? club.club_name : "..."}
         teamName={appState.teamName && appState.teamName}
         {...rest}
       />
-
-
-  
-
-
-
-
 
       <div className={mainPanelClasses} ref={mainPanel}>
         <AdminNavbar
