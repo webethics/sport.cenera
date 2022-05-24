@@ -9,7 +9,7 @@ const appStyle = (theme: any) => ({
   wrapper: {
     position: "relative",
     top: "0",
-    height: "100vh",
+    maxHeight: "100vh",
     "&:after": {
       display: "table",
       clear: "both",
