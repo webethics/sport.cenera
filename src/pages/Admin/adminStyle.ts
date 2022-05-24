@@ -23,7 +23,7 @@ const appStyle = (theme: any) => ({
     [theme.breakpoints.up("md")]: {
       width: `calc(100% - ${drawerWidth}px)`,
     },
-    overflow: "auto",
+    overflow: "scroll",
     position: "relative",
     float: "right",
     ...transition,
