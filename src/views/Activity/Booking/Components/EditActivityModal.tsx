@@ -50,9 +50,13 @@ export default function EditActivityModal(props: any) {
   const [teamsList, setTeamsList] = useState([]);
   const { Wardrobesdata } = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
-  // const [acitivityList, setAcitivityList] = useState([]);
   const [activitylist, setactivitylist] = useState([]);
   const [startTimefield, handleStartTimefield] = useState(new Date());
+
+  // function addHoursToDate(date: Date, hours: number): Date {
+  //   return new Date(new Date(date).setHours(date.getHours() + hours));
+  // }
+
   const [endTimefield, handleEndTimefield] = useState(new Date());
   const [errorMsg, setErrorMsg] = useState("");
   const [errorMsgMonth, setErrorMsgMonth] = useState("");
@@ -155,7 +159,7 @@ export default function EditActivityModal(props: any) {
     warderobe: "0",
     extWarBef15: false,
     extWarBef30: false,
-    activity: "0",
+    activity: "2",
     description: "",
     away_team: "",
     away_team_wardrobe: "",
@@ -195,10 +199,10 @@ export default function EditActivityModal(props: any) {
         .min(1, "Activity is Required")
         .required("Activity is Required"),
 
-      end_date: Yup.date().min(
-        Yup.ref("start_date"),
-        "End date can't be before start date"
-      ),
+      // end_date: Yup.date().min(
+      //   Yup.ref("start_date"),
+      //   "End date can't be before start date"
+      // ),
 
       start_time: Yup.string().required(""),
       end_time: Yup.string()
@@ -342,18 +346,10 @@ export default function EditActivityModal(props: any) {
   }, [startTimefield, endTimefield]);
 
   // useEffect(() => {
-  //   if (formik.values.activity === "Match") {
-  //     formik.setValues({
-  //       ...formik.values,
-  //       extWarBef30: true,
-  //     });
-  //   } else {
-  //     formik.setValues({
-  //       ...formik.values,
-  //       extWarBef30: false,
-  //     });
+  //   if (startTimefield) {
+  //     handleEndTimefield(addHoursToDate(startTimefield, 1));
   //   }
-  // }, [formik.values.activity]);
+  // }, [startTimefield]);
 
   useEffect(() => {
     if (EditActivitydata[0]) {
@@ -553,9 +549,9 @@ export default function EditActivityModal(props: any) {
                   className="datepicker"
                   clearable
                   disablePast
-                  value={values.end_date}
+                  value={values.start_date}
                   placeholder="10/10/2018"
-                  onChange={(e) => handleDateChange("end_date", e)}
+                  onChange={(e) => handleDateChange("start_date", e)}
                   minDate={new Date()}
                   format="MM/dd/yyyy"
                 />

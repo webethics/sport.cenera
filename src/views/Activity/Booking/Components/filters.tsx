@@ -228,7 +228,7 @@ export default function Filters({
               value={filter}
               onChange={handleChange3}
             >
-              <MenuItem value={1}>Today </MenuItem>
+              <MenuItem value={0}>Today </MenuItem>
               <MenuItem value={3}>Next 3 days</MenuItem>
               <MenuItem value={7}>Next 7 days</MenuItem>
               <MenuItem value={30}>This Month</MenuItem>

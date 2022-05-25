@@ -95,7 +95,7 @@ const UpcomingActivities = ({
   const [deleteNonRecuring, setDeleteNonRecuring] = useState();
   var date = new Date();
   date.setDate(date.getDate() + filterdate);
-  const nextdate = moment(date).format("YYYY-MM-DDTHH:MM");
+  const nextdate = moment(date.setHours(24, 35, 1)).format("YYYY-MM-DDTHH:MM");
   const currentdate = moment(Date()).format("YYYY-MM-DDTHH:MM");
   const newobj = {
     access_token: appState.authentication.accessToken,
@@ -283,6 +283,7 @@ const UpcomingActivities = ({
       setdata(2);
     }
   }, [
+    filterActivity,
     revaldatestate,
     deleting,
     loading,
@@ -302,7 +303,6 @@ const UpcomingActivities = ({
       revalidate();
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
- 
     }
   }, [Activitydata, data, successedit]);
 
@@ -467,7 +467,7 @@ const UpcomingActivities = ({
                               : moment(res.startTime).format("DD-MM-YYYY")}
                           </StyledTableCell>
                         </TableRow>
-                        <TableRow className={classes.customeTableRow}>
+                        <TableRow className={`${classes.customeTableRow}`}>
                           <StyledTableCell>Start time</StyledTableCell>
                           <StyledTableCell align="left">
                             End Time
@@ -492,7 +492,10 @@ const UpcomingActivities = ({
                       </TableHead>
                       {!res.recuring && (
                         <TableBody className="bodyWithChildrenItems">
-                          <StyledTableRow>
+                          <StyledTableRow
+                            className={`${res.isPublic === false &&
+                              "notpublic"}`}
+                          >
                             <BodyTableCell scope="row">
                               {moment(res.startTime).format("HH:mm")}
                             </BodyTableCell>
@@ -621,7 +624,11 @@ const UpcomingActivities = ({
                       {res.recuring &&
                         res.recuring.map((recuringValue: any) => (
                           <TableBody className="bodyWithChildrenItems">
-                            <StyledTableRow>
+                            <StyledTableRow
+                              className={`${recuringValue.isPublic === false &&
+                                "notpublic"}`}
+                            >
+                              {console.log(recuringValue.isPublic, "ppp")}
                               <BodyTableCell scope="row">
                                 {moment(recuringValue.startTime).format(
                                   "HH:mm"

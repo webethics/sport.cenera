@@ -49,6 +49,11 @@ export const Booking: FC = () => {
   const { addActivity } = ActivityService;
   const [fetchupcoming, setFetchupcoming] = useState(0);
   const [startTimefield, handleStartTimefield] = useState(new Date());
+
+  function addHoursToDate(date: Date, hours: number): Date {
+    return new Date(new Date(date).setHours(date.getHours() + hours));
+  }
+
   const [endTimefield, handleEndTimefield] = useState(new Date());
   const [errorMsg, setErrorMsg] = useState("");
   const [errorMsgMonth, setErrorMsgMonth] = useState("");
@@ -145,12 +150,12 @@ export const Booking: FC = () => {
     warderobe: "0",
     extWarBef15: false,
     extWarBef30: false,
-    activity: "0",
+    activity: "2",
     description: "",
     away_team: "",
     away_team_wardrobe: "",
     referee_wardrobe: "",
-    show_public: true,
+    show_public: false,
     recurring: 0,
     recurringby: 1,
     end_date_recurring: selectedDate,
@@ -184,10 +189,10 @@ export const Booking: FC = () => {
         .min(1, "Activity is required")
         .required("Activity is required"),
 
-      end_date: Yup.date().min(
-        Yup.ref("start_date"),
-        "End date can't be before start date"
-      ),
+      // end_date: Yup.date().min(
+      //   Yup.ref("start_date"),
+      //   "End date can't be before start date"
+      // ),
       start_time: Yup.string().required(
         "Start time could not be equal to end time"
       ),
@@ -330,12 +335,17 @@ export const Booking: FC = () => {
   useEffect(() => {
     formik.setValues({
       ...formik.values,
-      start_time: moment(startTimefield).format("HH:mm"), //if time change it will update formik
+      start_time: moment(startTimefield).format("HH:mm"),
       end_time: moment(endTimefield).format("HH:mm"),
     });
   }, [startTimefield, endTimefield]);
+  useEffect(() => {
+    if (startTimefield) {
+      handleEndTimefield(addHoursToDate(startTimefield, 1));
+    }
+  }, [startTimefield]);
 
-
+  //moment(startTime, 'HH:mm:ss').add(durationInMinutes, 'minutes').format('HH:mm');
 
   const { values, handleChange, errors, touched } = formik;
 
@@ -523,9 +533,9 @@ export const Booking: FC = () => {
                       className="datepicker"
                       clearable
                       disablePast
-                      value={values.end_date}
+                      value={values.start_date}
                       placeholder="10/10/2018"
-                      onChange={(e) => handleDateChange("end_date", e)}
+                      onChange={(e) => handleDateChange("start_date", e)}
                       minDate={new Date()}
                       format="MM/dd/yyyy"
                     />

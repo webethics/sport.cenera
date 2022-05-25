@@ -19,7 +19,7 @@ export default function ActivitiesDetail() {
   const [filterdate, setFilterdate] = useState(7);
   var date = new Date();
   date.setDate(date.getDate() + filterdate);
-  const nextdate = moment(date).format("YYYY-MM-DDTHH:MM");
+  const nextdate = moment(date.setHours(24, 35, 1)).format("YYYY-MM-DDTHH:MM");
   const currentdate = moment(Date()).format("YYYY-MM-DDTHH:MM");
 
   const [searchtext, setSearchtext] = useState("");
@@ -50,8 +50,6 @@ export default function ActivitiesDetail() {
       setActivityList(acitivityData);
     }
   }, [acitivityData, loading, revalidate, error, searchtext]);
-
-
 
   return (
     <>
