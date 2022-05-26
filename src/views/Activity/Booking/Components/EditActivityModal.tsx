@@ -51,18 +51,19 @@ export default function EditActivityModal(props: any) {
   const { Wardrobesdata } = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
   const [activitylist, setactivitylist] = useState([]);
-  const [startTimefield, handleStartTimefield] = useState<any>(new Date());
 
-  // function addHoursToDate(date: Date, hours: number): Date {
-  //   return new Date(new Date(date).setHours(date.getHours() + hours));
-  // }
+  const [startTimefield, handleStartTimefield] = useState(new Date());
+  const [endTimefield, handleEndTimefield] = useState(new Date());
 
-  const [endTimefield, handleEndTimefield] = useState<any>(new Date());
   const [errorMsg, setErrorMsg] = useState("");
   const [errorMsgMonth, setErrorMsgMonth] = useState("");
   const [errorMsgweekly, setErrorMsgweekly] = useState("");
 
   const { activityType } = useFetchActivityType();
+  // function addHoursToDate(date: Date, hours: number): Date {
+  //   return new Date(new Date(date).setHours(date.getHours() + hours));
+  // }
+
   //Recurring
   const recurring = [
     { name: "Yes", id: 1 },
@@ -354,13 +355,13 @@ export default function EditActivityModal(props: any) {
   useEffect(() => {
     if (EditActivitydata[0]) {
       const start = new Date(EditActivitydata[0].startTime);
-      const end = new Date(EditActivitydata[0].endTime);
+      // const end = new Date(EditActivitydata[0].endTime);
 
       handleStartTimefield(start);
-      handleEndTimefield(end);
-      // console.log(start, "start");
-      // const standard = new Date();
-      // console.log(standard, "standard");
+      // handleEndTimefield(end);
+      console.log(typeof start, "start");
+      const standard = new Date();
+      console.log(typeof standard, "standard");
       const starttime = EditActivitydata[0].startTime;
       const mstarttime = moment(starttime).format("HH:mm");
       const endtime = EditActivitydata[0].endTime;
