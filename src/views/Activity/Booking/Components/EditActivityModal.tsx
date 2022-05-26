@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 // import axios from "axios"
 import {
   Modal,
@@ -31,6 +31,7 @@ import { useFetchActivityType } from "@cenera/common/hooks/api-hooks/activity";
 import "rc-time-picker/assets/index.css";
 
 import Box from "@mui/material/Box";
+
 import { KeyboardTimePicker } from "@material-ui/pickers";
 const useStyles = makeStyles(styles as any);
 
@@ -57,7 +58,9 @@ export default function EditActivityModal(props: any) {
   //   return new Date(new Date(date).setHours(date.getHours() + hours));
   // }
 
-  const [endTimefield, handleEndTimefield] = useState(null);
+  const [endTimefield, handleEndTimefield] = useState<any>(
+    "2018-01-01 23:15:00"
+  );
   const [errorMsg, setErrorMsg] = useState("");
   const [errorMsgMonth, setErrorMsgMonth] = useState("");
   const [errorMsgweekly, setErrorMsgweekly] = useState("");
@@ -597,13 +600,15 @@ export default function EditActivityModal(props: any) {
                     showSecond={false}
                     onChange={handleValueChangeend}
                   /> */}
-                  <KeyboardTimePicker
-                    ampm={false}
-                    variant="inline"
-                    value={endTimefield}
-                    onChange={handleEndTimefield}
-                    // format="HH:MM"
-                  />
+                  <Fragment>
+                    <KeyboardTimePicker
+                      ampm={false}
+                      variant="inline"
+                      value={endTimefield}
+                      onChange={handleEndTimefield}
+                      // format="HH:MM"
+                    />
+                  </Fragment>
                 </Box>
                 {errors.end_time && touched.end_time && (
                   <span
