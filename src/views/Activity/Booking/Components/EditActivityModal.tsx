@@ -151,7 +151,7 @@ export default function EditActivityModal(props: any) {
   const initialFormValues = {
     team: "0",
     orTeam: "",
-    start_date: selectedDate,
+    start_date: "",
     start_time: "",
     end_date: selectedDate,
     end_time: "",
@@ -392,7 +392,9 @@ export default function EditActivityModal(props: any) {
           away_team: EditActivitydata[0].away_team_text,
           away_team_wardrobe: EditActivitydata[0].wardrobe_id_away,
           referee_wardrobe: EditActivitydata[0].wardrobe_id_referee,
-          start_date: EditActivitydata[0] && EditActivitydata[0].startTime,
+          start_date: moment(EditActivitydata[0].startTime).format(
+            "MM/DD/YYYY"
+          ),
           end_date: EditActivitydata[0] && EditActivitydata[0].endTime,
           start_time: mstarttime,
           end_time: mendtime,
@@ -410,7 +412,13 @@ export default function EditActivityModal(props: any) {
       }
     }
   }, [EditActivitydata]);
-  console.log(EditActivitydata[0], "current user");
+  if (EditActivitydata[0] && EditActivitydata[0]) {
+    console.log(
+      moment(EditActivitydata[0].startTime).format("MM/DD/YYYY"),
+      "current123456789 user"
+    );
+  }
+
   const { values, handleChange, errors, touched } = formik;
 
   return (
