@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import axios from "axios"
 import {
   Modal,
@@ -31,7 +31,6 @@ import { useFetchActivityType } from "@cenera/common/hooks/api-hooks/activity";
 import "rc-time-picker/assets/index.css";
 
 import Box from "@mui/material/Box";
-
 import { KeyboardTimePicker } from "@material-ui/pickers";
 const useStyles = makeStyles(styles as any);
 
@@ -52,15 +51,13 @@ export default function EditActivityModal(props: any) {
   const { Wardrobesdata } = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
   const [activitylist, setactivitylist] = useState([]);
-  const [startTimefield, handleStartTimefield] = useState(null);
+  const [startTimefield, handleStartTimefield] = useState<any>(new Date());
 
   // function addHoursToDate(date: Date, hours: number): Date {
   //   return new Date(new Date(date).setHours(date.getHours() + hours));
   // }
 
-  const [endTimefield, handleEndTimefield] = useState<any>(
-    "2018-01-01 23:15:00"
-  );
+  const [endTimefield, handleEndTimefield] = useState<any>(new Date());
   const [errorMsg, setErrorMsg] = useState("");
   const [errorMsgMonth, setErrorMsgMonth] = useState("");
   const [errorMsgweekly, setErrorMsgweekly] = useState("");
@@ -357,9 +354,9 @@ export default function EditActivityModal(props: any) {
   useEffect(() => {
     if (EditActivitydata[0]) {
       handleStartTimefield(EditActivitydata[0].startTime.toString());
-      // handleStartTimefield("2018-01-01 22:12:00");
       // handleEndTimefield(EditActivitydata[0].endTime);
-      handleEndTimefield("2018-01-01 23:12:00");
+
+      // handleEndTimefield("2018-01-01 23:12:00");
       // const starttime = EditActivitydata[0].startTime;
       // const mstarttime = moment(starttime).format("HH:mm");
       // const endtime = EditActivitydata[0].endTime;
@@ -529,7 +526,6 @@ export default function EditActivityModal(props: any) {
                   <KeyboardTimePicker
                     ampm={false}
                     variant="inline"
-                    label="With keyboard"
                     value={startTimefield}
                     onChange={handleStartTimefield}
                   />
@@ -600,15 +596,12 @@ export default function EditActivityModal(props: any) {
                     showSecond={false}
                     onChange={handleValueChangeend}
                   /> */}
-                  <Fragment>
-                    <KeyboardTimePicker
-                      ampm={false}
-                      variant="inline"
-                      value={endTimefield}
-                      onChange={handleEndTimefield}
-                      // format="HH:MM"
-                    />
-                  </Fragment>
+                  <KeyboardTimePicker
+                    ampm={false}
+                    variant="inline"
+                    value={endTimefield}
+                    onChange={handleEndTimefield}
+                  />
                 </Box>
                 {errors.end_time && touched.end_time && (
                   <span
