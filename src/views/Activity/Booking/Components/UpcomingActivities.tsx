@@ -278,7 +278,7 @@ const UpcomingActivities = ({
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
     }
-    if (fetchupcomingactivity && fetchupcomingactivity == 1 && Activitydata) {
+    if (fetchupcomingactivity && fetchupcomingactivity && Activitydata) {
       revalidate();
       setdata(2);
     }

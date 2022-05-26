@@ -31,10 +31,15 @@ import { KeyboardDatePicker } from "@material-ui/pickers";
 const useStyles = makeStyles(styles as any);
 
 export const Booking: FC = () => {
+  const random = Math.floor(Math.random() * 100 + 1);
+  const round = Math.round(random);
+  const number = round;
+
   const [week, setweek] = useState([]);
   const [monthDates, setMonthDates] = useState([]);
   const [appState] = useAppContext();
   const classes = useStyles();
+
   const [selectedDate, SetselectedDate] = useState(new Date());
 
   const [activitylist, setactivitylist] = useState([]);
@@ -47,7 +52,7 @@ export const Booking: FC = () => {
   const { Wardrobesdata } = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
   const { addActivity } = ActivityService;
-  const [fetchupcoming, setFetchupcoming] = useState(0);
+  // const [fetchupcoming, setFetchupcoming] = useState(0);
   const [startTimefield, handleStartTimefield] = useState(new Date());
 
   function addHoursToDate(date: Date, hours: number): Date {
@@ -293,7 +298,7 @@ export const Booking: FC = () => {
             enqueueSnackbar("Activity Added Successfully", {
               variant: "success",
             });
-            setFetchupcoming(1);
+            // setFetchupcoming(1);
           }
         } catch (err) {
           enqueueSnackbar("Failed to Add Activity", { variant: "error" });
@@ -838,19 +843,18 @@ export const Booking: FC = () => {
                           format="MM/dd/yyyy"
                         />
 
-                        {errors.end_date_recurring &&
-                          touched.end_date_recurring && (
-                            <span
-                              className={classes.errorColor}
-                              style={{
-                                color: "red",
-                                display: "inline-block",
-                                fontSize: "12px",
-                              }}
-                            >
-                              {errors.end_date_recurring}
-                            </span>
-                          )}
+                        {errors.end_date_recurring && (
+                          <span
+                            className={classes.errorColor}
+                            style={{
+                              color: "red",
+                              display: "inline-block",
+                              fontSize: "12px",
+                            }}
+                          >
+                            {errors.end_date_recurring}
+                          </span>
+                        )}
                       </GridItem>
                       <GridItem
                         xs="6"
@@ -1260,7 +1264,7 @@ export const Booking: FC = () => {
 
       <GridContainer>
         <GridItem xs={11} sm={11} md={11} xl={8} className={classes.container}>
-          <UpcomingActivities fetchupcomingactivity={fetchupcoming} />
+          <UpcomingActivities fetchupcomingactivity={number} />
         </GridItem>
       </GridContainer>
 
