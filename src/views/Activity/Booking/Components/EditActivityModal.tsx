@@ -381,6 +381,7 @@ export default function EditActivityModal(props: any) {
             newActivity = res.id;
           }
         });
+
         formik.setValues({
           ...formik.values,
           warderobe: EditActivitydata[0].wardrobe_id,
@@ -391,8 +392,8 @@ export default function EditActivityModal(props: any) {
           away_team: EditActivitydata[0].away_team_text,
           away_team_wardrobe: EditActivitydata[0].wardrobe_id_away,
           referee_wardrobe: EditActivitydata[0].wardrobe_id_referee,
-          start_date: EditActivitydata[0].startTime,
-          end_date: EditActivitydata[0].endTime,
+          start_date: EditActivitydata[0] && EditActivitydata[0].startTime,
+          end_date: EditActivitydata[0] && EditActivitydata[0].endTime,
           start_time: mstarttime,
           end_time: mendtime,
           extWarBef15: EditActivitydata[0].wardrobe_extra_time == 15 && true,
@@ -409,7 +410,7 @@ export default function EditActivityModal(props: any) {
       }
     }
   }, [EditActivitydata]);
-
+  console.log(EditActivitydata[0], "current user");
   const { values, handleChange, errors, touched } = formik;
 
   return (
