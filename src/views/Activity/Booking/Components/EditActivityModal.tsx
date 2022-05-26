@@ -355,13 +355,11 @@ export default function EditActivityModal(props: any) {
   useEffect(() => {
     if (EditActivitydata[0]) {
       const start = new Date(EditActivitydata[0].startTime);
-      // const end = new Date(EditActivitydata[0].endTime);
+      const end = new Date(EditActivitydata[0].endTime);
 
       handleStartTimefield(start);
-      // handleEndTimefield(end);
-      console.log(typeof start, "start");
-      const standard = new Date();
-      console.log(typeof standard, "standard");
+      handleEndTimefield(end);
+
       const starttime = EditActivitydata[0].startTime;
       const mstarttime = moment(starttime).format("HH:mm");
       const endtime = EditActivitydata[0].endTime;
@@ -422,6 +420,7 @@ export default function EditActivityModal(props: any) {
   // if (EditActivitydata[0] && EditActivitydata[0]) {
   //   console.log(EditActivitydata[0].startTime, "current123456789 user");
   // }
+  // console.log(startTimefield, "convertedddddd");
 
   const { values, handleChange, errors, touched } = formik;
 
