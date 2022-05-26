@@ -353,14 +353,16 @@ export default function EditActivityModal(props: any) {
 
   useEffect(() => {
     if (EditActivitydata[0]) {
-      handleStartTimefield(EditActivitydata[0].startTime.toString());
-      // handleEndTimefield(EditActivitydata[0].endTime);
+      const start = new Date(EditActivitydata[0].startTime).toUTCString();
+      const end = new Date(EditActivitydata[0].endTime).toUTCString();
+      handleStartTimefield(start);
+      handleEndTimefield(end);
 
       // handleEndTimefield("2018-01-01 23:12:00");
-      // const starttime = EditActivitydata[0].startTime;
-      // const mstarttime = moment(starttime).format("HH:mm");
-      // const endtime = EditActivitydata[0].endTime;
-      // const mendtime = moment(endtime).format("HH:mm");
+      const starttime = EditActivitydata[0].startTime;
+      const mstarttime = moment(starttime).format("HH:mm");
+      const endtime = EditActivitydata[0].endTime;
+      const mendtime = moment(endtime).format("HH:mm");
       let newActivity: any = 0;
 
       weekdays.forEach((res) => {
@@ -397,8 +399,8 @@ export default function EditActivityModal(props: any) {
             "MM/DD/YYYY"
           ),
           end_date: EditActivitydata[0] && EditActivitydata[0].endTime,
-          // start_time: mstarttime,
-          // end_time: mendtime,
+          start_time: mstarttime,
+          end_time: mendtime,
           extWarBef15: EditActivitydata[0].wardrobe_extra_time == 15 && true,
           extWarBef30: EditActivitydata[0].wardrobe_extra_time == 30 && true,
           recurring: EditActivitydata[0].recurring_item == true ? 1 : 0,
