@@ -353,6 +353,10 @@ export default function EditActivityModal(props: any) {
 
   useEffect(() => {
     if (EditActivitydata[0]) {
+      handleStartTimefield(EditActivitydata[0].startTime.toString());
+      // handleStartTimefield("2018-01-01 22:12:00");
+      // handleEndTimefield(EditActivitydata[0].endTime);
+      handleEndTimefield("2018-01-01 23:12:00");
       // const starttime = EditActivitydata[0].startTime;
       // const mstarttime = moment(starttime).format("HH:mm");
       // const endtime = EditActivitydata[0].endTime;
@@ -371,10 +375,6 @@ export default function EditActivityModal(props: any) {
       selectedDate.forEach((date: number) => {
         setMonthDates((prev) => [...prev, Number(date)]);
       });
-
-      handleStartTimefield(EditActivitydata[0].startTime);
-
-      handleEndTimefield(EditActivitydata[0].endTime);
 
       if (EditActivitydata && EditActivitydata[0]) {
         activitylist.forEach((res) => {
@@ -413,9 +413,9 @@ export default function EditActivityModal(props: any) {
       }
     }
   }, [EditActivitydata]);
-  // if (EditActivitydata[0] && EditActivitydata[0]) {
-  //   console.log(EditActivitydata[0].startTime, "current123456789 user");
-  // }
+  if (EditActivitydata[0] && EditActivitydata[0]) {
+    console.log(EditActivitydata[0].startTime, "current123456789 user");
+  }
 
   const { values, handleChange, errors, touched } = formik;
 
@@ -522,12 +522,13 @@ export default function EditActivityModal(props: any) {
                     showSecond={false}
                     onChange={handleValueChange}
                   /> */}
+
                   <KeyboardTimePicker
                     ampm={false}
                     variant="inline"
+                    label="With keyboard"
                     value={startTimefield}
                     onChange={handleStartTimefield}
-                    // format="HH:MM"
                   />
                 </Box>
                 {errors.start_time && (
