@@ -353,10 +353,10 @@ export default function EditActivityModal(props: any) {
 
   useEffect(() => {
     if (EditActivitydata[0]) {
-      const starttime = EditActivitydata[0].startTime;
-      const mstarttime = moment(starttime).format("HH:mm");
-      const endtime = EditActivitydata[0].endTime;
-      const mendtime = moment(endtime).format("HH:mm");
+      // const starttime = EditActivitydata[0].startTime;
+      // const mstarttime = moment(starttime).format("HH:mm");
+      // const endtime = EditActivitydata[0].endTime;
+      // const mendtime = moment(endtime).format("HH:mm");
       let newActivity: any = 0;
 
       weekdays.forEach((res) => {
@@ -397,8 +397,8 @@ export default function EditActivityModal(props: any) {
             "MM/DD/YYYY"
           ),
           end_date: EditActivitydata[0] && EditActivitydata[0].endTime,
-          start_time: mstarttime,
-          end_time: mendtime,
+          // start_time: mstarttime,
+          // end_time: mendtime,
           extWarBef15: EditActivitydata[0].wardrobe_extra_time == 15 && true,
           extWarBef30: EditActivitydata[0].wardrobe_extra_time == 30 && true,
           recurring: EditActivitydata[0].recurring_item == true ? 1 : 0,
@@ -413,12 +413,9 @@ export default function EditActivityModal(props: any) {
       }
     }
   }, [EditActivitydata]);
-  if (EditActivitydata[0] && EditActivitydata[0]) {
-    console.log(
-      typeof moment(EditActivitydata[0].startTime).format("HH:mm"),
-      "current123456789 user"
-    );
-  }
+  // if (EditActivitydata[0] && EditActivitydata[0]) {
+  //   console.log(EditActivitydata[0].startTime, "current123456789 user");
+  // }
 
   const { values, handleChange, errors, touched } = formik;
 
