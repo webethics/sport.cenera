@@ -51,13 +51,13 @@ export default function EditActivityModal(props: any) {
   const { Wardrobesdata } = useFetchWardrobes();
   const [wardrobes, setWardrobes] = useState([]);
   const [activitylist, setactivitylist] = useState([]);
-  const [startTimefield, handleStartTimefield] = useState(new Date());
+  const [startTimefield, handleStartTimefield] = useState(null);
 
   // function addHoursToDate(date: Date, hours: number): Date {
   //   return new Date(new Date(date).setHours(date.getHours() + hours));
   // }
 
-  const [endTimefield, handleEndTimefield] = useState(new Date());
+  const [endTimefield, handleEndTimefield] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [errorMsgMonth, setErrorMsgMonth] = useState("");
   const [errorMsgweekly, setErrorMsgweekly] = useState("");
@@ -373,6 +373,7 @@ export default function EditActivityModal(props: any) {
       });
 
       handleStartTimefield(EditActivitydata[0].startTime);
+
       handleEndTimefield(EditActivitydata[0].endTime);
 
       if (EditActivitydata && EditActivitydata[0]) {
@@ -414,7 +415,7 @@ export default function EditActivityModal(props: any) {
   }, [EditActivitydata]);
   if (EditActivitydata[0] && EditActivitydata[0]) {
     console.log(
-      moment(EditActivitydata[0].startTime).format("MM/DD/YYYY"),
+      typeof moment(EditActivitydata[0].startTime).format("HH:mm"),
       "current123456789 user"
     );
   }
@@ -529,6 +530,7 @@ export default function EditActivityModal(props: any) {
                     variant="inline"
                     value={startTimefield}
                     onChange={handleStartTimefield}
+                    // format="HH:MM"
                   />
                 </Box>
                 {errors.start_time && (
@@ -602,6 +604,7 @@ export default function EditActivityModal(props: any) {
                     variant="inline"
                     value={endTimefield}
                     onChange={handleEndTimefield}
+                    // format="HH:MM"
                   />
                 </Box>
                 {errors.end_time && touched.end_time && (
