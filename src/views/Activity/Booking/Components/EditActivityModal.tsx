@@ -354,8 +354,6 @@ export default function EditActivityModal(props: any) {
 
   useEffect(() => {
     if (EditActivitydata[0]) {
-      // const startdate = EditActivitydata[0].startTime;
-
       handleStartTimefield(
         moment(EditActivitydata[0].startTime, "YYYY-MM-DDTHH:mm:ss.SSS")
           // .format()
@@ -364,8 +362,12 @@ export default function EditActivityModal(props: any) {
       // const start =  {moment(startdate).format("Do")}
       // const end = new Date(EditActivitydata[0].endTime.toString());
 
-      const end = new Date(EditActivitydata[0].endTime.toString());
-      handleEndTimefield(end);
+      // const end = new Date(EditActivitydata[0].endTime.toString());
+      handleEndTimefield(
+        moment(EditActivitydata[0].endTime, "YYYY-MM-DDTHH:mm:ss.SSS")
+          // .format()
+          .toDate()
+      );
 
       const starttime = EditActivitydata[0].startTime;
       const mstarttime = moment(starttime).format("HH:mm");
@@ -427,7 +429,7 @@ export default function EditActivityModal(props: any) {
   // if (EditActivitydata[0] && EditActivitydata[0]) {
   //   console.log(typeof EditActivitydata[0].startTime, "current123456789 user");
   // }
-  console.log(startTimefield, "convertedddddd");
+  // console.log(startTimefield, "convertedddddd");
 
   const { values, handleChange, errors, touched } = formik;
 
