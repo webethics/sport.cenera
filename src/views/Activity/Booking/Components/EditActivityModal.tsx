@@ -52,10 +52,8 @@ export default function EditActivityModal(props: any) {
   const [wardrobes, setWardrobes] = useState([]);
   const [activitylist, setactivitylist] = useState([]);
 
-  const [startTimefield, handleStartTimefield] = useState(new Date());
-  const [endTimefield, handleEndTimefield] = useState(
-    new Date("2022-05-31 14:15 ")
-  );
+  const [startTimefield, handleStartTimefield] = useState<any>(new Date());
+  const [endTimefield, handleEndTimefield] = useState(new Date());
 
   const [errorMsg, setErrorMsg] = useState("");
   const [errorMsgMonth, setErrorMsgMonth] = useState("");
@@ -356,11 +354,18 @@ export default function EditActivityModal(props: any) {
 
   useEffect(() => {
     if (EditActivitydata[0]) {
-      const start = new Date(EditActivitydata[0].startTime.toString());
+      // const startdate = EditActivitydata[0].startTime;
+
+      handleStartTimefield(
+        moment(EditActivitydata[0].startTime, "YYYY-MM-DDTHH:mm:ss.SSS")
+          // .format()
+          .toDate()
+      );
+      // const start =  {moment(startdate).format("Do")}
       // const end = new Date(EditActivitydata[0].endTime.toString());
 
-      handleStartTimefield(start);
-      // handleEndTimefield(end);
+      const end = new Date(EditActivitydata[0].endTime.toString());
+      handleEndTimefield(end);
 
       const starttime = EditActivitydata[0].startTime;
       const mstarttime = moment(starttime).format("HH:mm");
@@ -419,9 +424,9 @@ export default function EditActivityModal(props: any) {
     }
   }, [EditActivitydata]);
 
-  if (EditActivitydata[0] && EditActivitydata[0]) {
-    console.log(typeof EditActivitydata[0].startTime, "current123456789 user");
-  }
+  // if (EditActivitydata[0] && EditActivitydata[0]) {
+  //   console.log(typeof EditActivitydata[0].startTime, "current123456789 user");
+  // }
   console.log(startTimefield, "convertedddddd");
 
   const { values, handleChange, errors, touched } = formik;
