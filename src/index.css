@@ -73,6 +73,15 @@ body .MuiOutlinedInput-input {
 .notpublic {
   background: lightgray !important;
 }
+
+.table-layout-fixed {
+  table-layout: fixed;
+}
+.table-layout-fixed th,
+.table-layout-fixed td {
+  white-space: normal;
+}
+
 @media screen and (max-width: 600px) {
   .custom-form-control {
     max-width: 100% !important;

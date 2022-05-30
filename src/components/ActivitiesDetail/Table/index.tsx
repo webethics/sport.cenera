@@ -217,7 +217,10 @@ export default function CustomizedTables({
               className={`${classes.tableContainer}`}
             >
               {newactivity.slice(0, numberofpage).map((res: any) => (
-                <Table className={classes.table} aria-label="customized table">
+                <Table
+                  className={`${classes.table} table-layout-fixed`}
+                  aria-label="customized table "
+                >
                   <TableHead>
                     <TableRow>
                       <StyledTableCell colSpan={7}>

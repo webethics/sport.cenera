@@ -76,7 +76,7 @@ const UpcomingActivities = ({
   const enddateofmonth = moment()
     .endOf("month")
     .format("YYYY-MM-DDT24:55");
-  console.log(enddateofmonth, "endmonth");
+
   const [filterdate, setFilterdate] = useState(7);
   console.log(endmonth, "filterenddate");
   const [successedit, setsuccessedit] = useState();
@@ -466,7 +466,7 @@ const UpcomingActivities = ({
                 {acitivityList &&
                   acitivityList.map((res: any) => (
                     <Table
-                      className={`${classes.table} upcoming-tables`}
+                      className={`${classes.table} upcoming-tables table-layout-fixed`}
                       aria-label="customized table"
                     >
                       <TableHead>
