@@ -230,7 +230,7 @@ export default function Filters({
             >
               <MenuItem value={0}>Today </MenuItem>
               <MenuItem value={2}>Next 3 days</MenuItem>
-              <MenuItem value={7}>Next 7 days</MenuItem>
+              <MenuItem value={6}>Next 7 days</MenuItem>
               <MenuItem value={30}>This Month</MenuItem>
               <MenuItem value={500}>All</MenuItem>
             </Select>
