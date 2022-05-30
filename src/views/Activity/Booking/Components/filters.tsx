@@ -39,7 +39,7 @@ export default function Filters({
   const classes = useStyles();
   const [text, setText] = useState("");
   const [team, setTeam] = React.useState("0");
-  const [filter, setfilter] = React.useState(7);
+  const [filter, setfilter] = React.useState(6);
   const [activity, setActivity] = React.useState("0");
   // const [searchtext, setSearchtext] = React.useState("");
 

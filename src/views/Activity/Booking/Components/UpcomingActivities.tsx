@@ -291,6 +291,7 @@ const UpcomingActivities = ({
       setdata(2);
     }
   }, [
+    endmonth,
     filterActivity,
     revaldatestate,
     deleting,
@@ -300,6 +301,7 @@ const UpcomingActivities = ({
     searchteam,
     fetchupcomingactivity,
     searchlocation,
+    filterdate,
   ]);
 
   useEffect(() => {
