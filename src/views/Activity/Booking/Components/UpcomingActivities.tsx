@@ -72,7 +72,13 @@ const UpcomingActivities = ({
   fetchupcomingactivity: any;
 }) => {
   const [filterActivity, setfilterActivity] = useState("0");
+  const [endmonth, setendmonth] = useState();
+  const enddateofmonth = moment()
+    .endOf("month")
+    .format("YYYY-MM-DDT24:55");
+  console.log(enddateofmonth, "endmonth");
   const [filterdate, setFilterdate] = useState(7);
+  console.log(endmonth, "filterenddate");
   const [successedit, setsuccessedit] = useState();
 
   const [data, setdata] = useState(null);
@@ -95,7 +101,9 @@ const UpcomingActivities = ({
   const [deleteNonRecuring, setDeleteNonRecuring] = useState();
   var date = new Date();
   date.setDate(date.getDate() + filterdate);
-  const nextdate = moment(date.setHours(24, 35, 1)).format("YYYY-MM-DDTHH:MM");
+
+  // const nextdate = moment(date.setHours(24, 35)).format("YYYY-MM-DDTHH:MM");
+  var nextdate = moment(date).format("YYYY-MM-DDT24:55");
   const currentdate = moment(Date()).format("YYYY-MM-DDTHH:MM");
   const newobj = {
     access_token: appState.authentication.accessToken,
@@ -106,7 +114,7 @@ const UpcomingActivities = ({
     ...(searchtext !== "" && { text_search: searchtext }),
     ...(filterActivity !== "0" && { activity_type: filterActivity }),
     startTime: currentdate,
-    endTime: nextdate,
+    endTime: endmonth ? enddateofmonth : nextdate,
   };
 
   const { Activitydata, loading, revalidate } = useFetchActivities(newobj);
@@ -403,7 +411,11 @@ const UpcomingActivities = ({
                 <>
                   <Filters
                     onFilter={(res: any) => {
-                      setFilterdate(res);
+                      if (res == 30) {
+                        setendmonth(res);
+                      } else {
+                        setFilterdate(res);
+                      }
                     }}
                     searchingtext={(res: any) => {
                       setSearchtext(res);

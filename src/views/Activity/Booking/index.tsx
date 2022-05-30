@@ -187,6 +187,10 @@ export const Booking: FC = () => {
     }
   };
 
+  {
+    console.log(initialFormValues, "initialFormValuesinitialFormValues");
+  }
+
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: Yup.object({
@@ -344,6 +348,7 @@ export const Booking: FC = () => {
       end_time: moment(endTimefield).format("HH:mm"),
     });
   }, [startTimefield, endTimefield]);
+
   useEffect(() => {
     if (startTimefield) {
       handleEndTimefield(addHoursToDate(startTimefield, 1));
@@ -447,10 +452,9 @@ export const Booking: FC = () => {
                       clearable
                       disablePast
                       value={values.start_date}
-                      placeholder="10/10/2018"
                       onChange={(e) => handleDateChange("start_date", e)}
                       minDate={new Date()}
-                      format="MM/dd/yyyy"
+                      format="dd/MM/yyyy"
                     />
                   </GridItem>
                   <GridItem
@@ -484,10 +488,12 @@ export const Booking: FC = () => {
                         onChange={handleValueChange}
                       /> */}
                       <KeyboardTimePicker
+                        autoOk={false}
                         ampm={false}
                         variant="inline"
                         value={startTimefield}
                         onChange={handleStartTimefield}
+                        // onChange={(e) => handleStartTimefield("start_date", e)}
                       />
                     </Box>
                     {errors.start_time && touched.start_time && (
@@ -542,7 +548,7 @@ export const Booking: FC = () => {
                       placeholder="10/10/2018"
                       onChange={(e) => handleDateChange("start_date", e)}
                       minDate={new Date()}
-                      format="MM/dd/yyyy"
+                      format="dd/MM/yyyy"
                     />
                     {errors.end_date && (
                       <span
@@ -588,6 +594,7 @@ export const Booking: FC = () => {
                       /> */}
 
                       <KeyboardTimePicker
+                        autoOk={false}
                         ampm={false}
                         variant="inline"
                         value={endTimefield}
@@ -835,12 +842,11 @@ export const Booking: FC = () => {
                           clearable
                           disablePast
                           value={values.end_date_recurring}
-                          placeholder="10/10/2018"
                           onChange={(e) =>
                             handleDateChange("end_date_recurring", e)
                           }
                           minDate={new Date()}
-                          format="MM/dd/yyyy"
+                          format="dd/MM/yyyy"
                         />
 
                         {errors.end_date_recurring && (

@@ -229,7 +229,7 @@ export default function Filters({
               onChange={handleChange3}
             >
               <MenuItem value={0}>Today </MenuItem>
-              <MenuItem value={3}>Next 3 days</MenuItem>
+              <MenuItem value={2}>Next 3 days</MenuItem>
               <MenuItem value={7}>Next 7 days</MenuItem>
               <MenuItem value={30}>This Month</MenuItem>
               <MenuItem value={500}>All</MenuItem>
