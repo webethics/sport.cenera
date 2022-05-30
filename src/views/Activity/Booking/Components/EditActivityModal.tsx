@@ -508,7 +508,7 @@ export default function EditActivityModal(props: any) {
                   placeholder="10/10/2018"
                   onChange={(e) => handleDateChange("start_date", e)}
                   minDate={new Date()}
-                  format="MM/dd/yyyy"
+                  format="dd/MM/yyyy"
                 />
               </GridItem>
               <GridItem xs="6" sm="5" md="4" style={{ marginBottom: "15px" }}>
@@ -575,7 +575,7 @@ export default function EditActivityModal(props: any) {
                   placeholder="10/10/2018"
                   onChange={(e) => handleDateChange("start_date", e)}
                   minDate={new Date()}
-                  format="MM/dd/yyyy"
+                  format="dd/MM/yyyy"
                 />
                 {errors.end_date && (
                   <span
@@ -835,7 +835,7 @@ export default function EditActivityModal(props: any) {
                         handleDateChange("end_date_recurring", e)
                       }
                       minDate={new Date()}
-                      format="MM/dd/yyyy"
+                      format="dd/MM/yyyy"
                     />
                     {errors.end_date_recurring && (
                       <span
