@@ -49,6 +49,10 @@ const appStyle = (theme: any) => ({
   mainPanelWithPerfectScrollbar: {
     overflow: "hidden !important",
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
+  },
 });
 
 export default appStyle;

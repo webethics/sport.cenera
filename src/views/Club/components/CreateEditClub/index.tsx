@@ -51,6 +51,7 @@ export const CreateEditClub: FC<Props> = ({
 
   const { enqueueSnackbar } = useSnackbar();
 
+  // console.log(toEditClub, "toEditClubtoEditClubtoEditClub");
   const initialFormValues = {
     club_name: toEditClub ? toEditClub.club_name : "",
     club_sportstype: toEditClub ? toEditClub.club_sportstype : "",
@@ -61,9 +62,9 @@ export const CreateEditClub: FC<Props> = ({
     textfield3: toEditClub ? toEditClub.textfield3 : "",
     textfield4: toEditClub ? toEditClub.textfield4 : "",
     textfield5: toEditClub ? toEditClub.textfield5 : "",
-    allowBooking: false,
+    allowBooking: toEditClub ? toEditClub.allowBooking : false,
   };
- 
+
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: Yup.object({

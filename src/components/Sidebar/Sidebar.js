@@ -1,25 +1,25 @@
 /*eslint-disable*/
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 // javascript plugin used to create scrollbars on windows
-import PerfectScrollbar from 'perfect-scrollbar';
-import { NavLink } from 'react-router-dom';
-import cx from 'classnames';
+import PerfectScrollbar from "perfect-scrollbar";
+import { NavLink } from "react-router-dom";
+import cx from "classnames";
 
 // @material-ui/core components
-import withStyles from '@material-ui/core/styles/withStyles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Hidden from '@material-ui/core/Hidden';
-import Collapse from '@material-ui/core/Collapse';
-import Icon from '@material-ui/core/Icon';// core components
-import { AdminNavBarLinks } from '@cenera/components/NavBars/AdminNavbarLinks';
+import withStyles from "@material-ui/core/styles/withStyles";
+import Drawer from "@material-ui/core/Drawer";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Hidden from "@material-ui/core/Hidden";
+import Collapse from "@material-ui/core/Collapse";
+import Icon from "@material-ui/core/Icon"; // core components
+import { AdminNavBarLinks } from "@cenera/components/NavBars/AdminNavbarLinks";
 
-import sidebarStyle from './sidebarStyle.js';
+import sidebarStyle from "./sidebarStyle.js";
 
-import avatar from '@cenera/assets/images/avatar.jpg';
+import avatar from "@cenera/assets/images/avatar.jpg";
 
 var ps;
 
@@ -30,7 +30,7 @@ var ps;
 class SidebarWrapper extends React.Component {
   sidebarWrapper = React.createRef();
   componentDidMount() {
-    if (navigator.platform.indexOf('Win') > -1) {
+    if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(this.sidebarWrapper.current, {
         suppressScrollX: true,
         suppressScrollY: false,
@@ -38,7 +38,7 @@ class SidebarWrapper extends React.Component {
     }
   }
   componentWillUnmount() {
-    if (navigator.platform.indexOf('Win') > -1) {
+    if (navigator.platform.indexOf("Win") > -1) {
       ps.destroy();
     }
   }
@@ -51,35 +51,26 @@ class SidebarWrapper extends React.Component {
         {links}
       </div>
     );
-
-
-
-
   }
 }
 
 class Sidebar extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       openAvatar: false,
       miniActive: true,
-      appState: JSON.parse(localStorage.getItem('appState')),
+      // appState: JSON.parse(localStorage.getItem("appState")),
       ...this.getCollapseStates(props.routes),
     };
-    // let appState = localStorage.getItem('appState');  
-    // let useState = JSON.parse(appState)
   }
-
-
 
   mainPanel = React.createRef();
   // this creates the intial state of this component based on the collapse routes
   // that it gets through this.props.routes
-  getCollapseStates = routes => {
+  getCollapseStates = (routes) => {
     let initialState = {};
-    routes.map(prop => {
+    routes.map((prop) => {
       if (prop.collapse) {
         initialState = {
           [prop.state]: this.getCollapseInitialState(prop.views),
@@ -105,8 +96,8 @@ class Sidebar extends React.Component {
     return false;
   }
   // verifies if routeName is the one active (in browser input)
-  activeRoute = routeName => {
-    return window.location.href.indexOf(routeName) > -1 ? 'active' : '';
+  activeRoute = (routeName) => {
+    return window.location.href.indexOf(routeName) > -1 ? "active" : "";
   };
   openCollapse(collapse) {
     var st = {};
@@ -114,7 +105,7 @@ class Sidebar extends React.Component {
     this.setState(st);
   }
   // this function creates the links and collapses that appear in the sidebar (left menu)
-  createLinks = routes => {
+  createLinks = (routes) => {
     const { classes, color, rtlActive } = this.props;
     return routes.map((prop, key) => {
       if (prop.redirect) {
@@ -122,44 +113,50 @@ class Sidebar extends React.Component {
       }
       if (prop.collapse) {
         var st = {};
-        st[prop['state']] = !this.state[prop.state];
+        st[prop["state"]] = !this.state[prop.state];
         const navLinkClasses =
           classes.itemLink +
-          ' ' +
+          " " +
           cx({
-            [' ' + classes.collapseActive]: this.getCollapseInitialState(prop.views),
+            [" " + classes.collapseActive]: this.getCollapseInitialState(
+              prop.views
+            ),
           });
         const itemText =
           classes.itemText +
-          ' ' +
+          " " +
           cx({
-            [classes.itemTextMini]: this.props.miniActive && this.state.miniActive,
-            [classes.itemTextMiniRTL]: rtlActive && this.props.miniActive && this.state.miniActive,
+            [classes.itemTextMini]:
+              this.props.miniActive && this.state.miniActive,
+            [classes.itemTextMiniRTL]:
+              rtlActive && this.props.miniActive && this.state.miniActive,
             [classes.itemTextRTL]: rtlActive,
           });
         const collapseItemText =
           classes.collapseItemText +
-          ' ' +
+          " " +
           cx({
-            [classes.collapseItemTextMini]: this.props.miniActive && this.state.miniActive,
-            [classes.collapseItemTextMiniRTL]: rtlActive && this.props.miniActive && this.state.miniActive,
+            [classes.collapseItemTextMini]:
+              this.props.miniActive && this.state.miniActive,
+            [classes.collapseItemTextMiniRTL]:
+              rtlActive && this.props.miniActive && this.state.miniActive,
             [classes.collapseItemTextRTL]: rtlActive,
           });
         const itemIcon =
           classes.itemIcon +
-          ' ' +
+          " " +
           cx({
             [classes.itemIconRTL]: rtlActive,
           });
         const caret =
           classes.caret +
-          ' ' +
+          " " +
           cx({
             [classes.caretRTL]: rtlActive,
           });
         const collapseItemMini =
           classes.collapseItemMini +
-          ' ' +
+          " " +
           cx({
             [classes.collapseItemMiniRTL]: rtlActive,
           });
@@ -169,73 +166,94 @@ class Sidebar extends React.Component {
             className={cx(
               { [classes.item]: prop.icon !== undefined },
               { [classes.collapseItem]: prop.icon === undefined }
-            )}>
+            )}
+          >
             <NavLink
-              to={'#'}
+              to={"#"}
               className={navLinkClasses}
-              onClick={e => {
+              onClick={(e) => {
                 e.preventDefault();
                 this.setState(st);
-              }}>
+              }}
+            >
               {prop.icon !== undefined ? (
-                typeof prop.icon === 'string' ? (
+                typeof prop.icon === "string" ? (
                   <Icon className={itemIcon}>{prop.icon}</Icon>
                 ) : (
                   <prop.icon className={itemIcon} />
                 )
               ) : (
-                <span className={collapseItemMini}>{rtlActive ? prop.rtlMini : prop.mini}</span>
+                <span className={collapseItemMini}>
+                  {rtlActive ? prop.rtlMini : prop.mini}
+                </span>
               )}
               <ListItemText
                 primary={rtlActive ? prop.rtlName : prop.name}
-                secondary={<b className={caret + ' ' + (this.state[prop.state] ? classes.caretActive : '')} />}
+                secondary={
+                  <b
+                    className={
+                      caret +
+                      " " +
+                      (this.state[prop.state] ? classes.caretActive : "")
+                    }
+                  />
+                }
                 disableTypography={true}
-                className={cx({ [itemText]: prop.icon !== undefined }, { [collapseItemText]: prop.icon === undefined })}
+                className={cx(
+                  { [itemText]: prop.icon !== undefined },
+                  { [collapseItemText]: prop.icon === undefined }
+                )}
               />
             </NavLink>
             <Collapse in={this.state[prop.state]} unmountOnExit>
-              <List className={classes.list + ' ' + classes.collapseList}>{this.createLinks(prop.views)}</List>
+              <List className={classes.list + " " + classes.collapseList}>
+                {this.createLinks(prop.views)}
+              </List>
             </Collapse>
           </ListItem>
         );
       }
       const innerNavLinkClasses =
         classes.collapseItemLink +
-        ' ' +
+        " " +
         cx({
-          [' ' + classes[color]]: this.activeRoute(prop.path),
+          [" " + classes[color]]: this.activeRoute(prop.path),
         });
       const collapseItemMini =
         classes.collapseItemMini +
-        ' ' +
+        " " +
         cx({
           [classes.collapseItemMiniRTL]: rtlActive,
         });
       const navLinkClasses =
         classes.itemLink +
-        ' ' +
+        " " +
         cx({
-          [' ' + classes[color]]: this.activeRoute(prop.path),
+          [" " + classes[color]]: this.activeRoute(prop.path),
         });
       const itemText =
         classes.itemText +
-        ' ' +
+        " " +
         cx({
-          [classes.itemTextMini]: this.props.miniActive && this.state.miniActive,
-          [classes.itemTextMiniRTL]: rtlActive && this.props.miniActive && this.state.miniActive,
+          [classes.itemTextMini]:
+            this.props.miniActive && this.state.miniActive,
+          [classes.itemTextMiniRTL]:
+            rtlActive && this.props.miniActive && this.state.miniActive,
           [classes.itemTextRTL]: rtlActive,
         });
       const collapseItemText =
         classes.collapseItemText +
-        ' ' +
+        " " +
         cx({
-          [classes.collapseItemTextMini]: this.props.miniActive && this.state.miniActive,
-          [classes.collapseItemTextMiniRTL]: rtlActive && this.props.miniActive && this.state.miniActive,
+          [classes.collapseItemTextMini]:
+            this.props.miniActive && this.state.miniActive,
+          [classes.collapseItemTextMiniRTL]:
+            rtlActive && this.props.miniActive && this.state.miniActive,
           [classes.collapseItemTextRTL]: rtlActive,
         });
       const itemIcon =
         classes.itemIcon +
-        ' ' +
+        " " +
         cx({
           [classes.itemIconRTL]: rtlActive,
         });
@@ -245,26 +263,33 @@ class Sidebar extends React.Component {
           className={cx(
             { [classes.item]: prop.icon !== undefined },
             { [classes.collapseItem]: prop.icon === undefined }
-          )}>
+          )}
+        >
           <NavLink
             to={prop.layout + prop.path}
             className={cx(
               { [navLinkClasses]: prop.icon !== undefined },
               { [innerNavLinkClasses]: prop.icon === undefined }
-            )}>
+            )}
+          >
             {prop.icon !== undefined ? (
-              typeof prop.icon === 'string' ? (
+              typeof prop.icon === "string" ? (
                 <Icon className={itemIcon}>{prop.icon}</Icon>
               ) : (
                 <prop.icon className={itemIcon} />
               )
             ) : (
-              <span className={collapseItemMini}>{rtlActive ? prop.rtlMini : prop.mini}</span>
+              <span className={collapseItemMini}>
+                {rtlActive ? prop.rtlMini : prop.mini}
+              </span>
             )}
             <ListItemText
               primary={rtlActive ? prop.rtlName : prop.name}
               disableTypography={true}
-              className={cx({ [itemText]: prop.icon !== undefined }, { [collapseItemText]: prop.icon === undefined })}
+              className={cx(
+                { [itemText]: prop.icon !== undefined },
+                { [collapseItemText]: prop.icon === undefined }
+              )}
             />
           </NavLink>
         </ListItem>
@@ -272,98 +297,111 @@ class Sidebar extends React.Component {
     });
   };
   render() {
-    const { classes, logo, image, logoText, routes, bgColor, rtlActive } = this.props;
+    const {
+      classes,
+      logo,
+      image,
+      logoText,
+      routes,
+      bgColor,
+      rtlActive,
+    } = this.props;
     const itemText =
       classes.itemText +
-      ' ' +
+      " " +
       cx({
         [classes.itemTextMini]: this.props.miniActive && this.state.miniActive,
-        [classes.itemTextMiniRTL]: rtlActive && this.props.miniActive && this.state.miniActive,
+        [classes.itemTextMiniRTL]:
+          rtlActive && this.props.miniActive && this.state.miniActive,
         [classes.itemTextRTL]: rtlActive,
       });
     const collapseItemText =
       classes.collapseItemText +
-      ' ' +
+      " " +
       cx({
-        [classes.collapseItemTextMini]: this.props.miniActive && this.state.miniActive,
-        [classes.collapseItemTextMiniRTL]: rtlActive && this.props.miniActive && this.state.miniActive,
+        [classes.collapseItemTextMini]:
+          this.props.miniActive && this.state.miniActive,
+        [classes.collapseItemTextMiniRTL]:
+          rtlActive && this.props.miniActive && this.state.miniActive,
         [classes.collapseItemTextRTL]: rtlActive,
       });
     const userWrapperClass =
       classes.user +
-      ' ' +
+      " " +
       cx({
-        [classes.whiteAfter]: bgColor === 'white',
+        [classes.whiteAfter]: bgColor === "white",
       });
     const caret =
       classes.caret +
-      ' ' +
+      " " +
       cx({
         [classes.caretRTL]: rtlActive,
       });
     const collapseItemMini =
       classes.collapseItemMini +
-      ' ' +
+      " " +
       cx({
         [classes.collapseItemMiniRTL]: rtlActive,
       });
     const photo =
       classes.photo +
-      ' ' +
+      " " +
       cx({
         [classes.photoRTL]: rtlActive,
       });
     var user = (
       <div className={userWrapperClass}>
         <List className={classes.list}>
-          <ListItem className={classes.item + ' ' + classes.userItem}>
+          <ListItem className={classes.item + " " + classes.userItem}>
             <ListItemText
               primary={this.props.userName}
               disableTypography={true}
-              className={itemText + ' ' + classes.userItemText}
+              className={itemText + " " + classes.userItemText}
             />
           </ListItem>
-          <ListItem className={classes.item + ' ' + classes.userItem}>
+          <ListItem className={classes.item + " " + classes.userItem}>
             <ListItemText
               primary={this.props.clubName}
               disableTypography={true}
-              className={itemText + ' ' + classes.userItemText}
+              className={itemText + " " + classes.userItemText}
             />
           </ListItem>
 
-          <ListItem className={classes.item + ' ' + classes.userItem}>
+          <ListItem className={classes.item + " " + classes.userItem}>
             <ListItemText
               primary={this.props.teamName}
               disableTypography={true}
-              className={itemText + ' ' + classes.userItemText}
+              className={itemText + " " + classes.userItemText}
             />
           </ListItem>
-
-
         </List>
       </div>
     );
-    var links = <List className={classes.list}>{this.createLinks(routes)}</List>;
+    var links = (
+      <List className={classes.list}>{this.createLinks(routes)}</List>
+    );
 
     const logoNormal =
       classes.logoNormal +
-      ' ' +
+      " " +
       cx({
-        [classes.logoNormalSidebarMini]: this.props.miniActive && this.state.miniActive,
-        [classes.logoNormalSidebarMiniRTL]: rtlActive && this.props.miniActive && this.state.miniActive,
+        [classes.logoNormalSidebarMini]:
+          this.props.miniActive && this.state.miniActive,
+        [classes.logoNormalSidebarMiniRTL]:
+          rtlActive && this.props.miniActive && this.state.miniActive,
         [classes.logoNormalRTL]: rtlActive,
       });
     const logoMini =
       classes.logoMini +
-      ' ' +
+      " " +
       cx({
         [classes.logoMiniRTL]: rtlActive,
       });
     const logoClasses =
       classes.logo +
-      ' ' +
+      " " +
       cx({
-        [classes.whiteAfter]: bgColor === 'white',
+        [classes.whiteAfter]: bgColor === "white",
       });
     var brand = (
       <div className={logoClasses}>
@@ -377,32 +415,36 @@ class Sidebar extends React.Component {
     );
     const drawerPaper =
       classes.drawerPaper +
-      ' ' +
+      " " +
       cx({
-        [classes.drawerPaperMini]: this.props.miniActive && this.state.miniActive,
+        [classes.drawerPaperMini]:
+          this.props.miniActive && this.state.miniActive,
         [classes.drawerPaperRTL]: rtlActive,
       });
     const sidebarWrapper =
       classes.sidebarWrapper +
-      ' ' +
+      " " +
       cx({
-        [classes.drawerPaperMini]: this.props.miniActive && this.state.miniActive,
-        [classes.sidebarWrapperWithPerfectScrollbar]: navigator.platform.indexOf('Win') > -1,
+        [classes.drawerPaperMini]:
+          this.props.miniActive && this.state.miniActive,
+        [classes.sidebarWrapperWithPerfectScrollbar]:
+          navigator.platform.indexOf("Win") > -1,
       });
     return (
       <div ref={this.mainPanel}>
         <Hidden mdUp implementation="css">
           <Drawer
             variant="temporary"
-            anchor={rtlActive ? 'left' : 'right'}
+            anchor={rtlActive ? "left" : "right"}
             open={this.props.open}
             classes={{
-              paper: drawerPaper + ' ' + classes[bgColor + 'Background'],
+              paper: drawerPaper + " " + classes[bgColor + "Background"],
             }}
             onClose={this.props.handleDrawerToggle}
             ModalProps={{
               keepMounted: true, // Better open performance on mobile.
-            }}>
+            }}
+          >
             {brand}
             <SidebarWrapper
               className={sidebarWrapper}
@@ -411,7 +453,10 @@ class Sidebar extends React.Component {
               links={links}
             />
             {image !== undefined ? (
-              <div className={classes.background} style={{ backgroundImage: 'url(' + image + ')' }} />
+              <div
+                className={classes.background}
+                style={{ backgroundImage: "url(" + image + ")" }}
+              />
             ) : null}
           </Drawer>
         </Hidden>
@@ -419,16 +464,24 @@ class Sidebar extends React.Component {
           <Drawer
             onMouseOver={() => this.setState({ miniActive: false })}
             onMouseOut={() => this.setState({ miniActive: true })}
-            anchor={rtlActive ? 'right' : 'left'}
+            anchor={rtlActive ? "right" : "left"}
             variant="permanent"
             open
             classes={{
-              paper: drawerPaper + ' ' + classes[bgColor + 'Background'],
-            }}>
+              paper: drawerPaper + " " + classes[bgColor + "Background"],
+            }}
+          >
             {brand}
-            <SidebarWrapper className={sidebarWrapper} user={user} links={links} />
+            <SidebarWrapper
+              className={sidebarWrapper}
+              user={user}
+              links={links}
+            />
             {image !== undefined ? (
-              <div className={classes.background} style={{ backgroundImage: 'url(' + image + ')' }} />
+              <div
+                className={classes.background}
+                style={{ backgroundImage: "url(" + image + ")" }}
+              />
             ) : null}
           </Drawer>
         </Hidden>
@@ -438,14 +491,22 @@ class Sidebar extends React.Component {
 }
 
 Sidebar.defaultProps = {
-  bgColor: 'blue',
+  bgColor: "blue",
 };
 
 Sidebar.propTypes = {
   classes: PropTypes.object.isRequired,
-  bgColor: PropTypes.oneOf(['white', 'black', 'blue']),
+  bgColor: PropTypes.oneOf(["white", "black", "blue"]),
   rtlActive: PropTypes.bool,
-  color: PropTypes.oneOf(['white', 'red', 'orange', 'green', 'blue', 'purple', 'rose']),
+  color: PropTypes.oneOf([
+    "white",
+    "red",
+    "orange",
+    "green",
+    "blue",
+    "purple",
+    "rose",
+  ]),
   logo: PropTypes.string,
   logoText: PropTypes.string,
   image: PropTypes.string,

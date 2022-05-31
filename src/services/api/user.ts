@@ -82,6 +82,13 @@ const resetPassword = (data: {
   });
 };
 
+const getClubeuser = (access_token: any, user_id: any) => {
+  return axios.post<any>(`https://sportwebtest.omnivex.no:2000/api/getUser`, {
+    access_token,
+    user_id: user_id,
+  });
+};
+
 export const UserService = {
   login,
   getUser,
@@ -91,4 +98,5 @@ export const UserService = {
   changePassword,
   requestPasswordReset,
   resetPassword,
+  getClubeuser,
 };

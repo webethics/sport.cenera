@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cx from "classnames";
 import { Switch, Route, Redirect } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
-
+import { CircularProgress, Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { AdminNavbar } from "@cenera/components/NavBars/AdminNavbar";
@@ -13,6 +13,7 @@ import { useAppContext } from "@cenera/app-context"; // new for showing selected
 import { useGetTypes } from "@cenera/common/hooks/api-hooks/get-types";
 import { useFetchClub } from "@cenera/common/hooks";
 import { adminRoutes } from "./routes";
+import { UserService } from "@cenera/services/api/user";
 
 import styles from "./adminStyle";
 
@@ -25,6 +26,9 @@ const AdminPage = (props: any) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [miniActive, setMiniActive] = useState(false);
   const [appState] = useAppContext();
+  const [currentRoute, setCurrentRoute] = useState(adminRoutes);
+  const [loadingRoute, setLoadingRoute] = useState(true);
+
   let routes = adminRoutes;
 
   const { club, loading: clubLoading } = useFetchClub(appState.user.club_id);
@@ -57,6 +61,31 @@ const AdminPage = (props: any) => {
       setMobileOpen(false);
     }
   };
+
+  useEffect(() => {
+    if (appState.authentication.accessToken) {
+      UserService.getClubeuser(
+        appState.authentication.accessToken,
+        appState.user.user_id
+      ).then((res) => {
+        if (res.data.allowBooking === false) {
+          currentRoute.splice(
+            adminRoutes.findIndex((a) => a.name === "Activity"),
+            1
+          );
+          setCurrentRoute(currentRoute);
+        }
+        if (res.data.allowGameinfo === false) {
+          currentRoute.splice(
+            adminRoutes.findIndex((a) => a.name === "Games"),
+            1
+          );
+          setCurrentRoute(currentRoute);
+        }
+        setLoadingRoute(false);
+      });
+    }
+  }, []);
 
   // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
   React.useEffect(() => {
@@ -122,42 +151,48 @@ const AdminPage = (props: any) => {
   }
 
   return (
-    <div className={classes.wrapper}>
-      <Sidebar
-        routes={routes}
-        logoText={"Cenera Sports"}
-        logo={require("@cenera/assets/images/logo.png")}
-        image={require("@cenera/assets/images/sidebar-2.jpg")}
-        handleDrawerToggle={handleDrawerToggle}
-        open={mobileOpen}
-        color={`blue`}
-        bgColor={`black`}
-        miniActive={miniActive}
-        userName={appState.user.user_login}
-        clubName={!clubLoading && club ? club.club_name : "..."}
-        teamName={appState.teamName && appState.teamName}
-        {...rest}
-      />
-
-      <div className={mainPanelClasses} ref={mainPanel}>
-        <AdminNavbar
-          sidebarMinimize={sidebarMinimize}
-          miniActive={miniActive}
-          brandText={getActiveRoute(routes)}
+    <>
+      <div className={classes.wrapper}>
+        <Sidebar
+          routes={loadingRoute === false ? currentRoute : []}
+          logoText={"Cenera Sports"}
+          logo={require("@cenera/assets/images/logo.png")}
+          image={require("@cenera/assets/images/sidebar-2.jpg")}
           handleDrawerToggle={handleDrawerToggle}
+          open={mobileOpen}
+          color={`blue`}
+          bgColor={`black`}
+          miniActive={miniActive}
+          userName={appState.user.user_login}
+          clubName={!clubLoading && club ? club.club_name : "..."}
+          teamName={appState.teamName && appState.teamName}
           {...rest}
         />
-        <div className={classes.content}>
-          <div className={classes.container}>
-            <Switch>
-              {getRoutes(adminRoutes)}
-              <Redirect from="/admin" to="/admin/dashboard" />
-            </Switch>
+
+        <div className={mainPanelClasses} ref={mainPanel}>
+          <AdminNavbar
+            sidebarMinimize={sidebarMinimize}
+            miniActive={miniActive}
+            brandText={getActiveRoute(routes)}
+            handleDrawerToggle={handleDrawerToggle}
+            {...rest}
+          />
+          <div className={classes.content}>
+            <div className={classes.container}>
+              <Switch>
+                {getRoutes(currentRoute)}
+                <Redirect from="/admin" to="/admin/dashboard" />
+              </Switch>
+            </div>
           </div>
+          <Footer fluid={true} />
         </div>
-        <Footer fluid={true} />
       </div>
-    </div>
+
+      <Backdrop className={classes.backdrop} open={loadingRoute}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </>
   );
 };
 

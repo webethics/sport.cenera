@@ -111,7 +111,6 @@ export const CreateEditUser: FC<Props> = ({
     }
   }, [loading]);
 
-
   const handleClubChange = (
     event: React.ChangeEvent<{
       name?: string;
@@ -337,7 +336,7 @@ export const CreateEditUser: FC<Props> = ({
                     onChange={formik.handleChange}
                   />
                 }
-                label="Allow booking"
+                label="Allow Games"
               />
               <FormControlLabel
                 control={
@@ -347,7 +346,7 @@ export const CreateEditUser: FC<Props> = ({
                     onChange={formik.handleChange}
                   />
                 }
-                label="Allow Games"
+                label="Allow booking"
               />
             </GridItem>
           </div>

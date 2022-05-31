@@ -25,9 +25,10 @@ import { Booking, Configuration } from "@cenera/views/Activity";
 import { Dashboard } from "@cenera/views/Dashboard";
 import { UsersManagement } from "@cenera/views/UserManagement";
 import SettingsIcon from "@material-ui/icons/Settings";
-// import { useAppContext } from "@cenera/app-context";
 
-const appState = JSON.parse(localStorage.getItem("appState"));
+// console.log(appState, "getlocatstoragedata");
+
+// let appState = JSON.parse(localStorage.getItem("appState"));
 
 const adminRoutes = [
   {
@@ -133,18 +134,16 @@ const adminRoutes = [
   },
 ];
 
-if (appState && appState.allowBooking === false) {
-  adminRoutes.splice(
-    adminRoutes.findIndex((a) => a.name === "Activity"),
-    1
-  );
-}
+// if (appState && appState.allowBooking === false) {
 
-if (appState && appState.allowGameinfo === false) {
-  adminRoutes.splice(
-    adminRoutes.findIndex((a) => a.name === "Games"),
-    1 
-  );
-}
+//   adminRoutes.splice(adminRoutes.findIndex((a) => a.name === "Activity"),1);
+// }
+
+// if (appState && appState.allowGameinfo === false) {
+//   adminRoutes.splice(
+//     adminRoutes.findIndex((a) => a.name === "Games"),
+//     1
+//   );
+// }
 
 export { adminRoutes };
