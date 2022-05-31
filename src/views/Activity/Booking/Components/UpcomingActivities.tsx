@@ -72,13 +72,12 @@ const UpcomingActivities = ({
   fetchupcomingactivity: any;
 }) => {
   const [filterActivity, setfilterActivity] = useState("0");
-  const [endmonth, setendmonth] = useState();
+  // const [endmonth, setendmonth] = useState();
+
+  const [filterdate, setFilterdate] = useState(6);
   const enddateofmonth = moment()
     .endOf("month")
     .format("YYYY-MM-DDT24:55");
-
-  const [filterdate, setFilterdate] = useState(7);
-  console.log(endmonth, "filterenddate");
   const [successedit, setsuccessedit] = useState();
 
   const [data, setdata] = useState(null);
@@ -114,7 +113,10 @@ const UpcomingActivities = ({
     ...(searchtext !== "" && { text_search: searchtext }),
     ...(filterActivity !== "0" && { activity_type: filterActivity }),
     startTime: currentdate,
-    endTime: endmonth ? enddateofmonth : nextdate,
+    // endTime: endmonth ? enddateofmonth : nextdate,
+    ...(filterdate !== 6 && {
+      endTime: filterdate == 30 ? enddateofmonth : nextdate,
+    }),
   };
 
   const { Activitydata, loading, revalidate } = useFetchActivities(newobj);
@@ -285,13 +287,13 @@ const UpcomingActivities = ({
     if (Activitydata) {
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
+      // setendmonth(null);
     }
     if (fetchupcomingactivity && fetchupcomingactivity && Activitydata) {
       revalidate();
       setdata(2);
     }
   }, [
-    endmonth,
     filterActivity,
     revaldatestate,
     deleting,
@@ -413,11 +415,7 @@ const UpcomingActivities = ({
                 <>
                   <Filters
                     onFilter={(res: any) => {
-                      if (res == 30) {
-                        setendmonth(res);
-                      } else {
-                        setFilterdate(res);
-                      }
+                      setFilterdate(res);
                     }}
                     searchingtext={(res: any) => {
                       setSearchtext(res);
@@ -642,7 +640,6 @@ const UpcomingActivities = ({
                               className={`${recuringValue.isPublic === false &&
                                 "notpublic"}`}
                             >
-                              {console.log(recuringValue.isPublic, "ppp")}
                               <BodyTableCell scope="row">
                                 {moment(recuringValue.startTime).format(
                                   "HH:mm"

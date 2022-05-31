@@ -16,13 +16,15 @@ import moment from "moment";
 const useStyles = makeStyles(activitiesDetailStyle as any);
 
 export default function ActivitiesDetail() {
-  const [filterdate, setFilterdate] = useState(7);
-  const [endmonth, setendmonth] = useState();
+  const [filterdate, setFilterdate] = useState(6);
+  // const [endmonth, setendmonth] = useState(null);
   const enddateofmonth = moment()
     .endOf("month")
     .format("YYYY-MM-DDT24:55");
+
   var date = new Date();
   date.setDate(date.getDate() + filterdate);
+  console.log(filterdate, "filterdate12345");
   var nextdate = moment(date).format("YYYY-MM-DDT24:55");
   const currentdate = moment(Date()).format("YYYY-MM-DDTHH:MM");
 
@@ -41,7 +43,12 @@ export default function ActivitiesDetail() {
     ...(searchtext !== "" && { text_search: searchtext }),
     ...(filterActivity !== "0" && { activity_type: filterActivity }),
     startTime: currentdate,
-    endTime: endmonth ? enddateofmonth : nextdate,
+    // endTime: filterdate == 30 ? enddateofmonth : nextdate,
+    // endTime: endmonth ? enddateofmonth : nextdate,
+    ...(filterdate !== 6 && {
+      endTime: filterdate == 30 ? enddateofmonth : nextdate,
+    }),
+    // ...(endmonth && { endTime: endmonth ? enddateofmonth : nextdate }),
   };
 
   const { acitivityData, loading, revalidate, error } = useFetchGetActivites(
@@ -52,8 +59,11 @@ export default function ActivitiesDetail() {
   useEffect(() => {
     if (acitivityData) {
       setActivityList(acitivityData);
+      // setendmonth(null);
     }
   }, [
+    // endmonth,
+    filterActivity,
     acitivityData,
     loading,
     revalidate,
@@ -87,11 +97,7 @@ export default function ActivitiesDetail() {
             <Filters
               clubid={id}
               onFilter={(res: any) => {
-                if (res == 30) {
-                  setendmonth(res);
-                } else {
-                  setFilterdate(res);
-                }
+                setFilterdate(res);
               }}
               searchingtext={(res: any) => {
                 setSearchtext(res);

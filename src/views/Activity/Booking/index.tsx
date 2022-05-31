@@ -187,9 +187,9 @@ export const Booking: FC = () => {
     }
   };
 
-  {
-    console.log(initialFormValues, "initialFormValuesinitialFormValues");
-  }
+  // {
+  //   console.log(initialFormValues, "initialFormValuesinitialFormValues");
+  // }
 
   const formik = useFormik({
     initialValues: initialFormValues,
