@@ -449,53 +449,6 @@ export default function EditActivityModal(props: any) {
           <form>
             <GridContainer>
               <GridItem xs="12" sm="2" md="2" sx={{ mb: 3 }}>
-                <h5 style={{ fontSize: "14px" }}>Team</h5>
-              </GridItem>
-              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                <ItemPicker
-                  data={teamsList}
-                  onChange={handleChange}
-                  value={values.team}
-                  disabled={values.orTeam && true}
-                  id="team"
-                />
-              </GridItem>
-
-              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box
-                    component="span"
-                    sx={{
-                      minWidth: "60px",
-                      marginRight: "5px",
-                    }}
-                  >
-                    or
-                  </Box>
-
-                  <TextField
-                    style={{ flex: "1" }}
-                    className="desc_box "
-                    id="orTeam"
-                    variant="outlined"
-                    value={values.orTeam}
-                    disabled={values.team !== "0" && true}
-                    onChange={handleChange}
-                  />
-                </Box>
-              </GridItem>
-
-              <GridItem
-                xs="12"
-                md="2"
-                style={{ marginBottom: "15px" }}
-              ></GridItem>
-              <GridItem xs="12" sm="2" md="2" sx={{ mb: 3 }}>
                 <h5 style={{ fontSize: "14px" }}>Start *</h5>
               </GridItem>
               <GridItem xs="6" sm="5" md="4" style={{ marginBottom: "15px" }}>
@@ -629,12 +582,248 @@ export default function EditActivityModal(props: any) {
                   </span>
                 )}
               </GridItem>
-              {/*Select Recurring Yes/No*/}
+
               <GridItem
                 xs="12"
                 md="2"
                 style={{ marginBottom: "15px" }}
               ></GridItem>
+              <GridItem xs="12" sm="2" md="2" sx={{ mb: 3 }}>
+                <h5 style={{ fontSize: "14px" }}>Team</h5>
+              </GridItem>
+              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
+                <ItemPicker
+                  data={teamsList}
+                  onChange={handleChange}
+                  value={values.team}
+                  disabled={values.orTeam && true}
+                  id="team"
+                />
+              </GridItem>
+
+              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box
+                    component="span"
+                    sx={{
+                      minWidth: "60px",
+                      marginRight: "5px",
+                    }}
+                  >
+                    or
+                  </Box>
+
+                  <TextField
+                    style={{ flex: "1" }}
+                    className="desc_box "
+                    id="orTeam"
+                    variant="outlined"
+                    value={values.orTeam}
+                    disabled={values.team !== "0" && true}
+                    onChange={handleChange}
+                  />
+                </Box>
+              </GridItem>
+
+              <GridItem
+                xs="12"
+                md="2"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
+
+              <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
+                <h5 style={{ fontSize: "14px" }}>Location</h5>
+              </GridItem>
+              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
+                <ItemPicker
+                  data={locations}
+                  value={values.location}
+                  onChange={handleChange}
+                  id="location"
+                />
+
+                {errors.location && touched.location && (
+                  <span
+                    className={classes.errorColor}
+                    style={{
+                      color: "red",
+                      display: "inline-block",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {errors.location}
+                  </span>
+                )}
+              </GridItem>
+
+              <GridItem
+                xs="12"
+                md="4"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
+              <GridItem
+                xs="12"
+                md="2"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
+
+              <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
+                <h5 style={{ fontSize: "14px" }}>Activity</h5>
+              </GridItem>
+              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
+                <ItemPicker
+                  data={activitylist}
+                  value={values.activity}
+                  onChange={handleChange}
+                  id="activity"
+                />
+                {errors.activity && touched.activity && (
+                  <span
+                    className={classes.errorColor}
+                    style={{
+                      color: "red",
+                      display: "inline-block",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {errors.activity}
+                  </span>
+                )}
+              </GridItem>
+              <GridItem
+                xs="12"
+                md="4"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
+              <GridItem
+                xs="12"
+                md="2"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
+
+              <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
+                <h5 style={{ fontSize: "14px" }}>Wardrobe</h5>
+              </GridItem>
+              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
+                <ItemPicker
+                  data={wardrobes}
+                  value={values.warderobe}
+                  onChange={handleChange}
+                  id="warderobe"
+                />
+              </GridItem>
+
+              <GridItem
+                xs="12"
+                md="4"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
+              <GridItem
+                xs="12"
+                md="2"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
+
+              {/* extra wadrobe time */}
+              <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
+                <h5 style={{ fontSize: "14px" }}>Extra Warderobe Time</h5>
+              </GridItem>
+              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      id="extWarBef15"
+                      checked={values.extWarBef15}
+                      style={{ color: "#00acc1" }}
+                      onChange={(e) => {
+                        formik.setValues({
+                          ...formik.values,
+                          extWarBef30: false,
+                        });
+                        handleChange(e);
+                      }}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          formik.setValues({
+                            ...formik.values,
+                            extWarBef15: !formik.values.extWarBef15,
+                            extWarBef30: false,
+                          });
+                        }
+                      }}
+                    />
+                  }
+                  label="15 Min"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      id="extWarBef30"
+                      checked={values.extWarBef30}
+                      style={{ color: "#00acc1" }}
+                      onChange={(e) => {
+                        formik.setValues({
+                          ...formik.values,
+                          extWarBef15: false,
+                        });
+                        handleChange(e);
+                      }}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          formik.setValues({
+                            ...formik.values,
+                            extWarBef30: !formik.values.extWarBef30,
+                            extWarBef15: false,
+                          });
+                        }
+                      }}
+                    />
+                  }
+                  label="30 Min"
+                />
+              </GridItem>
+
+              <GridItem
+                xs="12"
+                sm="5"
+                md="4"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
+              <GridItem
+                xs="12"
+                md="2"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
+
+              <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
+                <h5 style={{ fontSize: "14px" }}>Description</h5>
+              </GridItem>
+              <GridItem xs="12" sm="10" md="4" style={{ marginBottom: "15px" }}>
+                <TextField
+                  className="desc_box"
+                  id="description"
+                  variant="outlined"
+                  value={values.description}
+                  onChange={handleChange}
+                  style={{ width: "75%" }}
+                />
+              </GridItem>
+              <GridItem
+                xs="12"
+                md="4"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
+              <GridItem
+                xs="12"
+                md="2"
+                style={{ marginBottom: "15px" }}
+              ></GridItem>
+              {/*Select Recurring Yes/No*/}
               <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
                 <h5 style={{ fontSize: "14px" }}>Recurring</h5>
               </GridItem>
@@ -864,194 +1053,6 @@ export default function EditActivityModal(props: any) {
                 </>
               )}
               {/* End Recurring End Date */}
-
-              <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Location</h5>
-              </GridItem>
-              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                <ItemPicker
-                  data={locations}
-                  value={values.location}
-                  onChange={handleChange}
-                  id="location"
-                />
-
-                {errors.location && touched.location && (
-                  <span
-                    className={classes.errorColor}
-                    style={{
-                      color: "red",
-                      display: "inline-block",
-                      fontSize: "12px",
-                    }}
-                  >
-                    {errors.location}
-                  </span>
-                )}
-              </GridItem>
-
-              <GridItem
-                xs="12"
-                md="4"
-                style={{ marginBottom: "15px" }}
-              ></GridItem>
-              <GridItem
-                xs="12"
-                md="2"
-                style={{ marginBottom: "15px" }}
-              ></GridItem>
-
-              <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Wardrobe</h5>
-              </GridItem>
-              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                <ItemPicker
-                  data={wardrobes}
-                  value={values.warderobe}
-                  onChange={handleChange}
-                  id="warderobe"
-                />
-              </GridItem>
-
-              <GridItem
-                xs="12"
-                md="4"
-                style={{ marginBottom: "15px" }}
-              ></GridItem>
-              <GridItem
-                xs="12"
-                md="2"
-                style={{ marginBottom: "15px" }}
-              ></GridItem>
-
-              {/* extra wadrobe time */}
-              <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Extra Warderobe Time</h5>
-              </GridItem>
-              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      id="extWarBef15"
-                      checked={values.extWarBef15}
-                      style={{ color: "#00acc1" }}
-                      onChange={(e) => {
-                        formik.setValues({
-                          ...formik.values,
-                          extWarBef30: false,
-                        });
-                        handleChange(e);
-                      }}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          formik.setValues({
-                            ...formik.values,
-                            extWarBef15: !formik.values.extWarBef15,
-                            extWarBef30: false,
-                          });
-                        }
-                      }}
-                    />
-                  }
-                  label="15 Min"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      id="extWarBef30"
-                      checked={values.extWarBef30}
-                      style={{ color: "#00acc1" }}
-                      onChange={(e) => {
-                        formik.setValues({
-                          ...formik.values,
-                          extWarBef15: false,
-                        });
-                        handleChange(e);
-                      }}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          formik.setValues({
-                            ...formik.values,
-                            extWarBef30: !formik.values.extWarBef30,
-                            extWarBef15: false,
-                          });
-                        }
-                      }}
-                    />
-                  }
-                  label="30 Min"
-                />
-              </GridItem>
-
-              <GridItem
-                xs="12"
-                sm="5"
-                md="4"
-                style={{ marginBottom: "15px" }}
-              ></GridItem>
-              <GridItem
-                xs="12"
-                md="2"
-                style={{ marginBottom: "15px" }}
-              ></GridItem>
-
-              <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Activity</h5>
-              </GridItem>
-              <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                <ItemPicker
-                  data={activitylist}
-                  value={values.activity}
-                  onChange={handleChange}
-                  id="activity"
-                />
-                {errors.activity && touched.activity && (
-                  <span
-                    className={classes.errorColor}
-                    style={{
-                      color: "red",
-                      display: "inline-block",
-                      fontSize: "12px",
-                    }}
-                  >
-                    {errors.activity}
-                  </span>
-                )}
-              </GridItem>
-              <GridItem
-                xs="12"
-                md="4"
-                style={{ marginBottom: "15px" }}
-              ></GridItem>
-              <GridItem
-                xs="12"
-                md="2"
-                style={{ marginBottom: "15px" }}
-              ></GridItem>
-
-              <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Description</h5>
-              </GridItem>
-              <GridItem xs="12" sm="10" md="4" style={{ marginBottom: "15px" }}>
-                <TextField
-                  className="desc_box"
-                  id="description"
-                  variant="outlined"
-                  value={values.description}
-                  onChange={handleChange}
-                  style={{ width: "100%" }}
-                />
-              </GridItem>
-              <GridItem
-                xs="12"
-                md="4"
-                style={{ marginBottom: "15px" }}
-              ></GridItem>
-              <GridItem
-                xs="12"
-                md="2"
-                style={{ marginBottom: "15px" }}
-              ></GridItem>
               <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
                 <h5 style={{ fontSize: "14px" }}>Show Activity In Public</h5>
               </GridItem>

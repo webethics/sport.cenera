@@ -58,7 +58,6 @@ const getFormatedData = (array: any) => {
                   { ...value, randomId: randomId(), isSelected: false },
                 ],
                 startTime: value.startTime,
-                lol: "lol",
               });
             }
           }

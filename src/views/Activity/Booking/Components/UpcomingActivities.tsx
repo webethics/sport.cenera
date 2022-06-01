@@ -241,16 +241,44 @@ const UpcomingActivities = ({
   };
 
   const publishActivity = async () => {
-    const itempublish = acitivityList
-      .filter((res) => res.isSelected)
-      .map((res) => res.activity_id);
+    const nonRecuringpublishdate: any = { activity_id: [] };
+    const recuringpublishDates: any = [];
+    //
+    acitivityList.forEach((res) => {
+      if (res.isSelected === true && res.recurring_item === true) {
+        recuringpublishDates.push(res);
+      }
+      if (res.isSelected === true && res.recurring_item === false) {
+        nonRecuringpublishdate.activity_id.push(res.activity_id);
+      }
 
-    if (itempublish) {
+      if (res.recuring) {
+        res.recuring.forEach((value: any) => {
+          if (value.isSelected === true && value.recurring_item === true) {
+            recuringpublishDates.push(value);
+          }
+          if (value.isSelected === true && value.recurring_item === false) {
+            nonRecuringpublishdate.activity_id.push(value.activity_id);
+          }
+        });
+      }
+    });
+
+    //
+
+    const itempublish = recuringpublishDates
+      .filter((res: any) => res.isSelected)
+      .map((res: any) => res.activity_id);
+
+    const notrecurring = nonRecuringpublishdate.activity_id;
+    const publishId = [...itempublish, ...notrecurring];
+
+    if (publishId) {
       setpublish(true);
       const response = await setActivitiesPublished(
         appState.authentication.accessToken,
         appState.user.club_id,
-        itempublish
+        publishId
       );
       if (response) {
         await revalidate();
@@ -796,7 +824,7 @@ const UpcomingActivities = ({
               </Button>
               <Button
                 color="danger"
-                style={{ maxWidth: "100%", display: "none" }}
+                style={{ maxWidth: "100%" }}
                 onClick={publishedActivity}
               >
                 Published Selected Activities
