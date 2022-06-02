@@ -24,7 +24,7 @@ export default function ActivitiesDetail() {
 
   var date = new Date();
   date.setDate(date.getDate() + filterdate);
-  console.log(filterdate, "filterdate12345");
+  // console.log(filterdate, "filterdate12345");
   var nextdate = moment(date).format("YYYY-MM-DDT24:55");
   const currentdate = moment(Date()).format("YYYY-MM-DDTHH:MM");
 

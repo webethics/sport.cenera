@@ -82,12 +82,14 @@ body .MuiOutlinedInput-input {
   white-space: normal;
 }
 
-.makeStyles-matched-257 {
+.matchclass {
   color: #0079bc !important;
+  font-weight: 500;
 }
-.makeStyles-matched-37 {
+
+/* .makeStyles-matched-37 {
   color: #0079bc !important;
-}
+}  */
 
 @media screen and (max-width: 600px) {
   .custom-form-control {

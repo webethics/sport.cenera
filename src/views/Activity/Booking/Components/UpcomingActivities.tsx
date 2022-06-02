@@ -559,7 +559,7 @@ const UpcomingActivities = ({
 
                             <BodyTableCell
                               className={`${res.activity_type === "Match" &&
-                                classes.matched}`}
+                                "matchclass"}`}
                               align="left"
                             >
                               {res.activity_type}
@@ -697,7 +697,7 @@ const UpcomingActivities = ({
                               </BodyTableCell>
                               <BodyTableCell
                                 className={`${recuringValue.activity_type ===
-                                  "Match" && classes.matched}`}
+                                  "Match" && "matchclass"}`}
                                 align="left"
                               >
                                 {recuringValue.activity_type}

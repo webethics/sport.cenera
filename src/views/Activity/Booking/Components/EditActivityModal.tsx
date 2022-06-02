@@ -421,15 +421,18 @@ export default function EditActivityModal(props: any) {
             (EditActivitydata[0].recurring_details.includes("monthly") && 3) ||
             (!EditActivitydata[0].recurring_details && 1),
           end_date_recurring: EditActivitydata[0].end_date_recurring,
+          show_public: EditActivitydata[0].isPublic,
         });
       }
     }
   }, [EditActivitydata]);
 
-  // if (EditActivitydata[0] && EditActivitydata[0]) {
-  //   console.log(typeof EditActivitydata[0].startTime, "current123456789 user");
-  // }
-  // console.log(startTimefield, "convertedddddd");
+  if (EditActivitydata[0] && EditActivitydata[0]) {
+    console.log(
+      typeof EditActivitydata[0].isPublic.toString(),
+      "current123456789 user"
+    );
+  }
 
   const { values, handleChange, errors, touched } = formik;
 

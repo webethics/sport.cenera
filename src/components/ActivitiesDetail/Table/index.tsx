@@ -161,7 +161,7 @@ const useStyles = makeStyles({
   },
   matched: {
     fontWeight: 500,
-    color: "#0079BC",
+    color: "red",
   },
   bottomTableRow: {
     "& td": {
@@ -268,7 +268,7 @@ export default function CustomizedTables({
                         </BodyTableCell>
                         <BodyTableCell
                           className={`${res.activity_type === "Match" &&
-                            classes.matched}`}
+                            "matchclass"}`}
                           align="left"
                         >
                           {res.activity_type}
@@ -362,7 +362,7 @@ export default function CustomizedTables({
                           </BodyTableCell>
                           <BodyTableCell
                             className={`${recuringValue.activity_type ===
-                              "Match" && classes.matched}`}
+                              "Match" && "matchclass"}`}
                             align="left"
                           >
                             {recuringValue.activity_type}
