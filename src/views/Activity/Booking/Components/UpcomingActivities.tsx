@@ -500,11 +500,20 @@ const UpcomingActivities = ({
                       <TableHead>
                         <TableRow>
                           <StyledTableCell colSpan={9}>
-                            {res.recuring && res.recuring.length > 0
-                              ? moment(res.recuring[0].startTime).format(
-                                  "DD-MM-YYYY"
-                                )
-                              : moment(res.startTime).format("DD-MM-YYYY")}
+                            <span style={{ paddingRight: "12px" }}>
+                              {res.recuring && res.recuring.length > 0
+                                ? moment(res.recuring[0].startTime).format(
+                                    "DD-MM-YYYY"
+                                  )
+                                : moment(res.startTime).format("dddd")}
+                            </span>
+                            <span>
+                              {res.recuring && res.recuring.length > 0
+                                ? moment(res.recuring[0].startTime).format(
+                                    "DD-MM-YYYY"
+                                  )
+                                : moment(res.startTime).format("DD-MM-YYYY")}
+                            </span>
                           </StyledTableCell>
                         </TableRow>
                         <TableRow className={`${classes.customeTableRow}`}>
@@ -558,8 +567,12 @@ const UpcomingActivities = ({
                             </BodyTableCell>
 
                             <BodyTableCell
-                              className={`${res.activity_type === "Match" &&
-                                "matchclass"}`}
+                              // className={`${res.activity_type === "Match" &&
+                              //   classes.matched}`}
+                              style={{
+                                color: `#${res.activity_type_textcolor}`,
+                                fontWeight: `${res.activity_type_textstyle}`,
+                              }}
                               align="left"
                             >
                               {res.activity_type}
@@ -696,8 +709,12 @@ const UpcomingActivities = ({
                                 {recuringValue.wardrobe_name === "" && "NA"}
                               </BodyTableCell>
                               <BodyTableCell
-                                className={`${recuringValue.activity_type ===
-                                  "Match" && "matchclass"}`}
+                                // className={`${recuringValue.activity_type ===
+                                //   "Match" && classes.matched}`}
+                                style={{
+                                  color: `#${recuringValue.activity_type_textcolor}`,
+                                  fontWeight: `${recuringValue.activity_type_textstyle}`,
+                                }}
                                 align="left"
                               >
                                 {recuringValue.activity_type}

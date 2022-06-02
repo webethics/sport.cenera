@@ -19,6 +19,7 @@ import dotpattrenV from "@cenera/assets/images/dotpattren-v.svg";
 import Button from "@material-ui/core/Button";
 import moment from "moment";
 import { getFormatedData, getduraiton } from "@cenera/utils/services";
+// import { color } from "@mui/system";
 //,getFormatedReccuringDate,getduraiton
 
 const StyledTableCell = withStyles((theme: Theme) =>
@@ -161,7 +162,7 @@ const useStyles = makeStyles({
   },
   matched: {
     fontWeight: 500,
-    color: "red",
+    color: "#0079BC",
   },
   bottomTableRow: {
     "& td": {
@@ -224,11 +225,26 @@ export default function CustomizedTables({
                   <TableHead>
                     <TableRow>
                       <StyledTableCell colSpan={7}>
-                        {res.recuring && res.recuring.length > 0
-                          ? moment(res.recuring[0].startTime).format(
-                              "DD-MM-YYYY"
-                            )
-                          : moment(res.startTime).format("DD-MM-YYYY")}
+                        <span style={{ paddingRight: "12px" }}>
+                          {" "}
+                          {res.recuring && res.recuring.length > 0
+                            ? moment(res.recuring[0].startTime).format(
+                                "DD-MM-YYYY"
+                              )
+                            : moment(res.startTime).format("dddd")}{" "}
+                        </span>
+
+                        {/* <h1>
+                          MM
+                          {moment(res.recuring[0].startTime).format("dddd")}
+                        </h1> */}
+                        <span>
+                          {res.recuring && res.recuring.length > 0
+                            ? moment(res.recuring[0].startTime).format(
+                                "DD-MM-YYYY"
+                              )
+                            : moment(res.startTime).format("DD-MM-YYYY")}
+                        </span>
                       </StyledTableCell>
                     </TableRow>
                     <TableRow className={classes.customeTableRow}>
@@ -266,9 +282,12 @@ export default function CustomizedTables({
                           {res.wardrobe_name}
                           {res.wardrobe_name === "" && "NA"}
                         </BodyTableCell>
+                        {/* textEmphasisStyle: `${res.activity_type_textstyle}`, */}
                         <BodyTableCell
-                          className={`${res.activity_type === "Match" &&
-                            "matchclass"}`}
+                          style={{
+                            color: `#${res.activity_type_textcolor}`,
+                            fontWeight: `${res.activity_type_textstyle}`,
+                          }}
                           align="left"
                         >
                           {res.activity_type}
@@ -361,8 +380,11 @@ export default function CustomizedTables({
                             {recuringValue.wardrobe_name === "" && "NA"}
                           </BodyTableCell>
                           <BodyTableCell
-                            className={`${recuringValue.activity_type ===
-                              "Match" && "matchclass"}`}
+                            // style={{ color: "red" }}
+                            style={{
+                              color: `#${res.activity_type_textcolor}`,
+                              fontWeight: `${res.activity_type_textstyle}`,
+                            }}
                             align="left"
                           >
                             {recuringValue.activity_type}
