@@ -10,9 +10,14 @@ import { useParams } from "react-router-dom";
 const useStyles = makeStyles(bannerStyle as any);
 
 export default function Banner() {
+  function capitalizeFirstLetter(string: any) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   const classes = useStyles();
 
   const { name } = useParams<any>();
+  const clubname = name.replace("-", " ");
 
   // const[name,setName] = useState()
 
@@ -22,7 +27,7 @@ export default function Banner() {
         <Grid container alignItems="center" justifyContent="center">
           <Grid item>
             <h1>Activity Calendar</h1>
-            <h2>{name}</h2>
+            <h2>{capitalizeFirstLetter(clubname)}</h2>
           </Grid>
         </Grid>
       </Container>

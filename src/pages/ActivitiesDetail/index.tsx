@@ -75,6 +75,7 @@ export default function ActivitiesDetail() {
     filterActivity,
   ]);
 
+  // console.log(activityList, "gggggg");
   return (
     <>
       <Box bgcolor="primary.contrastText" className={classes.wrapper}>
