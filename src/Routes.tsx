@@ -31,7 +31,7 @@ export const AppRoutes = () => {
     <Switch>
       <Route path="/" exact={true} component={Activities} />
       <Route
-        path="/activitiesdetail/:id/"
+        path="/activitiesdetail/:id/:name"
         exact={true}
         component={ActivitiesDetail}
       />

@@ -44,8 +44,8 @@ export default function Listing() {
                   <CardActionArea>
                     <Link
                       to={{
-                        pathname: `/activitiesdetail/${res.club_id}`,
-                        state: { name: res.club_name },
+                        pathname: `/activitiesdetail/${res.club_id}/${res.club_name}`,
+                        // state: { name: res.club_name },
                       }}
                     >
                       <CardMedia
