@@ -133,7 +133,12 @@ const getduraiton = (t1: any, t2: any) => {
   let b = moment(t2);
 
   const milliseconds = b.diff(a);
-  const minutes = (milliseconds / (1000 * 60)) % 60;
+  let minutes:any = (milliseconds / (1000 * 60)) % 60;
+
+  if(minutes<10){
+    minutes = '0'+minutes
+  }
+
   const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
   return `${hours}:${minutes} h`;
 };

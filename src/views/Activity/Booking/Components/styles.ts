@@ -92,7 +92,7 @@ export const styles = (theme: Theme) => ({
 });
 
 export const modalStyle = {
-  position: "absolute" as "absolute",
+  position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -102,6 +102,22 @@ export const modalStyle = {
   p: 4,
   overflow: "scroll",
   height: "95%",
+
+  "@media (max-width: 1280px)": {
+    width: "80%",
+  },
+};
+
+export const editLocation = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  transition: "all",
+  p: 4,
+  overflow: "auto",
 
   "@media (max-width: 1280px)": {
     width: "80%",

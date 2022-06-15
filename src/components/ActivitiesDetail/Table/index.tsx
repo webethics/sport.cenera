@@ -224,7 +224,7 @@ export default function CustomizedTables({
                 >
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell colSpan={7}>
+                      <StyledTableCell colSpan={6}>
                         <span style={{ paddingRight: "12px" }}>
                           {" "}
                           {res.recuring && res.recuring.length > 0
@@ -246,6 +246,7 @@ export default function CustomizedTables({
                             : moment(res.startTime).format("DD-MM-YYYY")}
                         </span>
                       </StyledTableCell>
+                      <StyledTableCell>Week  : {moment(res.startTime, "YYYYMMDD").week()} </StyledTableCell>
                     </TableRow>
                     <TableRow className={classes.customeTableRow}>
                       <StyledTableCell align="left">Start Time</StyledTableCell>

@@ -311,11 +311,13 @@ const UpcomingActivities = ({
     setModalshow(true);
   };
 
+
+  
   useEffect(() => {
     if (Activitydata) {
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
-      // setendmonth(null);
+  
     }
     if (fetchupcomingactivity && fetchupcomingactivity && Activitydata) {
       revalidate();
@@ -324,14 +326,14 @@ const UpcomingActivities = ({
   }, [
     filterActivity,
     revaldatestate,
-    deleting,
-    loading,
-    nextdate,
-    searchtext,
-    searchteam,
-    fetchupcomingactivity,
-    searchlocation,
-    filterdate,
+    // deleting,
+    // loading,
+    // nextdate,
+    // searchtext,
+    // searchteam,
+    // fetchupcomingactivity,
+    // searchlocation,
+    // filterdate,
   ]);
 
   useEffect(() => {
@@ -499,8 +501,10 @@ const UpcomingActivities = ({
                     >
                       <TableHead>
                         <TableRow>
-                          <StyledTableCell colSpan={9}>
+                          <StyledTableCell colSpan={8}>
+                    
                             <span style={{ paddingRight: "12px" }}>
+                            
                               {res.recuring && res.recuring.length > 0
                                 ? moment(res.recuring[0].startTime).format(
                                     "DD-MM-YYYY"
@@ -515,6 +519,7 @@ const UpcomingActivities = ({
                                 : moment(res.startTime).format("DD-MM-YYYY")}
                             </span>
                           </StyledTableCell>
+                          <StyledTableCell>Week  : {moment(res.startTime, "YYYYMMDD").week()} </StyledTableCell>
                         </TableRow>
                         <TableRow className={`${classes.customeTableRow}`}>
                           <StyledTableCell>Start time</StyledTableCell>
@@ -593,7 +598,7 @@ const UpcomingActivities = ({
                                   )
                                 }
                               >
-                                Edit
+                               Edit
                               </Button>
                             </BodyTableCell>
                             <BodyTableCell align="left">
@@ -830,22 +835,28 @@ const UpcomingActivities = ({
           {acitivityList.length > 0 && (
             <div
               className=""
-              style={{ textAlign: "center", paddingBottom: "40px" }}
+              style={{ textAlign: "center", paddingBottom: "40px",paddingLeft: "10px" ,display: "flex",justifyContent: "space-around"}}
             >
-              <Button
-                color="danger"
-                style={{ maxWidth: "100%" }}
-                onClick={handleDeleteSelected}
-              >
-                Delete Selected Activities
-              </Button>
-              <Button
-                color="danger"
-                style={{ maxWidth: "100%" }}
-                onClick={publishedActivity}
-              >
-                Published Selected Activities
-              </Button>
+ 
+              <div className="deleted_activity" >
+                <Button
+                  color="danger"
+                  style={{ maxWidth: "100%" }}
+                  onClick={handleDeleteSelected}
+                  className="delete_activity"
+                >
+                  Delete Selected Activities
+                </Button>
+              </div>
+              <div className="publish_activity">
+                <Button
+                color="success"
+                  style={{ maxWidth: "100%" }}
+                  onClick={publishedActivity}
+                >
+                  Published Selected Activities
+                </Button>
+              </div>
             </div>
           )}
         </CardBody>

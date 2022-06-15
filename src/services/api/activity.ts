@@ -137,6 +137,26 @@ const UpdateLocation = (
   });
 };
 
+const ChangeLocation = (
+  access_token: string,
+  club_id: number,
+  location_name: string,
+  location_id: number,
+
+) => {
+  return axios.post<any>(`${configs.app.api}/booking/updateLocation`, {
+    access_token: access_token,
+    club_id: club_id,
+    updateType: "update",
+    location_id: location_id,
+    location_type: "field",
+    location_name: location_name,
+    location_description: "",
+  });
+};
+
+
+
 const deleteLocation = (
   access_token: string,
   club_id: number,
@@ -191,6 +211,25 @@ const deleteWardrobes = (
   });
 };
 
+const updateWardrobes = (
+  access_token: string,
+  club_id: number,
+  wardrobe_id: number,
+  wardrobe_name: string,
+
+) => {
+  return axios.post<any>(`${configs.app.api}/booking/updateWardrobe`, {
+    access_token: access_token,
+    club_id: club_id,
+    updateType: "update",
+    wardrobe_id: wardrobe_id,
+    wardrobe_name: wardrobe_name,
+    wardrobe_maxCapacity: "field",
+    wardrobe_description: ""
+  });
+};
+
+
 const setActivitiesPublished = (
   access_token: string,
   club_id: number,
@@ -224,11 +263,13 @@ export const ActivityService = {
   GetPublicClubs,
   GetLocations,
   UpdateLocation,
+  ChangeLocation,
   deleteLocation,
   getWardrobes,
   createWardrobes,
   addActivity,
   deleteWardrobes,
+  updateWardrobes,
   getUpcomingActivities,
   deleteMultipleActivities, 
   setActivitiesPublished,

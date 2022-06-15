@@ -14,6 +14,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import TextField from "@material-ui/core/TextField";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+// import EditIcon from '@material-ui/icons/Edit';
 import { useShowConfirmDialog } from "@cenera/common/hooks/confirmDialog";
 import Typography from "@material-ui/core/Typography";
 import { useFormik } from "formik";
@@ -21,10 +22,14 @@ import { useFetchGetLocations } from "@cenera/common/hooks/api-hooks/activity";
 import { ActivityService } from "@cenera/services/api/activity";
 import { useAppContext } from "@cenera/app-context";
 import * as Yup from "yup";
+// import Editlocation from "./Editlocation";
 
 const useStyles = makeStyles(configurationStyle as any);
 
 const Location = () => {
+
+  // const [successedit, setsuccessedit] = useState();
+  // const [modalshow, setModalshow] = useState(false);
   const classes = useStyles();
   const [appState] = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
@@ -34,6 +39,7 @@ const Location = () => {
   const [deleteConfig, setDeleteConfig] = useState(false);
   const [adding, setAdding] = useState(false);
   const [locations, setLocations] = useState([]);
+  // const [selectedLocation , setSelectedLocation] = useState();
 
   const handleDelete = async (location_id: any) => {
     setDeleteConfig(true);
@@ -93,7 +99,7 @@ const Location = () => {
       handleDelete(id);
     },
     successMessage: "Location deleted successfully",
-    confirmMessage: "Location will be deleted for good!",
+    confirmMessage: `Location  will be deleted for good!`,
   });
 
   const formik = useFormik({
@@ -110,18 +116,50 @@ const Location = () => {
 
   });
 
+  // if (successedit) {
+  //   revalidate();
+  //   let temp = getFormatedData(Activitydata);
+  //   setAcitivityList(temp);
+  // }
+
   useEffect(() => {
     if (locationData) {
       setLocations(locationData);
     } else if (error) {
       enqueueSnackbar("SomeThing Went Wront", { variant: "error" });
     }
-  }, [locationData]);
+  }, [locationData ]);
 
+  // useEffect(() => {
+  //   if (locationData) {
+  //     revalidate();
+  //     setLocations(locationData);
+  //   } else if (error) {
+  //     enqueueSnackbar("SomeThing Went Wront", { variant: "error" });
+  //   }
+  // }, [ successedit]);
+
+
+// const[selectlocationid,setselectlocationid]=useState(null)
+// const[selectlocationname,setselectlocationname]=useState(null)
+  // const handleEditActivity = (id: number,name: any) => {
+   
+  //   setselectlocationid(id)
+  //   setselectlocationname(name)
+  //   setModalshow(true);
+  // };
+  
   const { values, handleChange, handleSubmit, errors,touched } = formik;
   
   return (
     <>
+      {/* <Editlocation
+        open={modalshow}
+        onClose={() => setModalshow(false)}
+        locationname={selectlocationname}
+        locationnameid={selectlocationid}
+        callupcoming={(v: any) => setsuccessedit(v)}
+        /> */}
       <form onSubmit={handleSubmit}>
         <Paper className={classes.paper}>
           <Card className={classes.root} variant="outlined">
@@ -129,18 +167,30 @@ const Location = () => {
               <Typography variant="h6" component="h3">
                 Location
               </Typography>
+
               <List>
                 {locations.map((res) => (
                   <ListItem className={classes.listItem} key={res.location_id}>
+                       
                     <ListItemIcon className={classes.listIcon}>
                       <LocationOnIcon />
                     </ListItemIcon>
                     <ListItemText className={classes.listItemText}>
                       {res.location_name}
                     </ListItemText>
+                   
+                    {/* <EditIcon
+                      fontSize="small"
+                      cursor="pointer"
+                      onClick={() =>handleEditActivity(res.location_id,res.location_name)
+                      }
+                    /> */}
                     <DeleteOutlineIcon
                       className={classes.deleteButton}
-                      onClick={() => showConfirmDialog(res.location_id)}
+                      onClick={() =>{ 
+                        // setSelectedLocation(res.location_name);
+                        showConfirmDialog(res.location_id)
+                    }}
                     />
                   </ListItem>
                 ))}
@@ -172,6 +222,7 @@ const Location = () => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+      
     </>
   );
 };

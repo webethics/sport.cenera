@@ -14,6 +14,7 @@ export default function ItemPicker(props: any) {
       className="custom-form-control"
     >
       <Select
+     
         MenuProps={{
           className: classes.selectMenu,
         }}
@@ -28,6 +29,7 @@ export default function ItemPicker(props: any) {
         inputProps={{
           id,
           name: id,
+          tabIndex: 13
         }}
       >
         <MenuItem

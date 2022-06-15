@@ -3,7 +3,7 @@ import { makeStyles, FormControl, Select, MenuItem } from "@material-ui/core";
 import { styles } from "./styles";
 const useStyles = makeStyles(styles as any);
 
-export default function RecurringPicker(props: any) {
+export default function Refreewardrobe(props: any) {
   const classes = useStyles();
 
   const { data, id, value, onChange } = props;
@@ -14,6 +14,7 @@ export default function RecurringPicker(props: any) {
       className="custom-form-control"
     >
       <Select
+     
         MenuProps={{
           className: classes.selectMenu,
         }}
@@ -28,9 +29,18 @@ export default function RecurringPicker(props: any) {
         inputProps={{
           id,
           name: id,
-          tabIndex: 14
+          tabIndex: 19
         }}
       >
+        <MenuItem
+          value="0"
+          classes={{
+            root: classes.selectMenuItem,
+            selected: classes.selectMenuItemSelected,
+          }}
+        >
+          None
+        </MenuItem>
         {data.map((res: any) => (
           <MenuItem
             classes={{

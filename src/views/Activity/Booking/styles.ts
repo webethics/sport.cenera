@@ -37,9 +37,19 @@ export const styles = (theme: Theme) => ({
     width: "60%",
     justifyContent: "center",
   },
+  editBtnContainer: {
+    margin: "20px auto 0",
+    display: "flex",
+    width: "60%",
+    justifyContent: "center",
+  },
   btnSubmit: {
     flex: 1,
     margin: "0 100px",
+  },
+  editLocationBtn: {
+    flex: 1,
+    margin: 0,
   },
   btnDelete: {
     flex: 1,

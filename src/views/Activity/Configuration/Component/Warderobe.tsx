@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState ,useEffect} from "react";
 import { makeStyles, CircularProgress, Backdrop } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
@@ -21,10 +21,15 @@ import { useFetchWardrobes } from "@cenera/common/hooks/api-hooks/activity";
 import { ActivityService } from "@cenera/services/api/activity";
 import { useAppContext } from "@cenera/app-context";
 import * as Yup from "yup";
+// import Editwardrobe from "./Editwardrobe";
+// import EditIcon from '@material-ui/icons/Edit';
+
 
 const useStyles = makeStyles(configurationStyle as any);
 
 const Warderobe = () => {
+  // const [modalshow, setModalshow] = useState(false);
+  // const [selectedWardrobe , setSelectedWardrobe]:any = useState();
   const classes = useStyles();
   const [appState] = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
@@ -95,7 +100,7 @@ const Warderobe = () => {
       handleDelete(id);
     },
     successMessage: "Wardrobe deleted successfully",
-    confirmMessage: "Wardrobe will be deleted for good!",
+    confirmMessage: `Wardrobe  will be deleted for good!`,
   });
 
   const formik = useFormik({
@@ -117,10 +122,25 @@ const Warderobe = () => {
     }
   }, [Wardrobesdata]);
 
+  // const[selectwardrobeid,setselectwardrobeid]=useState(null)
+  // const[selectwardrobname,setselectwardrobname]=useState(null)
+  // const handleEditActivity = (id: number,name: any) => {
+
+  //   setselectwardrobeid(id)
+  //   setselectwardrobname(name)
+  //   setModalshow(true);
+  // };
+
   const { values, handleChange, handleSubmit, errors, touched } = formik;
 
   return (
     <>
+      {/* <Editwardrobe
+      open={modalshow}
+      onClose={() => setModalshow(false)}
+      wardrobenname={selectwardrobname}
+      wardrobenameid={selectwardrobeid}
+      /> */}
       <form onSubmit={handleSubmit}>
         <Paper className={classes.paper}>
           <Card className={classes.root} variant="outlined">
@@ -141,9 +161,18 @@ const Warderobe = () => {
                       <ListItemText className={classes.listItemText}>
                         {res.wardrobe_name}
                       </ListItemText>
+                      {/* <EditIcon
+                      fontSize="small"
+                      cursor="pointer"
+                         onClick={() =>handleEditActivity(res.wardrobe_id,res.wardrobe_name)
+                         }
+                       /> */}
                       <DeleteOutlineIcon
                         className={classes.deleteButton}
-                        onClick={() => showConfirmDialog(res.wardrobe_id)}
+                        onClick={() => {
+                          // setSelectedWardrobe(res.wardrobe_name);
+                          showConfirmDialog(res.wardrobe_id)
+                        }}
                       />
                     </ListItem>
                   )
