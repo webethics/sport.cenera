@@ -834,7 +834,8 @@ export const Booking: FC = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                        inputProps={{ tabIndex: 10 }}
+                        // inputProps={{ tabIndex: 10 }}
+                        tabIndex={10}
                           id="extWarBef15"
                           checked={values.extWarBef15}
                           style={{ color: "#00acc1" }}
@@ -861,7 +862,8 @@ export const Booking: FC = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                        inputProps={{ tabIndex: 11 }}
+                        // inputProps={{ tabIndex: 11 }}
+                        tabIndex={11}
                           id="extWarBef30"
                           checked={values.extWarBef30}
                           style={{ color: "#00acc1" }}
@@ -1238,7 +1240,8 @@ export const Booking: FC = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                         inputProps={{ tabIndex: 17 }}
+                        //  inputProps={{ tabIndex: 17 }}
+                         tabIndex={17}
                           id="show_public"
                           checked={values.show_public}
                           style={{ color: "#00acc1" }}
