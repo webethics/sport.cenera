@@ -7,8 +7,6 @@ import { Button } from "@cenera/components/Button/Button";
 import { styles } from "./styles";
 import ItemPicker from "./Components/ItemPicker";
 import RecurringPicker from "./Components/recurringPicker";
-import Refreewardrobe from "./Components/awayrefree"
-import Awaywardrobe from "./Components/awaywardrobe"
 import { TextField, Divider } from "@material-ui/core";
 import UpcomingActivities from "./Components/UpcomingActivities";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -29,15 +27,17 @@ import Box from "@mui/material/Box";
 
 import { KeyboardTimePicker } from "@material-ui/pickers";
 import { KeyboardDatePicker } from "@material-ui/pickers";
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete from "@mui/material/Autocomplete";
 // import TextField from '@mui/material/TextField';
 
 const useStyles = makeStyles(styles as any);
 
 export const Booking: FC = () => {
-  const random = Math.floor(Math.random() * 100 + 1);
-  const round = Math.round(random);
-  const number = round;
+  // const random = Math.floor(Math.random() * 100 + 1);
+  // const round = Math.round(random);
+  // const number = round;
+  const [addnewbooking, setaddnewbooking] = useState(1);
+  // console.log(addnewbooking, "addnewbookingaddnewbooking");
 
   const [week, setweek] = useState([]);
   const [monthDates, setMonthDates] = useState([]);
@@ -67,10 +67,6 @@ export const Booking: FC = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [errorMsgMonth, setErrorMsgMonth] = useState("");
   const [errorMsgweekly, setErrorMsgweekly] = useState("");
-  const [teamlist,setTeamlist] = useState<any>(0);
-  const [locationlist,setLocationlist]= useState<any>();
-  const[selectwardrobe,setselectwardrobe] = useState<any>();
-  const [selectactivitytype,setSelectactivitytype] = useState<any>();
   // const[weekerror,setweekerror]= useState(false);
 
   //Recurring
@@ -152,15 +148,14 @@ export const Booking: FC = () => {
     formik.setValues(formikField);
   };
 
-  const initialFormValues:any = {
-
-    team: [],
+  const initialFormValues: any = {
+    team: "0",
     orTeam: "",
     start_date: selectedDate,
     start_time: "",
     end_date: selectedDate,
     end_time: "",
-    location: [],
+    location: "0",
     warderobe: "0",
     extWarBef15: false,
     extWarBef30: false,
@@ -269,9 +264,7 @@ export const Booking: FC = () => {
         club_id: appState.user.club_id,
         startTime: newStartTime,
         endTime: newEndTime,
-        
-        
-        _id: formValues.location,
+        location_id: formValues.location,
         activity_type: activity,
 
         ...(formValues.recurring === 1
@@ -310,6 +303,7 @@ export const Booking: FC = () => {
         try {
           let res = await addActivity(newobj);
           if (res) {
+            setaddnewbooking(2);
             enqueueSnackbar("Activity Added Successfully", {
               variant: "success",
             });
@@ -357,12 +351,8 @@ export const Booking: FC = () => {
       ...formik.values,
       start_time: moment(startTimefield).format("HH:mm"),
       end_time: moment(endTimefield).format("HH:mm"),
-      team: teamlist,
-      location: locationlist,
-      activity: selectactivitytype,
-      warderobe: selectwardrobe
     });
-  }, [startTimefield, endTimefield ,teamlist,locationlist,selectactivitytype]);
+  }, [startTimefield, endTimefield]);
 
   useEffect(() => {
     if (startTimefield) {
@@ -372,7 +362,6 @@ export const Booking: FC = () => {
 
   //moment(startTime, 'HH:mm:ss').add(durationInMinutes, 'minutes').format('HH:mm');
 
- 
   const { values, handleChange, errors, touched } = formik;
 
   return (
@@ -386,10 +375,8 @@ export const Booking: FC = () => {
             <CardBody>
               <form>
                 <GridContainer>
-                
-                  <GridItem xs="12" sm="2" md="2" sx={{ mb: 3 }} >
-                  {/* <TextField label="1126262" inputProps={{ tabIndex: 1 }} /> */}
-                    <h5 style={{ fontSize: "14px" }} >Start *</h5>
+                  <GridItem xs="12" sm="2" md="2" sx={{ mb: 3 }}>
+                    <h5 style={{ fontSize: "14px" }}>Start *</h5>
                   </GridItem>
                   <GridItem
                     xs="6"
@@ -409,7 +396,6 @@ export const Booking: FC = () => {
                     /> */}
 
                     <KeyboardDatePicker
-                      inputProps={{ tabIndex: 1 }}
                       id="start_date"
                       className="datepicker"
                       clearable
@@ -451,7 +437,6 @@ export const Booking: FC = () => {
                         onChange={handleValueChange}
                       /> */}
                       <KeyboardTimePicker
-                        inputProps={{ tabIndex: 2 }}
                         autoOk={false}
                         ampm={false}
                         variant="inline"
@@ -503,7 +488,6 @@ export const Booking: FC = () => {
                       id="end_date"
                     /> */}
                     <KeyboardDatePicker
-                     inputProps={{ tabIndex: 3 }}
                       id="end_date"
                       className="datepicker"
                       clearable
@@ -557,7 +541,6 @@ export const Booking: FC = () => {
                       /> */}
 
                       <KeyboardTimePicker
-                       inputProps={{ tabIndex: 4 }}
                         autoOk={false}
                         ampm={false}
                         variant="inline"
@@ -600,24 +583,34 @@ export const Booking: FC = () => {
                       disabled={values.orTeam && true}
                       id="team"
                     /> */}
-                      <Autocomplete
-                       
-                        multiple
-                        limitTags={2} 
-                        onChange={ (e, obj) => { setTeamlist(obj.map((n) => n.id));console.log(e) } }
-                        id="team"
-                        options={teamsList}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField {...params} inputProps={{ ...params.inputProps, tabIndex: 5 }} placeholder="select teams" />
-                        )}
-                        sx={{ width: '300px'}}
-                        disabled={values.orTeam && true}
-                        />
-           {console.log( teamlist.length,"ppppppp")}
+                    <Autocomplete
+                      style={{ width: "100%" }}
+                      disabled={values.orTeam && true}
+                      //disablePortal
+                      id="team"
+                      onChange={(e, obj) => {
+                        if (obj !== null) {
+                          formik.setValues({
+                            ...formik.values,
+                            team: obj.id,
+                          });
+                        } else {
+                          formik.setValues({
+                            ...formik.values,
+                            team: "0",
+                          });
+                        }
+                        console.log(e);
+                      }}
+                      options={teamsList}
+                      getOptionLabel={(option) => option.name}
+                      sx={{ width: 300 }}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Select team" />
+                      )}
+                    />
                   </GridItem>
 
-                  
                   <GridItem
                     xs="12"
                     sm="5"
@@ -640,13 +633,12 @@ export const Booking: FC = () => {
                         or
                       </Box>
                       <TextField
-                        inputProps={{ tabIndex: 6 }}
                         style={{ width: "263px" }}
                         className="desc_box orteambox "
                         id="orTeam"
                         variant="outlined"
                         value={values.orTeam}
-                        disabled={teamlist !== 0   && true}
+                        disabled={values.team !== 0 && true}
                         onChange={handleChange}
                       />
                     </Box>
@@ -679,19 +671,32 @@ export const Booking: FC = () => {
                       id="location"
                     /> */}
 
-                      <Autocomplete
-                        multiple
-                        limitTags={2} 
-                        onChange={ (e, obj) => { setLocationlist(obj.map((n) => n.id));console.log(e) } }
-                        options={locations}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField {...params} inputProps={{ ...params.inputProps, tabIndex: 7 }} placeholder="select location" />
-                        )}
-                        sx={{ width: '300px'}}
-                        id="location"
-                      />
- 
+                    <Autocomplete
+                      // disablePortal
+                      style={{ width: "100%" }}
+                      id="location"
+                      onChange={(e, obj) => {
+                        if (obj !== null) {
+                          formik.setValues({
+                            ...formik.values,
+                            location: obj.id,
+                          });
+                        } else {
+                          formik.setValues({
+                            ...formik.values,
+                            location: 0,
+                          });
+                        }
+                        console.log(e);
+                      }}
+                      options={locations}
+                      getOptionLabel={(option) => option.name}
+                      sx={{ width: 300 }}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Select location" />
+                      )}
+                    />
+
                     {errors.location && touched.location && (
                       <span
                         className={classes.errorColor}
@@ -733,20 +738,34 @@ export const Booking: FC = () => {
                       data={activitylist}
                       value={values.activity}
                       onChange={handleChange}
-                      id="activity" setSelectactivitytype
+                      id="activity"
                     /> */}
-                      <Autocomplete
-                        multiple
-                        limitTags={2} 
-                        options={activitylist}
-                        onChange={ (e, obj) => { setSelectactivitytype(obj.map((n) => n.id));console.log(e) } }
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField {...params} inputProps={{ ...params.inputProps, tabIndex: 8 }} placeholder="select activity" />
-                        )}
-                        sx={{ width: '300px'}}
-                        id="activity"
-                      />
+                    <Autocomplete
+                      //disablePortal
+                      style={{ width: "100%" }}
+                      id="activity"
+                      onChange={(e, obj) => {
+                        if (obj !== null) {
+                          formik.setValues({
+                            ...formik.values,
+                            activity: obj.id,
+                          });
+                        } else {
+                          formik.setValues({
+                            ...formik.values,
+                            activity: 0,
+                          });
+                        }
+                        console.log(e);
+                      }}
+                      options={activitylist}
+                      getOptionLabel={(option) => option.name}
+                      sx={{ width: 300 }}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Select activity" />
+                      )}
+                    />
+
                     {errors.activity && touched.activity && (
                       <span
                         className={classes.errorColor}
@@ -791,18 +810,31 @@ export const Booking: FC = () => {
                       id="warderobe"
                     /> */}
 
-                      <Autocomplete
-                        multiple
-                        limitTags={2} 
-                        onChange={ (e, obj) => { setselectwardrobe(obj.map((n) => n.id));console.log(e) } }
-                        options={locations}
-                        getOptionLabel={(option) => option.name}
-                        renderInput={(params) => (
-                          <TextField {...params} inputProps={{ ...params.inputProps, tabIndex: 9 }} placeholder="select warderobe" />
-                        )}
-                        sx={{ width: '300px'}}
-                        id="warderobe"
-                      />
+                    <Autocomplete
+                      //disablePortal
+                      style={{ width: "100%" }}
+                      id="warderobe"
+                      onChange={(e, obj) => {
+                        if (obj !== null) {
+                          formik.setValues({
+                            ...formik.values,
+                            warderobe: obj.id,
+                          });
+                        } else {
+                          formik.setValues({
+                            ...formik.values,
+                            warderobe: 0,
+                          });
+                        }
+                        console.log(e);
+                      }}
+                      options={wardrobes}
+                      getOptionLabel={(option) => option.name}
+                      sx={{ width: 300 }}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Select warderobe" />
+                      )}
+                    />
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -834,8 +866,6 @@ export const Booking: FC = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                        // inputProps={{ tabIndex: 10 }}
-                        tabIndex={10}
                           id="extWarBef15"
                           checked={values.extWarBef15}
                           style={{ color: "#00acc1" }}
@@ -862,8 +892,6 @@ export const Booking: FC = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                        // inputProps={{ tabIndex: 11 }}
-                        tabIndex={11}
                           id="extWarBef30"
                           checked={values.extWarBef30}
                           style={{ color: "#00acc1" }}
@@ -952,7 +980,6 @@ export const Booking: FC = () => {
                     style={{ marginBottom: "15px" }}
                   >
                     <TextField
-                    inputProps={{ tabIndex: 12 }}
                       className="desc_box"
                       id="description"
                       variant="outlined"
@@ -986,14 +1013,12 @@ export const Booking: FC = () => {
                     md="4"
                     style={{ marginBottom: "15px" }}
                   >
-                      <ItemPicker
-                        
-                        data={recurring}
-                        value={values.recurring}
-                        onChange={handleChange}
-                        id="recurring"
-                        />
-                     
+                    <ItemPicker
+                      data={recurring}
+                      value={values.recurring}
+                      onChange={handleChange}
+                      id="recurring"
+                    />
                   </GridItem>
                   <GridItem
                     xs="6"
@@ -1022,7 +1047,6 @@ export const Booking: FC = () => {
                           </Box>
 
                           <RecurringPicker
-                           inputProps={{ tabIndex: 14 }}
                             data={interval}
                             value={values.recurringby}
                             onChange={handleChange}
@@ -1080,7 +1104,6 @@ export const Booking: FC = () => {
                             >
                               {dates.map((res: any) => (
                                 <Button
-                                 tabIndex={15}
                                   onClick={() => handledays2(res)}
                                   className={
                                     monthDates.some((elm) => elm === res)
@@ -1115,7 +1138,6 @@ export const Booking: FC = () => {
                               display: "flex",
                               alignItems: "center",
                               flexWrap: "wrap",
-                              
                             }}
                           >
                             {weekdays.map((res) => (
@@ -1128,7 +1150,6 @@ export const Booking: FC = () => {
                                     : classes.dateButton
                                 }
                                 disableRipple
-                                tabIndex={15}
                               >
                                 {res.name.charAt(0)}
                               </Button>
@@ -1191,7 +1212,6 @@ export const Booking: FC = () => {
                           id="end_date_recurring"
                         /> */}
                         <KeyboardDatePicker
-                          inputProps={{ tabIndex: 16 }}
                           id="end_date_recurring"
                           className="datepicker"
                           clearable
@@ -1240,8 +1260,6 @@ export const Booking: FC = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                        //  inputProps={{ tabIndex: 17 }}
-                         tabIndex={17}
                           id="show_public"
                           checked={values.show_public}
                           style={{ color: "#00acc1" }}
@@ -1279,7 +1297,6 @@ export const Booking: FC = () => {
                       </GridItem>
                       <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                         <TextField
-                          inputProps={{ tabIndex: 17 }}
                           className="desc_box2"
                           id="away_team"
                           variant="outlined"
@@ -1292,7 +1309,7 @@ export const Booking: FC = () => {
                         <h5 style={{ fontSize: "14px" }}>Warderobe</h5>
                       </GridItem>
                       <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
-                        <Awaywardrobe
+                        <ItemPicker
                           className="datepicker"
                           data={wardrobes}
                           value={values.away_team_wardrobe}
@@ -1318,7 +1335,7 @@ export const Booking: FC = () => {
                         <h5 style={{ fontSize: "14px" }}>Warderobe</h5>
                       </GridItem>
                       <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
-                        <Refreewardrobe
+                        <ItemPicker
                           data={wardrobes}
                           value={values.referee_wardrobe}
                           onChange={handleChange}
@@ -1331,7 +1348,6 @@ export const Booking: FC = () => {
 
                 <div className={`btn-wrap ${classes.btnContainer}`}>
                   <Button
-                    tabIndex={20}
                     color="info"
                     className={classes.btnSubmit}
                     type="button"
@@ -1349,7 +1365,7 @@ export const Booking: FC = () => {
 
       <GridContainer>
         <GridItem xs={11} sm={11} md={11} xl={8} className={classes.container}>
-          <UpcomingActivities fetchupcomingactivity={number} />
+          <UpcomingActivities fetchupcomingactivity={addnewbooking} />
         </GridItem>
       </GridContainer>
 

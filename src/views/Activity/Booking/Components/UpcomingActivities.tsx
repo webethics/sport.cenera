@@ -311,42 +311,49 @@ const UpcomingActivities = ({
     setModalshow(true);
   };
 
-
-  
   useEffect(() => {
     if (Activitydata) {
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
-  
     }
-    if (fetchupcomingactivity && fetchupcomingactivity && Activitydata) {
+    if (fetchupcomingactivity && fetchupcomingactivity) {
+      console.log(fetchupcomingactivity, "fetchupcomin gghhghghghggh");
       revalidate();
       setdata(2);
     }
   }, [
-    filterActivity,
+    //filterActivity,
     revaldatestate,
     // deleting,
     // loading,
     // nextdate,
     // searchtext,
     // searchteam,
-    // fetchupcomingactivity,
+    fetchupcomingactivity,
     // searchlocation,
     // filterdate,
   ]);
 
+  // testing of useeffect
   useEffect(() => {
     if (data == 2) {
       let temp = getFormatedData(Activitydata);
+      console.log("searchteammm", temp, "hjhjh", Activitydata);
       setAcitivityList(temp);
     }
+  }, [searchteam, Activitydata, data]);
+  //
+  useEffect(() => {
+    // if (data == 2) {
+    //   let temp = getFormatedData(Activitydata);
+    //   setAcitivityList(temp);
+    // }
     if (successedit) {
       revalidate();
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
     }
-  }, [Activitydata, data, successedit]);
+  }, [successedit]);
 
   const handleDeleteSelected = () => {
     let isSelectedForDelete = acitivityList.some((res) => {
@@ -502,9 +509,7 @@ const UpcomingActivities = ({
                       <TableHead>
                         <TableRow>
                           <StyledTableCell colSpan={8}>
-                    
                             <span style={{ paddingRight: "12px" }}>
-                            
                               {res.recuring && res.recuring.length > 0
                                 ? moment(res.recuring[0].startTime).format(
                                     "DD-MM-YYYY"
@@ -519,7 +524,9 @@ const UpcomingActivities = ({
                                 : moment(res.startTime).format("DD-MM-YYYY")}
                             </span>
                           </StyledTableCell>
-                          <StyledTableCell>Week  : {moment(res.startTime, "YYYYMMDD").week()} </StyledTableCell>
+                          <StyledTableCell>
+                            Week : {moment(res.startTime, "YYYYMMDD").week()}{" "}
+                          </StyledTableCell>
                         </TableRow>
                         <TableRow className={`${classes.customeTableRow}`}>
                           <StyledTableCell>Start time</StyledTableCell>
@@ -598,7 +605,7 @@ const UpcomingActivities = ({
                                   )
                                 }
                               >
-                               Edit
+                                Edit
                               </Button>
                             </BodyTableCell>
                             <BodyTableCell align="left">
@@ -835,10 +842,15 @@ const UpcomingActivities = ({
           {acitivityList.length > 0 && (
             <div
               className=""
-              style={{ textAlign: "center", paddingBottom: "40px",paddingLeft: "10px" ,display: "flex",justifyContent: "space-around"}}
+              style={{
+                textAlign: "center",
+                paddingBottom: "40px",
+                paddingLeft: "10px",
+                display: "flex",
+                justifyContent: "space-around",
+              }}
             >
- 
-              <div className="deleted_activity" >
+              <div className="deleted_activity">
                 <Button
                   color="danger"
                   style={{ maxWidth: "100%" }}
@@ -850,7 +862,7 @@ const UpcomingActivities = ({
               </div>
               <div className="publish_activity">
                 <Button
-                color="success"
+                  color="success"
                   style={{ maxWidth: "100%" }}
                   onClick={publishedActivity}
                 >
