@@ -638,7 +638,7 @@ export const Booking: FC = () => {
                         id="orTeam"
                         variant="outlined"
                         value={values.orTeam}
-                        disabled={values.team !== 0 && true}
+                        disabled={values.team !== "0" && true}
                         onChange={handleChange}
                       />
                     </Box>
