@@ -29,12 +29,21 @@ import moment from "moment";
 import * as Yup from "yup";
 import { useFetchActivityType } from "@cenera/common/hooks/api-hooks/activity";
 import "rc-time-picker/assets/index.css";
+import Autocomplete from "@mui/material/Autocomplete";
 
 import Box from "@mui/material/Box";
 import { KeyboardTimePicker } from "@material-ui/pickers";
 const useStyles = makeStyles(styles as any);
 
 export default function EditActivityModal(props: any) {
+  //
+
+  const [initialteam, setinitialteam] = useState(null);
+  const [initiallocation, setinitiallocation] = useState(null);
+  const [initialwardrobe, setinitialwardrobe] = useState(null);
+  const [activitytype, setactivitytype] = useState(null);
+
+  //
   const editActivity = props.activityid;
   const editActivitystarttime = props.activitystarttime;
   const [week, setweek] = useState([]);
@@ -392,6 +401,7 @@ export default function EditActivityModal(props: any) {
         activitylist.forEach((res) => {
           if (res.name == EditActivitydata[0].activity_type.toLowerCase()) {
             newActivity = res.id;
+            setactivitytype(newActivity);
           }
         });
 
@@ -429,11 +439,18 @@ export default function EditActivityModal(props: any) {
 
   if (EditActivitydata[0] && EditActivitydata[0]) {
     console.log(
-      typeof EditActivitydata[0].isPublic.toString(),
-      "current123456789 user"
+      typeof EditActivitydata[0].team_id.toString(),
+      "current123456789 user teamiddd"
     );
   }
-
+  useEffect(() => {
+    if (EditActivitydata[0]) {
+      setinitialteam(EditActivitydata[0].team_id.toString());
+      setinitiallocation(EditActivitydata[0].location_id.toString());
+      setinitialwardrobe(EditActivitydata[0].wardrobe_id.toString());
+    }
+  }, [EditActivitydata]);
+  console.log(typeof initialteam, "hhhhh");
   const { values, handleChange, errors, touched } = formik;
 
   return (
@@ -595,12 +612,43 @@ export default function EditActivityModal(props: any) {
                 <h5 style={{ fontSize: "14px" }}>Team</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                <ItemPicker
+                {/* <ItemPicker
                   data={teamsList}
                   onChange={handleChange}
                   value={values.team}
                   disabled={values.orTeam && true}
                   id="team"
+                /> */}
+
+                <Autocomplete
+                  style={{ width: "75%" }}
+                  disabled={values.orTeam && true}
+                  //disablePortal
+
+                  value={
+                    initialteam && teamsList.find((o) => o.id == initialteam)
+                  }
+                  id="team"
+                  onChange={(e, obj) => {
+                    if (obj !== null) {
+                      formik.setValues({
+                        ...formik.values,
+                        team: obj.id,
+                      });
+                    } else {
+                      formik.setValues({
+                        ...formik.values,
+                        team: "0",
+                      });
+                    }
+                    console.log(e);
+                  }}
+                  options={teamsList}
+                  getOptionLabel={(option) => option.name}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Select team" />
+                  )}
                 />
               </GridItem>
 
@@ -643,11 +691,40 @@ export default function EditActivityModal(props: any) {
                 <h5 style={{ fontSize: "14px" }}>Location</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                <ItemPicker
+                {/* <ItemPicker
                   data={locations}
                   value={values.location}
                   onChange={handleChange}
                   id="location"
+                /> */}
+                <Autocomplete
+                  // disablePortal
+                  style={{ width: "100%" }}
+                  value={
+                    initiallocation &&
+                    locations.find((o) => o.id == initiallocation)
+                  }
+                  id="location"
+                  onChange={(e, obj) => {
+                    if (obj !== null) {
+                      formik.setValues({
+                        ...formik.values,
+                        location: obj.id,
+                      });
+                    } else {
+                      formik.setValues({
+                        ...formik.values,
+                        location: "0",
+                      });
+                    }
+                    console.log(e);
+                  }}
+                  options={locations}
+                  getOptionLabel={(option) => option.name}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Select location" />
+                  )}
                 />
 
                 {errors.location && touched.location && (
@@ -679,11 +756,40 @@ export default function EditActivityModal(props: any) {
                 <h5 style={{ fontSize: "14px" }}>Activity</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                <ItemPicker
+                {/* <ItemPicker
                   data={activitylist}
                   value={values.activity}
                   onChange={handleChange}
                   id="activity"
+                /> */}
+                <Autocomplete
+                  //disablePortal
+                  style={{ width: "75%" }}
+                  id="activity"
+                  value={
+                    activitytype &&
+                    activitylist.find((o) => o.id == activitytype)
+                  }
+                  onChange={(e, obj) => {
+                    if (obj !== null) {
+                      formik.setValues({
+                        ...formik.values,
+                        activity: obj.id,
+                      });
+                    } else {
+                      formik.setValues({
+                        ...formik.values,
+                        activity: "0",
+                      });
+                    }
+                    console.log(e);
+                  }}
+                  options={activitylist}
+                  getOptionLabel={(option) => option.name}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Select activity" />
+                  )}
                 />
                 {errors.activity && touched.activity && (
                   <span
@@ -713,11 +819,40 @@ export default function EditActivityModal(props: any) {
                 <h5 style={{ fontSize: "14px" }}>Wardrobe</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
-                <ItemPicker
+                {/* <ItemPicker
                   data={wardrobes}
                   value={values.warderobe}
                   onChange={handleChange}
                   id="warderobe"
+                /> */}
+                <Autocomplete
+                  //disablePortal
+                  style={{ width: "75%" }}
+                  id="warderobe"
+                  value={
+                    initialwardrobe &&
+                    wardrobes.find((o) => o.id == initialwardrobe)
+                  }
+                  onChange={(e, obj) => {
+                    if (obj !== null) {
+                      formik.setValues({
+                        ...formik.values,
+                        warderobe: obj.id,
+                      });
+                    } else {
+                      formik.setValues({
+                        ...formik.values,
+                        warderobe: "0",
+                      });
+                    }
+                    console.log(e);
+                  }}
+                  options={wardrobes}
+                  getOptionLabel={(option) => option.name}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Select warderobe" />
+                  )}
                 />
               </GridItem>
 

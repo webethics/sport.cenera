@@ -72,6 +72,7 @@ const UpcomingActivities = ({
   fetchupcomingactivity: any;
 }) => {
   const [filterActivity, setfilterActivity] = useState("0");
+
   // const [endmonth, setendmonth] = useState();
 
   const [filterdate, setFilterdate] = useState(6);
@@ -80,7 +81,7 @@ const UpcomingActivities = ({
     .format("YYYY-MM-DDT24:55");
   const [successedit, setsuccessedit] = useState();
 
-  const [data, setdata] = useState(null);
+  // const [data, setdata] = useState(null);
   const [searchtext, setSearchtext] = useState("");
   const [searchteam, setsearchteam] = useState(0);
 
@@ -311,43 +312,56 @@ const UpcomingActivities = ({
     setModalshow(true);
   };
 
+  // useEffect(() => {
+  //   if (Activitydata) {
+  //     let temp = getFormatedData(Activitydata);
+  //     setAcitivityList(temp);
+  //   }
+  //   if (fetchupcomingactivity && fetchupcomingactivity) {
+  //     console.log(fetchupcomingactivity, "fetchupcomin gghhghghghggh");
+  //     revalidate();
+  //     setdata(2);
+  //   }
+  // }, [
+  //   //filterActivity,
+  //   revaldatestate,
+  //   // deleting,
+  //   // loading,
+  //   // nextdate,
+  //   // searchtext,
+  //   // searchteam,
+  //   fetchupcomingactivity,
+  //   // searchlocation,
+  //   // filterdate,
+  // ]);
+  //testing-------------------------
   useEffect(() => {
-    if (Activitydata) {
+    if (Activitydata.length) {
       let temp = getFormatedData(Activitydata);
+      console.log("onetimerun");
       setAcitivityList(temp);
     }
-    if (fetchupcomingactivity && fetchupcomingactivity) {
-      console.log(fetchupcomingactivity, "fetchupcomin gghhghghghggh");
-      revalidate();
-      setdata(2);
-    }
-  }, [
-    //filterActivity,
-    revaldatestate,
-    // deleting,
-    // loading,
-    // nextdate,
-    // searchtext,
-    // searchteam,
-    fetchupcomingactivity,
-    // searchlocation,
-    // filterdate,
-  ]);
-
+  }, [Activitydata]);
+  console.log(Activitydata.length, "uuuuuuuuu");
+  //----------------
   // testing of useeffect
   useEffect(() => {
-    if (data == 2) {
-      let temp = getFormatedData(Activitydata);
-      console.log("searchteammm", temp, "hjhjh", Activitydata);
-      setAcitivityList(temp);
-    }
-  }, [searchteam, Activitydata, data]);
+    let temp = getFormatedData(Activitydata);
+    console.log("searchteammm");
+    revalidate();
+    setAcitivityList(temp);
+  }, [
+    fetchupcomingactivity,
+    revaldatestate,
+    searchteam,
+    searchlocation,
+    filterdate,
+    filterdate,
+    filterActivity,
+  ]);
+  // console.log("acitivityList", acitivityList);
   //
   useEffect(() => {
-    // if (data == 2) {
-    //   let temp = getFormatedData(Activitydata);
-    //   setAcitivityList(temp);
-    // }
     if (successedit) {
       revalidate();
       let temp = getFormatedData(Activitydata);
@@ -512,7 +526,7 @@ const UpcomingActivities = ({
                             <span style={{ paddingRight: "12px" }}>
                               {res.recuring && res.recuring.length > 0
                                 ? moment(res.recuring[0].startTime).format(
-                                    "DD-MM-YYYY"
+                                    "dddd"
                                   )
                                 : moment(res.startTime).format("dddd")}
                             </span>

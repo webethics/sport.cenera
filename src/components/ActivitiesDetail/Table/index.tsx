@@ -228,9 +228,7 @@ export default function CustomizedTables({
                         <span style={{ paddingRight: "12px" }}>
                           {" "}
                           {res.recuring && res.recuring.length > 0
-                            ? moment(res.recuring[0].startTime).format(
-                                "DD-MM-YYYY"
-                              )
+                            ? moment(res.recuring[0].startTime).format("dddd")
                             : moment(res.startTime).format("dddd")}{" "}
                         </span>
 
@@ -246,7 +244,9 @@ export default function CustomizedTables({
                             : moment(res.startTime).format("DD-MM-YYYY")}
                         </span>
                       </StyledTableCell>
-                      <StyledTableCell>Week  : {moment(res.startTime, "YYYYMMDD").week()} </StyledTableCell>
+                      <StyledTableCell>
+                        Week : {moment(res.startTime, "YYYYMMDD").week()}{" "}
+                      </StyledTableCell>
                     </TableRow>
                     <TableRow className={classes.customeTableRow}>
                       <StyledTableCell align="left">Start Time</StyledTableCell>
