@@ -342,7 +342,7 @@ const UpcomingActivities = ({
       setAcitivityList(temp);
     }
   }, [Activitydata]);
-  console.log(Activitydata.length, "uuuuuuuuu");
+  //console.log(Activitydata.length, "uuuuuuuuu");
   //----------------
   // testing of useeffect
   useEffect(() => {
@@ -351,6 +351,7 @@ const UpcomingActivities = ({
     revalidate();
     setAcitivityList(temp);
   }, [
+    deleteNonRecuring,
     fetchupcomingactivity,
     revaldatestate,
     searchteam,

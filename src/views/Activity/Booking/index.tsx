@@ -6,7 +6,7 @@ import { CardHeader, Card, CardBody } from "@cenera/components/Card";
 import { Button } from "@cenera/components/Button/Button";
 import { styles } from "./styles";
 import ItemPicker from "./Components/ItemPicker";
-import RecurringPicker from "./Components/recurringPicker";
+
 import { TextField, Divider } from "@material-ui/core";
 import UpcomingActivities from "./Components/UpcomingActivities";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -24,7 +24,7 @@ import moment from "moment";
 import * as Yup from "yup";
 import "rc-time-picker/assets/index.css";
 import Box from "@mui/material/Box";
-
+import RecurringPicker from "./Components/recurringPicker";
 import { KeyboardTimePicker } from "@material-ui/pickers";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -385,7 +385,7 @@ export const Booking: FC = () => {
                     style={{ marginBottom: "15px" }}
                   >
                     {/* <DatePicker
-                      className="datepicker"
+                      className="datepicker"s
                       label="Date"
                       disablePast
                       value={values.start_date}
@@ -396,6 +396,7 @@ export const Booking: FC = () => {
                     /> */}
 
                     <KeyboardDatePicker
+                      inputProps={{ tabIndex: 1 }}
                       id="start_date"
                       className="datepicker"
                       clearable
@@ -437,6 +438,7 @@ export const Booking: FC = () => {
                         onChange={handleValueChange}
                       /> */}
                       <KeyboardTimePicker
+                        inputProps={{ tabIndex: 2 }}
                         autoOk={false}
                         ampm={false}
                         variant="inline"
@@ -488,6 +490,7 @@ export const Booking: FC = () => {
                       id="end_date"
                     /> */}
                     <KeyboardDatePicker
+                      inputProps={{ tabIndex: 3 }}
                       id="end_date"
                       className="datepicker"
                       clearable
@@ -541,6 +544,7 @@ export const Booking: FC = () => {
                       /> */}
 
                       <KeyboardTimePicker
+                        inputProps={{ tabIndex: 4 }}
                         autoOk={false}
                         ampm={false}
                         variant="inline"
@@ -606,7 +610,12 @@ export const Booking: FC = () => {
                       getOptionLabel={(option) => option.name}
                       sx={{ width: 300 }}
                       renderInput={(params) => (
-                        <TextField {...params} label="Select team" />
+                        <TextField
+                          {...params}
+                          inputProps={{ ...params.inputProps, tabIndex: 5 }}
+                          placeholder="select teams"
+                          label="Select team"
+                        />
                       )}
                     />
                   </GridItem>
@@ -633,6 +642,7 @@ export const Booking: FC = () => {
                         or
                       </Box>
                       <TextField
+                        inputProps={{ tabIndex: 6 }}
                         style={{ width: "263px" }}
                         className="desc_box orteambox "
                         id="orTeam"
@@ -693,7 +703,12 @@ export const Booking: FC = () => {
                       getOptionLabel={(option) => option.name}
                       sx={{ width: 300 }}
                       renderInput={(params) => (
-                        <TextField {...params} label="Select location" />
+                        <TextField
+                          {...params}
+                          inputProps={{ ...params.inputProps, tabIndex: 7 }}
+                          placeholder="select teams"
+                          label="Select location"
+                        />
                       )}
                     />
 
@@ -762,7 +777,12 @@ export const Booking: FC = () => {
                       getOptionLabel={(option) => option.name}
                       sx={{ width: 300 }}
                       renderInput={(params) => (
-                        <TextField {...params} label="Select activity" />
+                        <TextField
+                          {...params}
+                          inputProps={{ ...params.inputProps, tabIndex: 8 }}
+                          placeholder="select activity"
+                          label="Select activity"
+                        />
                       )}
                     />
 
@@ -832,7 +852,11 @@ export const Booking: FC = () => {
                       getOptionLabel={(option) => option.name}
                       sx={{ width: 300 }}
                       renderInput={(params) => (
-                        <TextField {...params} label="Select warderobe" />
+                        <TextField
+                          {...params}
+                          inputProps={{ ...params.inputProps, tabIndex: 9 }}
+                          label="Select warderobe"
+                        />
                       )}
                     />
                   </GridItem>
@@ -866,6 +890,7 @@ export const Booking: FC = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
+                          inputProps={{ tabIndex: 10 }}
                           id="extWarBef15"
                           checked={values.extWarBef15}
                           style={{ color: "#00acc1" }}
@@ -892,6 +917,7 @@ export const Booking: FC = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
+                          inputProps={{ tabIndex: 11 }}
                           id="extWarBef30"
                           checked={values.extWarBef30}
                           style={{ color: "#00acc1" }}
@@ -980,6 +1006,7 @@ export const Booking: FC = () => {
                     style={{ marginBottom: "15px" }}
                   >
                     <TextField
+                      inputProps={{ tabIndex: 12 }}
                       className="desc_box"
                       id="description"
                       variant="outlined"
@@ -1014,11 +1041,13 @@ export const Booking: FC = () => {
                     style={{ marginBottom: "15px" }}
                   >
                     <ItemPicker
+                      tabIndex={13}
+                      // inputProps={{ tabIndex: 13 }}
                       data={recurring}
                       value={values.recurring}
                       onChange={handleChange}
                       id="recurring"
-                    />
+                    ></ItemPicker>
                   </GridItem>
                   <GridItem
                     xs="6"
@@ -1047,6 +1076,7 @@ export const Booking: FC = () => {
                           </Box>
 
                           <RecurringPicker
+                            inputProps={{ tabIndex: 14 }}
                             data={interval}
                             value={values.recurringby}
                             onChange={handleChange}
@@ -1104,6 +1134,7 @@ export const Booking: FC = () => {
                             >
                               {dates.map((res: any) => (
                                 <Button
+                                  tabIndex={15}
                                   onClick={() => handledays2(res)}
                                   className={
                                     monthDates.some((elm) => elm === res)
@@ -1143,6 +1174,7 @@ export const Booking: FC = () => {
                             {weekdays.map((res) => (
                               //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
                               <Button
+                                tabIndex={15}
                                 onClick={() => handledays1(res.name)}
                                 className={
                                   week.some((elm) => elm === res.name)
@@ -1212,6 +1244,7 @@ export const Booking: FC = () => {
                           id="end_date_recurring"
                         /> */}
                         <KeyboardDatePicker
+                          inputProps={{ tabIndex: 16 }}
                           id="end_date_recurring"
                           className="datepicker"
                           clearable
@@ -1260,6 +1293,7 @@ export const Booking: FC = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
+                          tabIndex={17}
                           id="show_public"
                           checked={values.show_public}
                           style={{ color: "#00acc1" }}
@@ -1297,6 +1331,7 @@ export const Booking: FC = () => {
                       </GridItem>
                       <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                         <TextField
+                          inputProps={{ tabIndex: 17 }}
                           className="desc_box2"
                           id="away_team"
                           variant="outlined"
@@ -1348,6 +1383,7 @@ export const Booking: FC = () => {
 
                 <div className={`btn-wrap ${classes.btnContainer}`}>
                   <Button
+                    tabIndex={20}
                     color="info"
                     className={classes.btnSubmit}
                     type="button"
