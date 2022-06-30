@@ -142,6 +142,7 @@ const UpcomingActivities = ({
     if (response) {
       if (!deleteNonRecuring && !deleteRecuring) {
         await revalidate();
+        console.log("nonrecurringdel");
       }
       // setrevaldate(1);
       enqueueSnackbar("Activity Deleted Successfully", {
@@ -171,6 +172,7 @@ const UpcomingActivities = ({
       console.log(res, "promise response");
       if (deleteStatus === true) {
         if (!deleteNonRecuring && !deleteRecuring) {
+          console.log("recurringdel");
           await revalidate();
         }
 
@@ -192,6 +194,7 @@ const UpcomingActivities = ({
   useEffect(() => {
     if (deleteNonRecuring && deleteRecuring) {
       deleteAllSelected();
+      revalidate();
     }
   }, [deleteNonRecuring, deleteRecuring]);
 
@@ -336,11 +339,9 @@ const UpcomingActivities = ({
   // ]);
   //testing-------------------------
   useEffect(() => {
-    if (Activitydata.length) {
-      let temp = getFormatedData(Activitydata);
-      console.log("onetimerun");
-      setAcitivityList(temp);
-    }
+    let temp = getFormatedData(Activitydata);
+    console.log("onetimerun");
+    setAcitivityList(temp);
   }, [Activitydata]);
   //console.log(Activitydata.length, "uuuuuuuuu");
   //----------------
