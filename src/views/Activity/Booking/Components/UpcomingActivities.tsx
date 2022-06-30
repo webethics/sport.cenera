@@ -340,7 +340,7 @@ const UpcomingActivities = ({
   //testing-------------------------
   useEffect(() => {
     let temp = getFormatedData(Activitydata);
-    console.log("onetimerun");
+    //console.log("onetimerun");
     setAcitivityList(temp);
   }, [Activitydata]);
   //console.log(Activitydata.length, "uuuuuuuuu");
@@ -348,10 +348,11 @@ const UpcomingActivities = ({
   // testing of useeffect
   useEffect(() => {
     let temp = getFormatedData(Activitydata);
-    console.log("searchteammm");
+    //console.log("searchteammm");
     revalidate();
     setAcitivityList(temp);
   }, [
+    deleteRecuring,
     deleteNonRecuring,
     fetchupcomingactivity,
     revaldatestate,
@@ -400,6 +401,10 @@ const UpcomingActivities = ({
     });
     if (isSelectedForpublish) {
       showPublicDialoge();
+    } else {
+      enqueueSnackbar("Please Select Activity", {
+        variant: "error",
+      });
     }
   };
 
@@ -584,6 +589,7 @@ const UpcomingActivities = ({
                             </BodyTableCell>
                             <BodyTableCell align="left">
                               {res.team || res.team_text}
+
                               {!res.team && !res.team_text && "NA"}
                             </BodyTableCell>
                             <BodyTableCell align="left">

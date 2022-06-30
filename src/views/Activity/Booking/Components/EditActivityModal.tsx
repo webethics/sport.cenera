@@ -407,9 +407,12 @@ export default function EditActivityModal(props: any) {
 
         formik.setValues({
           ...formik.values,
+          orTeam:
+            EditActivitydata[0].team_text !== "" &&
+            EditActivitydata[0].team_text,
           warderobe: EditActivitydata[0].wardrobe_id,
           location: EditActivitydata[0].location_id,
-          team: EditActivitydata[0].team_id,
+
           activity: newActivity,
           description: EditActivitydata[0].description,
           away_team: EditActivitydata[0].away_team_text,
@@ -430,27 +433,28 @@ export default function EditActivityModal(props: any) {
               2) ||
             (EditActivitydata[0].recurring_details.includes("monthly") && 3) ||
             (!EditActivitydata[0].recurring_details && 1),
-          end_date_recurring: EditActivitydata[0].end_date_recurring,
+          end_date_recurring: EditActivitydata[0].recurring_endDate,
           show_public: EditActivitydata[0].isPublic,
         });
       }
     }
   }, [EditActivitydata]);
 
-  if (EditActivitydata[0] && EditActivitydata[0]) {
-    console.log(
-      typeof EditActivitydata[0].team_id.toString(),
-      "current123456789 user teamiddd"
-    );
-  }
+  // if (EditActivitydata[0] && EditActivitydata[0]) {
+  //   console.log(EditActivitydata[0], "current edit");
+  // }
   useEffect(() => {
     if (EditActivitydata[0]) {
-      setinitialteam(EditActivitydata[0].team_id.toString());
+      setinitialteam(
+        EditActivitydata[0].team_id !== null &&
+          EditActivitydata[0].team_id.toString()
+      );
+
       setinitiallocation(EditActivitydata[0].location_id.toString());
       setinitialwardrobe(EditActivitydata[0].wardrobe_id.toString());
     }
   }, [EditActivitydata]);
-  console.log(typeof initialteam, "hhhhh");
+  // console.log(typeof initialteam, "hhhhh"); orTeam
   const { values, handleChange, errors, touched } = formik;
 
   return (
