@@ -144,7 +144,7 @@ const UpcomingActivities = ({
     if (response) {
       if (!deleteNonRecuring && !deleteRecuring) {
         await revalidate();
-        console.log("nonrecurringdel");
+        // console.log("nonrecurringdel");
       }
       // setrevaldate(1);
       enqueueSnackbar("Activity Deleted Successfully", {
@@ -343,7 +343,7 @@ const UpcomingActivities = ({
   useEffect(() => {
     if (Activitydata.length > 0) {
       let temp = getFormatedData(Activitydata);
-      console.log("onetimerun");
+      // console.log("onetimerun");
       setAcitivityList(temp);
     }
   }, [Activitydata]);
@@ -352,7 +352,7 @@ const UpcomingActivities = ({
   // testing of useeffect
   useEffect(() => {
     let temp = getFormatedData(Activitydata);
-    console.log("searchteammm");
+    // console.log("searchteammm");
     revalidate();
     setAcitivityList(temp);
   }, [

@@ -86,7 +86,7 @@ const getFormatedData = (array: any) => {
   result.sort((a: any, b: any) => {
     var c: any = moment(a.startTime);
     var d: any = moment(b.startTime);
-    console.log(c, d, "hey check date here");
+    // console.log(c, d, "hey check date here");
     return c - d;
   });
 
