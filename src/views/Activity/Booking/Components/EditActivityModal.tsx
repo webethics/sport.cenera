@@ -307,6 +307,7 @@ export default function EditActivityModal(props: any) {
         if (res.data.message) {
           props.onClose();
           props.callupcoming(props.activityid);
+          //  props.updatedsuccess()
           enqueueSnackbar("Activity Edited Successfully", {
             variant: "success",
           });
@@ -408,8 +409,9 @@ export default function EditActivityModal(props: any) {
         formik.setValues({
           ...formik.values,
           orTeam:
-            EditActivitydata[0].team_text !== "" &&
-            EditActivitydata[0].team_text,
+            EditActivitydata[0].team_id == null
+              ? EditActivitydata[0].team_text
+              : "",
           warderobe: EditActivitydata[0].wardrobe_id,
           location: EditActivitydata[0].location_id,
 
@@ -446,8 +448,9 @@ export default function EditActivityModal(props: any) {
   useEffect(() => {
     if (EditActivitydata[0]) {
       setinitialteam(
-        EditActivitydata[0].team_id !== null &&
-          EditActivitydata[0].team_id.toString()
+        EditActivitydata[0].team_id !== null
+          ? EditActivitydata[0].team_id.toString()
+          : ""
       );
 
       setinitiallocation(EditActivitydata[0].location_id.toString());

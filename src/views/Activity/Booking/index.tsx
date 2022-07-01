@@ -309,6 +309,9 @@ export const Booking: FC = () => {
             });
             // setFetchupcoming(1);
           }
+          if (addnewbooking === 2) {
+            setaddnewbooking(1);
+          }
         } catch (err) {
           enqueueSnackbar("Failed to Add Activity", { variant: "error" });
         }

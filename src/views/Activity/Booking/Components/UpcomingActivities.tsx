@@ -73,6 +73,8 @@ const UpcomingActivities = ({
 }) => {
   const [filterActivity, setfilterActivity] = useState("0");
 
+  // const [createbooking, setcreatebooking] = useState(fetchupcomingactivity);
+  // console.log(createbooking, "jjjjjjj", setcreatebooking, "kkkkk");
   // const [endmonth, setendmonth] = useState();
 
   const [filterdate, setFilterdate] = useState(6);
@@ -369,6 +371,7 @@ const UpcomingActivities = ({
       revalidate();
       let temp = getFormatedData(Activitydata);
       setAcitivityList(temp);
+      setsuccessedit(null);
     }
   }, [successedit]);
 
