@@ -706,7 +706,7 @@ export default function EditActivityModal(props: any) {
                 /> */}
                 <Autocomplete
                   // disablePortal
-                  style={{ width: "100%" }}
+                  style={{ width: "75%" }}
                   value={
                     initiallocation &&
                     locations.find((o) => o.id == initiallocation)
