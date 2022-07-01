@@ -23,8 +23,8 @@ const getFormatedData = (array: any) => {
       const date1 = moment(value.startTime)
         .format("YYYY-MM-DD")
         .toString();
-      console.log(value.startTime, "starttimeeeee");
-      console.log(date1, "ssdssdstarttimeeeee");
+      // console.log(value.startTime, "starttimeeeee");
+      // console.log(date1, "ssdssdstarttimeeeee");
       const date2 = moment(i.startTime)
         .format("YYYY-MM-DD")
         .toString();
@@ -84,8 +84,9 @@ const getFormatedData = (array: any) => {
       : [...nonRecuringData];
 
   result.sort((a: any, b: any) => {
-    var c: any = new Date(a.startTime);
-    var d: any = new Date(b.startTime);
+    var c: any = moment(a.startTime);
+    var d: any = moment(b.startTime);
+    console.log(c, d, "hey check date here");
     return c - d;
   });
 
