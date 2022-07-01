@@ -341,16 +341,18 @@ const UpcomingActivities = ({
   // ]);
   //testing-------------------------
   useEffect(() => {
-    let temp = getFormatedData(Activitydata);
-    //console.log("onetimerun");
-    setAcitivityList(temp);
+    if (Activitydata.length > 0) {
+      let temp = getFormatedData(Activitydata);
+      console.log("onetimerun");
+      setAcitivityList(temp);
+    }
   }, [Activitydata]);
   //console.log(Activitydata.length, "uuuuuuuuu");
   //----------------
   // testing of useeffect
   useEffect(() => {
     let temp = getFormatedData(Activitydata);
-    //console.log("searchteammm");
+    console.log("searchteammm");
     revalidate();
     setAcitivityList(temp);
   }, [
