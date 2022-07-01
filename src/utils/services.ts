@@ -20,12 +20,10 @@ const getFormatedData = (array: any) => {
   array.forEach((value: any) => {
     let count = 0;
     for (let i of array) {
-      const date1 = moment(value.startTime)
-        .format("YYYY-MM-DD")
-        .toString();
-      const date2 = moment(i.startTime)
-        .format("YYYY-MM-DD")
-        .toString();
+      const date1 = moment(value.startTime).format("YYYY-MM-DD");
+      // .toString();
+      const date2 = moment(i.startTime).format("YYYY-MM-DD");
+      //.toString();
       if (date1 === date2) {
         count++;
       }
@@ -33,12 +31,10 @@ const getFormatedData = (array: any) => {
     if (count >= 2) {
       if (recuringData.length > 0) {
         recuringData.forEach((res: any, i: number) => {
-          const recdate1 = moment(res.startTime)
-            .format("YYYY-MM-DD")
-            .toString();
-          const recdate2 = moment(value.startTime)
-            .format("YYYY-MM-DD")
-            .toString();
+          const recdate1 = moment(res.startTime).format("YYYY-MM-DD");
+          //.toString();
+          const recdate2 = moment(value.startTime).format("YYYY-MM-DD");
+          //.toString();
           if (recdate1 === recdate2) {
             recuringData[i].recuring.push({
               ...value,
@@ -46,12 +42,12 @@ const getFormatedData = (array: any) => {
               isSelected: false,
             });
           } else {
-            let t1 = moment(recuringData[recuringData.length - 1].startTime)
-              .format("YYYY-MM-DD")
-              .toString();
-            let t2 = moment(value.startTime)
-              .format("YYYY-MM-DD")
-              .toString();
+            let t1 = moment(
+              recuringData[recuringData.length - 1].startTime
+            ).format("YYYY-MM-DD");
+            // .toString();
+            let t2 = moment(value.startTime).format("YYYY-MM-DD");
+            //.toString();
             if (t1 !== t2) {
               recuringData.push({
                 recuring: [
@@ -133,10 +129,10 @@ const getduraiton = (t1: any, t2: any) => {
   let b = moment(t2);
 
   const milliseconds = b.diff(a);
-  let minutes:any = (milliseconds / (1000 * 60)) % 60;
+  let minutes: any = (milliseconds / (1000 * 60)) % 60;
 
-  if(minutes<10){
-    minutes = '0'+minutes
+  if (minutes < 10) {
+    minutes = "0" + minutes;
   }
 
   const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
