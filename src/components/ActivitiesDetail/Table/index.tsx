@@ -218,10 +218,12 @@ export default function CustomizedTables({
               className={`${classes.tableContainer}`}
             >
               {newactivity.slice(0, numberofpage).map((res: any) => (
+
                 <Table
                   className={`${classes.table} table-layout-fixed`}
                   aria-label="customized table "
                 >
+                  {console.log(res, "res")}
                   <TableHead>
                     <TableRow>
                       <StyledTableCell colSpan={6}>
@@ -239,8 +241,8 @@ export default function CustomizedTables({
                         <span>
                           {res.recuring && res.recuring.length > 0
                             ? moment(res.recuring[0].startTime).format(
-                                "DD-MM-YYYY"
-                              )
+                              "DD-MM-YYYY"
+                            )
                             : moment(res.startTime).format("DD-MM-YYYY")}
                         </span>
                       </StyledTableCell>
@@ -284,6 +286,7 @@ export default function CustomizedTables({
                           {res.wardrobe_name === "" && "NA"}
                         </BodyTableCell>
                         {/* textEmphasisStyle: `${res.activity_type_textstyle}`, */}
+                        {console.log(res['activity_type_textcolor'], "res.activity_type_textcolor")}
                         <BodyTableCell
                           style={{
                             color: `#${res.activity_type_textcolor}`,
@@ -383,8 +386,8 @@ export default function CustomizedTables({
                           <BodyTableCell
                             // style={{ color: "red" }}
                             style={{
-                              color: `#${res.activity_type_textcolor}`,
-                              fontWeight: `${res.activity_type_textstyle}`,
+                              color: `#${recuringValue.activity_type_textcolor}`,
+                              fontWeight: `${recuringValue.activity_type_textstyle}`,
                             }}
                             align="left"
                           >
