@@ -141,7 +141,7 @@ export default function Filters({
           className={classes.formGroup}
         >
           <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label">Team</InputLabel>
+            <InputLabel id="demo-simple-select-outlined-label">Lag</InputLabel>
             <Select
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
@@ -149,7 +149,7 @@ export default function Filters({
               onChange={handleChange1}
               label="Team"
             >
-              <MenuItem value={0}>All</MenuItem>
+              <MenuItem value={0}>Alt</MenuItem>
               {newteam &&
                 newteam.map((res: any) => (
                   <MenuItem value={res.team_id}>{res.team_text} </MenuItem>
@@ -163,7 +163,7 @@ export default function Filters({
         <Box p={1} className={classes.formGroup}>
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
-              Location
+              Lokasjon
             </InputLabel>
             <Select
               labelId="demo-simple-select-outlined-label"
@@ -172,7 +172,7 @@ export default function Filters({
               onChange={handleChange2}
               label="location"
             >
-              <MenuItem value={0}>All</MenuItem>
+              <MenuItem value={0}>Alt</MenuItem>
 
               {filteredLocation &&
                 filteredLocation.map((res: any) => (
@@ -189,7 +189,7 @@ export default function Filters({
         <Box p={1} className={classes.formGroup}>
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
-              Activity
+              Aktivitet
             </InputLabel>
             <Select
               labelId="demo-simple-select-outlined-label"
@@ -198,7 +198,7 @@ export default function Filters({
               onChange={handleChange4}
               label="Team"
             >
-              <MenuItem value={0}>All</MenuItem>
+              <MenuItem value={0}>Alt</MenuItem>
               {filteredArr &&
                 filteredArr.map((res: any) => (
                   <MenuItem value={res.activity_type}>
@@ -215,7 +215,7 @@ export default function Filters({
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search…"
+              placeholder="Sok lag"
               style={{ height: "40px" }}
               classes={{
                 root: classes.inputRoot,
@@ -245,11 +245,11 @@ export default function Filters({
               value={filter}
               onChange={handleChange3}
             >
-              <MenuItem value={0}>Today </MenuItem>
-              <MenuItem value={2}>Next 3 days</MenuItem>
-              <MenuItem value={6}>Next 7 days</MenuItem>
-              <MenuItem value={30}>This Month</MenuItem>
-              <MenuItem value={500}>All</MenuItem>
+              <MenuItem value={0}>I dag </MenuItem>
+              <MenuItem value={2}>Neste 3 dager</MenuItem>
+              <MenuItem value={6}>Neste 7 dager</MenuItem>
+              <MenuItem value={30}>Denne maned</MenuItem>
+              <MenuItem value={500}>Alt</MenuItem>
             </Select>
           </FormControl>
         </Box>

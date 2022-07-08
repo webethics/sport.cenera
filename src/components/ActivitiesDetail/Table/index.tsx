@@ -207,7 +207,33 @@ export default function CustomizedTables({
   };
 
   const classes = useStyles();
+  //
+  const weekdays: any = [
+    { eng: "Monday", norw: "Mandag" },
+    { eng: "Tuesday", norw: "Tirsdag" },
+    { eng: "Wednesday", norw: "Onsdag" },
+    { eng: "Thursday", norw: "Torsdag" },
+    { eng: "Friday", norw: "Fredag" },
+    { eng: "Saturday", norw: "Lørdag" },
+    { eng: "Sunday", norw: "Søndag" },
+  ];
 
+  const printnorwayformat = (date: any) => {
+    let dateStr = date.toString();
+    //console.log(dateStr.length, "datehere");
+
+    let org_name = "";
+    weekdays.forEach((res: any) => {
+      //console.log(res.eng.length, "sssss");
+      if (res.eng === dateStr) {
+        //console.log(res.norw, "-----", dateStr);
+        org_name = res.norw;
+      }
+    });
+
+    return org_name;
+  };
+  //
   return (
     <div className={classes.bgContainer}>
       <Container className={classes.Container}>
@@ -218,7 +244,6 @@ export default function CustomizedTables({
               className={`${classes.tableContainer}`}
             >
               {newactivity.slice(0, numberofpage).map((res: any) => (
-
                 <Table
                   className={`${classes.table} table-layout-fixed`}
                   aria-label="customized table "
@@ -229,9 +254,19 @@ export default function CustomizedTables({
                       <StyledTableCell colSpan={6}>
                         <span style={{ paddingRight: "12px" }}>
                           {" "}
-                          {res.recuring && res.recuring.length > 0
-                            ? moment(res.recuring[0].startTime).format("dddd")
-                            : moment(res.startTime).format("dddd")}{" "}
+                          {res.recuring && res.recuring.length > 0 ? (
+                            <>
+                              {printnorwayformat(
+                                moment(res.recuring[0].startTime).format("dddd")
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {printnorwayformat(
+                                moment(res.startTime).format("dddd")
+                              )}
+                            </>
+                          )}{" "}
                         </span>
 
                         {/* <h1>
@@ -241,24 +276,24 @@ export default function CustomizedTables({
                         <span>
                           {res.recuring && res.recuring.length > 0
                             ? moment(res.recuring[0].startTime).format(
-                              "DD-MM-YYYY"
-                            )
+                                "DD-MM-YYYY"
+                              )
                             : moment(res.startTime).format("DD-MM-YYYY")}
                         </span>
                       </StyledTableCell>
                       <StyledTableCell>
-                        Week : {moment(res.startTime, "YYYYMMDD").week()}{" "}
+                        Uke : {moment(res.startTime, "YYYYMMDD").week()}{" "}
                       </StyledTableCell>
                     </TableRow>
                     <TableRow className={classes.customeTableRow}>
-                      <StyledTableCell align="left">Start Time</StyledTableCell>
-                      <StyledTableCell align="left">End Time</StyledTableCell>
-                      <StyledTableCell align="left">Duration</StyledTableCell>
+                      <StyledTableCell align="left">Start tid</StyledTableCell>
+                      <StyledTableCell align="left"> Slutt tid</StyledTableCell>
+                      <StyledTableCell align="left">Varighet</StyledTableCell>
 
-                      <StyledTableCell align="left">Team</StyledTableCell>
-                      <StyledTableCell align="left">Location</StyledTableCell>
-                      <StyledTableCell align="left">Warderobe</StyledTableCell>
-                      <StyledTableCell align="left">Activity</StyledTableCell>
+                      <StyledTableCell align="left">Lag</StyledTableCell>
+                      <StyledTableCell align="left">Lokasjon</StyledTableCell>
+                      <StyledTableCell align="left">Garderobe</StyledTableCell>
+                      <StyledTableCell align="left">Aktivitet</StyledTableCell>
                     </TableRow>
                   </TableHead>
 
@@ -286,7 +321,10 @@ export default function CustomizedTables({
                           {res.wardrobe_name === "" && "NA"}
                         </BodyTableCell>
                         {/* textEmphasisStyle: `${res.activity_type_textstyle}`, */}
-                        {console.log(res['activity_type_textcolor'], "res.activity_type_textcolor")}
+                        {console.log(
+                          res["activity_type_textcolor"],
+                          "res.activity_type_textcolor"
+                        )}
                         <BodyTableCell
                           style={{
                             color: `#${res.activity_type_textcolor}`,
@@ -308,7 +346,7 @@ export default function CustomizedTables({
                               className={classes.label}
                               align="left"
                             >
-                              Away Team
+                              Bortelag
                             </BodyTableCell>
                             <BodyTableCell align="left">
                               {res.away_team_text}
@@ -318,7 +356,7 @@ export default function CustomizedTables({
                               align="left"
                               className={classes.label}
                             >
-                              Warderobe
+                              Garderobe
                             </BodyTableCell>
                             <BodyTableCell align="left">
                               {res.wardrobe_name_away
@@ -340,7 +378,7 @@ export default function CustomizedTables({
                               align="left"
                               className={classes.label}
                             >
-                              Referee
+                              Dommer
                             </BodyTableCell>
                             <BodyTableCell align="left">
                               {res.wardrobe_name_referee
@@ -406,7 +444,7 @@ export default function CustomizedTables({
                                 className={classes.label}
                                 align="left"
                               >
-                                Away Team
+                                Bortelag
                               </BodyTableCell>
                               <BodyTableCell align="left">
                                 {recuringValue.away_team_text}
@@ -416,7 +454,7 @@ export default function CustomizedTables({
                                 align="left"
                                 className={classes.label}
                               >
-                                Warderobe
+                                Garderobe
                               </BodyTableCell>
                               <BodyTableCell align="left">
                                 {recuringValue.wardrobe_name_away
@@ -438,7 +476,7 @@ export default function CustomizedTables({
                                 align="left"
                                 className={classes.label}
                               >
-                                Referee
+                                Dommer
                               </BodyTableCell>
                               <BodyTableCell align="left">
                                 {recuringValue.wardrobe_name_referee

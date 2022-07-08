@@ -448,6 +448,31 @@ const UpcomingActivities = ({
     }
   };
 
+  const weekdays: any = [
+    { eng: "Monday", norw: "Mandag" },
+    { eng: "Tuesday", norw: "Tirsdag" },
+    { eng: "Wednesday", norw: "Onsdag" },
+    { eng: "Thursday", norw: "Torsdag" },
+    { eng: "Friday", norw: "Fredag" },
+    { eng: "Saturday", norw: "Lørdag" },
+    { eng: "Sunday", norw: "Søndag" },
+  ];
+
+  const printnorwayformat = (date: any) => {
+    let dateStr = date.toString();
+    //console.log(dateStr.length, "datehere");
+
+    let org_name = "";
+    weekdays.forEach((res: any) => {
+      //console.log(res.eng.length, "sssss");
+      if (res.eng === dateStr) {
+        //console.log(res.norw, "-----", dateStr);
+        org_name = res.norw;
+      }
+    });
+
+    return org_name;
+  };
   return (
     <div className="parent">
       {alert}
@@ -536,11 +561,21 @@ const UpcomingActivities = ({
                         <TableRow>
                           <StyledTableCell colSpan={8}>
                             <span style={{ paddingRight: "12px" }}>
-                              {res.recuring && res.recuring.length > 0
-                                ? moment(res.recuring[0].startTime).format(
-                                    "dddd"
-                                  )
-                                : moment(res.startTime).format("dddd")}
+                              {res.recuring && res.recuring.length > 0 ? (
+                                <>
+                                  {printnorwayformat(
+                                    moment(res.recuring[0].startTime).format(
+                                      "dddd"
+                                    )
+                                  )}
+                                </>
+                              ) : (
+                                <>
+                                  {printnorwayformat(
+                                    moment(res.startTime).format("dddd")
+                                  )}
+                                </>
+                              )}
                             </span>
                             <span>
                               {res.recuring && res.recuring.length > 0
@@ -551,27 +586,27 @@ const UpcomingActivities = ({
                             </span>
                           </StyledTableCell>
                           <StyledTableCell>
-                            Week : {moment(res.startTime, "YYYYMMDD").week()}{" "}
+                            Uke :{moment(res.startTime, "YYYYMMDD").week()}
                           </StyledTableCell>
                         </TableRow>
                         <TableRow className={`${classes.customeTableRow}`}>
-                          <StyledTableCell>Start time</StyledTableCell>
+                          <StyledTableCell>Start tid</StyledTableCell>
                           <StyledTableCell align="left">
-                            End Time
+                            Slutt tid
                           </StyledTableCell>
                           <StyledTableCell align="left">
-                            Duration
+                            Varighet
                           </StyledTableCell>
 
-                          <StyledTableCell align="left">Team</StyledTableCell>
+                          <StyledTableCell align="left">Lag</StyledTableCell>
                           <StyledTableCell align="left">
-                            Location
+                            Lokasjon
                           </StyledTableCell>
                           <StyledTableCell align="left">
-                            Warderobe
+                            Garderobe
                           </StyledTableCell>
                           <StyledTableCell align="left">
-                            Activity
+                            Aktivitet
                           </StyledTableCell>
                           <StyledTableCell align="left"></StyledTableCell>
                           <StyledTableCell align="left"></StyledTableCell>
@@ -659,7 +694,7 @@ const UpcomingActivities = ({
                                   className={classes.label}
                                   align="left"
                                 >
-                                  Away Team
+                                  Bortelag
                                 </BodyTableCell>
                                 <BodyTableCell align="left">
                                   {res.away_team_text}
@@ -669,7 +704,7 @@ const UpcomingActivities = ({
                                   align="left"
                                   className={classes.label}
                                 >
-                                  Warderobe
+                                  Garderobe
                                 </BodyTableCell>
                                 <BodyTableCell align="left">
                                   {res.wardrobe_name_away
@@ -695,7 +730,7 @@ const UpcomingActivities = ({
                                   align="left"
                                   className={classes.label}
                                 >
-                                  Referee
+                                  Dommer
                                 </BodyTableCell>
                                 <BodyTableCell align="left">
                                   {res.wardrobe_name_referee
@@ -804,7 +839,7 @@ const UpcomingActivities = ({
                                     className={classes.label}
                                     align="left"
                                   >
-                                    Away Team
+                                    Bortelag
                                   </BodyTableCell>
                                   <BodyTableCell align="left">
                                     {recuringValue.away_team_text}
@@ -815,7 +850,7 @@ const UpcomingActivities = ({
                                     align="left"
                                     className={classes.label}
                                   >
-                                    Warderobe
+                                    Garderobe
                                   </BodyTableCell>
                                   <BodyTableCell align="left">
                                     {recuringValue.wardrobe_name_away
@@ -841,7 +876,7 @@ const UpcomingActivities = ({
                                     align="left"
                                     className={classes.label}
                                   >
-                                    Referee
+                                    Dommer
                                   </BodyTableCell>
                                   <BodyTableCell align="left">
                                     {recuringValue.wardrobe_name_referee

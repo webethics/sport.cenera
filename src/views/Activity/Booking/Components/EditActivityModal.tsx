@@ -75,8 +75,8 @@ export default function EditActivityModal(props: any) {
 
   //Recurring
   const recurring = [
-    { name: "Yes", id: 1 },
-    { name: "No", id: 2 },
+    { name: "Ingen", id: 1 },
+    { name: "valgt", id: 2 },
   ];
 
   const interval = [
@@ -465,7 +465,7 @@ export default function EditActivityModal(props: any) {
       <Modal {...props}>
         <Box sx={modalStyle}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <h4>Edit Activity</h4>
+            <h4>Edit aktiviteter</h4>
             <CloseIcon
               style={{ cursor: "pointer" }}
               onClick={() => props.onClose()}
@@ -506,7 +506,7 @@ export default function EditActivityModal(props: any) {
                       marginRight: "5px",
                     }}
                   >
-                    Time
+                    Tid
                   </Box>
                   {/* 
                   <TimePicker
@@ -582,7 +582,7 @@ export default function EditActivityModal(props: any) {
                       marginRight: "5px",
                     }}
                   >
-                    Time
+                    Tid
                   </Box>
                   {/* <TimePicker
                     className="timepicker"
@@ -616,7 +616,7 @@ export default function EditActivityModal(props: any) {
                 style={{ marginBottom: "15px" }}
               ></GridItem>
               <GridItem xs="12" sm="2" md="2" sx={{ mb: 3 }}>
-                <h5 style={{ fontSize: "14px" }}>Team</h5>
+                <h5 style={{ fontSize: "14px" }}>Lag</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
                 {/* <ItemPicker
@@ -654,7 +654,7 @@ export default function EditActivityModal(props: any) {
                   getOptionLabel={(option) => option.name}
                   sx={{ width: 300 }}
                   renderInput={(params) => (
-                    <TextField {...params} label="Select team" />
+                    <TextField {...params} label="Velg Lag" />
                   )}
                 />
               </GridItem>
@@ -673,7 +673,7 @@ export default function EditActivityModal(props: any) {
                       marginRight: "5px",
                     }}
                   >
-                    or
+                    eller
                   </Box>
 
                   <TextField
@@ -695,7 +695,7 @@ export default function EditActivityModal(props: any) {
               ></GridItem>
 
               <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Location</h5>
+                <h5 style={{ fontSize: "14px" }}>Lokasjon</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
                 {/* <ItemPicker
@@ -730,7 +730,7 @@ export default function EditActivityModal(props: any) {
                   getOptionLabel={(option) => option.name}
                   sx={{ width: 300 }}
                   renderInput={(params) => (
-                    <TextField {...params} label="Select location" />
+                    <TextField {...params} label="Velg Lokasjon" />
                   )}
                 />
 
@@ -760,7 +760,7 @@ export default function EditActivityModal(props: any) {
               ></GridItem>
 
               <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Activity</h5>
+                <h5 style={{ fontSize: "14px" }}>Aktivitet</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
                 {/* <ItemPicker
@@ -795,7 +795,7 @@ export default function EditActivityModal(props: any) {
                   getOptionLabel={(option) => option.name}
                   sx={{ width: 300 }}
                   renderInput={(params) => (
-                    <TextField {...params} label="Select activity" />
+                    <TextField {...params} label="Velg Aktivitet" />
                   )}
                 />
                 {errors.activity && touched.activity && (
@@ -823,7 +823,7 @@ export default function EditActivityModal(props: any) {
               ></GridItem>
 
               <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Wardrobe</h5>
+                <h5 style={{ fontSize: "14px" }}>Garderobe</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
                 {/* <ItemPicker
@@ -858,7 +858,7 @@ export default function EditActivityModal(props: any) {
                   getOptionLabel={(option) => option.name}
                   sx={{ width: 300 }}
                   renderInput={(params) => (
-                    <TextField {...params} label="Select warderobe" />
+                    <TextField {...params} label="Velg Gardrobe" />
                   )}
                 />
               </GridItem>
@@ -876,7 +876,7 @@ export default function EditActivityModal(props: any) {
 
               {/* extra wadrobe time */}
               <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Extra Warderobe Time</h5>
+                <h5 style={{ fontSize: "14px" }}>Ekstra tid Garderobe</h5>
               </GridItem>
               <GridItem xs="12" sm="5" md="4" style={{ marginBottom: "15px" }}>
                 <FormControlLabel
@@ -946,7 +946,9 @@ export default function EditActivityModal(props: any) {
               ></GridItem>
 
               <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Description</h5>
+                <h5 style={{ fontSize: "14px" }}>
+                  Beskrivelse(blir ikke publisert)
+                </h5>
               </GridItem>
               <GridItem xs="12" sm="10" md="4" style={{ marginBottom: "15px" }}>
                 <TextField
@@ -970,7 +972,7 @@ export default function EditActivityModal(props: any) {
               ></GridItem>
               {/*Select Recurring Yes/No*/}
               <GridItem xs="12" sm="2" md="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Recurring</h5>
+                <h5 style={{ fontSize: "14px" }}>Gjentagende</h5>
               </GridItem>
               <GridItem xs="6" sm="5" md="4" style={{ marginBottom: "15px" }}>
                 <ItemPicker
@@ -999,7 +1001,7 @@ export default function EditActivityModal(props: any) {
                           marginRight: "5px",
                         }}
                       >
-                        Interval
+                        Intervall
                       </Box>
                       {/* <ItemPicker
                             placeholder="selectType"
@@ -1036,13 +1038,13 @@ export default function EditActivityModal(props: any) {
                   >
                     {(values.recurringby === 1 || values.recurringby === 2) && (
                       <h5 style={{ fontSize: "14px", marginBottom: "15px" }}>
-                        Select Recurring Days
+                        Velg ukedager for gjentagende
                       </h5>
                     )}
 
                     {values.recurringby === 3 && (
                       <h5 style={{ fontSize: "14px", marginBottom: "15px" }}>
-                        Select Recurring Dates
+                        Velg ukedager for gjentagende
                       </h5>
                     )}
                   </GridItem>
@@ -1149,7 +1151,7 @@ export default function EditActivityModal(props: any) {
                     style={{ marginBottom: "15px" }}
                   >
                     <h5 style={{ fontSize: "14px", marginBottom: "15px" }}>
-                      Recurring End Date
+                      Gjentagende aktivitet
                     </h5>
                   </GridItem>
                   <GridItem
@@ -1199,7 +1201,7 @@ export default function EditActivityModal(props: any) {
               )}
               {/* End Recurring End Date */}
               <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
-                <h5 style={{ fontSize: "14px" }}>Show Activity In Public</h5>
+                <h5 style={{ fontSize: "14px" }}>Publiser aktivitet</h5>
               </GridItem>
               <GridItem xs="12" sm="10" style={{ marginBottom: "15px" }}>
                 <FormControlLabel
@@ -1237,7 +1239,7 @@ export default function EditActivityModal(props: any) {
                     }}
                   />
                   <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
-                    <h5 style={{ fontSize: "14px" }}>Away Team</h5>
+                    <h5 style={{ fontSize: "14px" }}>Bortelag</h5>
                   </GridItem>
                   <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                     <TextField
@@ -1250,7 +1252,7 @@ export default function EditActivityModal(props: any) {
                   </GridItem>
 
                   <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
-                    <h5 style={{ fontSize: "14px" }}>Warderobe</h5>
+                    <h5 style={{ fontSize: "14px" }}>Garderobe</h5>
                   </GridItem>
                   <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                     <ItemPicker
@@ -1270,11 +1272,11 @@ export default function EditActivityModal(props: any) {
                     style={{ marginBottom: "15px" }}
                   ></GridItem>
                   <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
-                    <h5 style={{ fontSize: "14px" }}>Referee</h5>
+                    <h5 style={{ fontSize: "14px" }}>Dommer</h5>
                   </GridItem>
 
                   <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
-                    <h5 style={{ fontSize: "14px" }}>Warderobe</h5>
+                    <h5 style={{ fontSize: "14px" }}>Garderobe</h5>
                   </GridItem>
                   <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                     <ItemPicker
@@ -1295,7 +1297,7 @@ export default function EditActivityModal(props: any) {
                 type="button"
                 onClick={formik.handleSubmit}
               >
-                Edit Activity
+                Edit aktivitet
               </Button>
             </div>
           </form>

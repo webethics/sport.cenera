@@ -39,6 +39,12 @@ export const Booking: FC = () => {
   const [addnewbooking, setaddnewbooking] = useState(1);
   // console.log(addnewbooking, "addnewbookingaddnewbooking");
 
+  const [value, setvalue] = useState({
+    name: "training",
+    isMatch: false,
+    id: 2,
+  });
+
   const [week, setweek] = useState([]);
   const [monthDates, setMonthDates] = useState([]);
   const [appState] = useAppContext();
@@ -71,8 +77,8 @@ export const Booking: FC = () => {
 
   //Recurring
   const recurring = [
-    { name: "Yes", id: 1 },
-    { name: "No", id: 2 },
+    { name: "Ja", id: 1 },
+    { name: "Nei", id: 2 },
   ];
 
   const interval = [
@@ -215,7 +221,7 @@ export const Booking: FC = () => {
         .test(
           "is-greater",
           "End time should be greater than start time",
-          function (value) {
+          function(value) {
             const { start_time } = this.parent;
             return moment(value, "HH:mm").isSameOrAfter(
               moment(start_time, "HH:mm")
@@ -273,8 +279,8 @@ export const Booking: FC = () => {
 
         ...(formValues.recurring === 1 &&
           formValues.recurringby === 1 && {
-          recurring_details: `weekly:${week.toString()}`,
-        }),
+            recurring_details: `weekly:${week.toString()}`,
+          }),
         ...(formValues.recurringby === 2 && {
           recurring_details: `bi-weekly:${week.toString()}`,
         }),
@@ -447,7 +453,7 @@ export const Booking: FC = () => {
                         variant="inline"
                         value={startTimefield}
                         onChange={handleStartTimefield}
-                      // onChange={(e) => handleStartTimefield("start_date", e)}
+                        // onChange={(e) => handleStartTimefield("start_date", e)}
                       />
                     </Box>
                     {errors.start_time && touched.start_time && (
@@ -607,7 +613,7 @@ export const Booking: FC = () => {
                             team: "0",
                           });
                         }
-                        console.log(e)
+                        console.log(e);
                       }}
                       options={teamsList}
                       getOptionLabel={(option) => option.name}
@@ -758,8 +764,15 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                       id="activity"
                     /> */}
+                    {console.log("jkjjj", setvalue)}
                     <Autocomplete
                       //disablePortal
+                      // defaultValue={Options.find(v => v.label[0])}
+                      // defaultValue={activitylist.find(
+                      //   (o) => o.id == 2,
+                      //   console.log(o, "consoled")
+                      // )}
+                      value={value}
                       style={{ width: "100%" }}
                       id="activity"
                       onChange={(e, obj) => {
@@ -1000,7 +1013,9 @@ export const Booking: FC = () => {
                     md="2"
                     style={{ marginBottom: "15px" }}
                   >
-                    <h5 style={{ fontSize: "14px" }}>Beskrivelse (blir ikke publisert)</h5>
+                    <h5 style={{ fontSize: "14px" }}>
+                      Beskrivelse (blir ikke publisert)
+                    </h5>
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -1075,7 +1090,7 @@ export const Booking: FC = () => {
                               marginRight: "5px",
                             }}
                           >
-                            Interval
+                            Intervall
                           </Box>
 
                           <RecurringPicker
@@ -1105,18 +1120,18 @@ export const Booking: FC = () => {
                       >
                         {(values.recurringby === 1 ||
                           values.recurringby === 2) && (
-                            <h5
-                              style={{ fontSize: "14px", marginBottom: "15px" }}
-                            >
-                              Select Recurring Days
-                            </h5>
-                          )}
+                          <h5
+                            style={{ fontSize: "14px", marginBottom: "15px" }}
+                          >
+                            Velg ukedager for gjentagende
+                          </h5>
+                        )}
 
                         {values.recurringby === 3 && (
                           <h5
                             style={{ fontSize: "14px", marginBottom: "15px" }}
                           >
-                            Select Recurring Dates
+                            Velg ukedager for gjentagende
                           </h5>
                         )}
                       </GridItem>
@@ -1167,41 +1182,41 @@ export const Booking: FC = () => {
                         )}
                         {(values.recurringby === 1 ||
                           values.recurringby === 2) && (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                flexWrap: "wrap",
-                              }}
-                            >
-                              {weekdays.map((res) => (
-                                //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
-                                <Button
-                                  tabIndex={15}
-                                  onClick={() => handledays1(res.name)}
-                                  className={
-                                    week.some((elm) => elm === res.name)
-                                      ? `${classes.dateButton} active_dates`
-                                      : classes.dateButton
-                                  }
-                                  disableRipple
-                                >
-                                  {res.name.charAt(0)}
-                                </Button>
-                              ))}
-                              {(errorMsgweekly || errorMsg) && (
-                                <span
-                                  style={{
-                                    color: "red",
-                                    marginLeft: "12px",
-                                    fontSize: "12px",
-                                  }}
-                                >
-                                  {errorMsgweekly || errorMsg}
-                                </span>
-                              )}
-                            </Box>
-                          )}
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              flexWrap: "wrap",
+                            }}
+                          >
+                            {weekdays.map((res) => (
+                              //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
+                              <Button
+                                tabIndex={15}
+                                onClick={() => handledays1(res.name)}
+                                className={
+                                  week.some((elm) => elm === res.name)
+                                    ? `${classes.dateButton} active_dates`
+                                    : classes.dateButton
+                                }
+                                disableRipple
+                              >
+                                {res.name.charAt(0)}
+                              </Button>
+                            ))}
+                            {(errorMsgweekly || errorMsg) && (
+                              <span
+                                style={{
+                                  color: "red",
+                                  marginLeft: "12px",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                {errorMsgweekly || errorMsg}
+                              </span>
+                            )}
+                          </Box>
+                        )}
                       </GridItem>
                       <GridItem
                         xs="6"
@@ -1288,9 +1303,7 @@ export const Booking: FC = () => {
                   )}
                   {/* End Recurring End Date */}
                   <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
-                    <h5 style={{ fontSize: "14px" }}>
-                      Publiser aktivitet
-                    </h5>
+                    <h5 style={{ fontSize: "14px" }}>Publiser aktivitet</h5>
                   </GridItem>
                   <GridItem xs="12" sm="10" style={{ marginBottom: "15px" }}>
                     <FormControlLabel
