@@ -215,7 +215,7 @@ export const Booking: FC = () => {
         .test(
           "is-greater",
           "End time should be greater than start time",
-          function(value) {
+          function (value) {
             const { start_time } = this.parent;
             return moment(value, "HH:mm").isSameOrAfter(
               moment(start_time, "HH:mm")
@@ -273,8 +273,8 @@ export const Booking: FC = () => {
 
         ...(formValues.recurring === 1 &&
           formValues.recurringby === 1 && {
-            recurring_details: `weekly:${week.toString()}`,
-          }),
+          recurring_details: `weekly:${week.toString()}`,
+        }),
         ...(formValues.recurringby === 2 && {
           recurring_details: `bi-weekly:${week.toString()}`,
         }),
@@ -373,7 +373,7 @@ export const Booking: FC = () => {
         <GridItem xs={11} sm={11} md={11} xl={8} className={classes.container}>
           <Card>
             <CardHeader>
-              <h4>Book Activity</h4>
+              <h4>Legg inn aktiviteter</h4>
             </CardHeader>
             <CardBody>
               <form>
@@ -430,7 +430,7 @@ export const Booking: FC = () => {
                           marginRight: "5px",
                         }}
                       >
-                        Time
+                        Tid
                       </Box>
 
                       {/* <TimePicker
@@ -447,7 +447,7 @@ export const Booking: FC = () => {
                         variant="inline"
                         value={startTimefield}
                         onChange={handleStartTimefield}
-                        // onChange={(e) => handleStartTimefield("start_date", e)}
+                      // onChange={(e) => handleStartTimefield("start_date", e)}
                       />
                     </Box>
                     {errors.start_time && touched.start_time && (
@@ -474,7 +474,7 @@ export const Booking: FC = () => {
                     md="2"
                     style={{ marginBottom: "15px" }}
                   >
-                    <h5 style={{ fontSize: "14px" }}>End *</h5>
+                    <h5 style={{ fontSize: "14px" }}>Slutt*</h5>
                   </GridItem>
                   <GridItem
                     xs="6"
@@ -537,7 +537,7 @@ export const Booking: FC = () => {
                           marginRight: "5px",
                         }}
                       >
-                        Time
+                        Tid
                       </Box>
                       {/* <TimePicker
                         className="timepicker"
@@ -575,7 +575,7 @@ export const Booking: FC = () => {
                     style={{ marginBottom: "15px" }}
                   ></GridItem>
                   <GridItem xs="12" sm="2" md="2" sx={{ mb: 3 }}>
-                    <h5 style={{ fontSize: "14px" }}>Team</h5>
+                    <h5 style={{ fontSize: "14px" }}>Lag</h5>
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -607,7 +607,7 @@ export const Booking: FC = () => {
                             team: "0",
                           });
                         }
-                        console.log(e);
+                        console.log(e)
                       }}
                       options={teamsList}
                       getOptionLabel={(option) => option.name}
@@ -616,8 +616,8 @@ export const Booking: FC = () => {
                         <TextField
                           {...params}
                           inputProps={{ ...params.inputProps, tabIndex: 5 }}
-                          placeholder="select teams"
-                          label="Select team"
+                          placeholder="Velg Lag"
+                          label="Velg Lag"
                         />
                       )}
                     />
@@ -642,7 +642,7 @@ export const Booking: FC = () => {
                           marginRight: "5px",
                         }}
                       >
-                        or
+                        eller
                       </Box>
                       <TextField
                         inputProps={{ tabIndex: 6 }}
@@ -669,7 +669,7 @@ export const Booking: FC = () => {
                     md="2"
                     style={{ marginBottom: "15px" }}
                   >
-                    <h5 style={{ fontSize: "14px" }}>Location</h5>
+                    <h5 style={{ fontSize: "14px" }}>Lokasjon</h5>
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -709,8 +709,8 @@ export const Booking: FC = () => {
                         <TextField
                           {...params}
                           inputProps={{ ...params.inputProps, tabIndex: 7 }}
-                          placeholder="select teams"
-                          label="Select location"
+                          placeholder="Velg Lokasjon"
+                          label="Velg Lokasjon"
                         />
                       )}
                     />
@@ -744,7 +744,7 @@ export const Booking: FC = () => {
                     md="2"
                     style={{ marginBottom: "15px" }}
                   >
-                    <h5 style={{ fontSize: "14px" }}>Activity</h5>
+                    <h5 style={{ fontSize: "14px" }}>Aktivitet</h5>
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -783,8 +783,8 @@ export const Booking: FC = () => {
                         <TextField
                           {...params}
                           inputProps={{ ...params.inputProps, tabIndex: 8 }}
-                          placeholder="select activity"
-                          label="Select activity"
+                          placeholder="Velg Aktivitet"
+                          label="Velg Aktivitet"
                         />
                       )}
                     />
@@ -858,7 +858,7 @@ export const Booking: FC = () => {
                         <TextField
                           {...params}
                           inputProps={{ ...params.inputProps, tabIndex: 9 }}
-                          label="Select warderobe"
+                          label="Velg Garderobe"
                         />
                       )}
                     />
@@ -880,7 +880,7 @@ export const Booking: FC = () => {
                     md="2"
                     style={{ marginBottom: "15px" }}
                   >
-                    <h5 style={{ fontSize: "14px" }}>Extra Warderobe Time</h5>
+                    <h5 style={{ fontSize: "14px" }}>Ekstra tid Garderobe</h5>
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -1000,7 +1000,7 @@ export const Booking: FC = () => {
                     md="2"
                     style={{ marginBottom: "15px" }}
                   >
-                    <h5 style={{ fontSize: "14px" }}>Description</h5>
+                    <h5 style={{ fontSize: "14px" }}>Beskrivelse (blir ikke publisert)</h5>
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -1035,7 +1035,7 @@ export const Booking: FC = () => {
                     md="2"
                     style={{ marginBottom: "15px" }}
                   >
-                    <h5 style={{ fontSize: "14px" }}>Recurring</h5>
+                    <h5 style={{ fontSize: "14px" }}>Gjentagender</h5>
                   </GridItem>
                   <GridItem
                     xs="6"
@@ -1105,12 +1105,12 @@ export const Booking: FC = () => {
                       >
                         {(values.recurringby === 1 ||
                           values.recurringby === 2) && (
-                          <h5
-                            style={{ fontSize: "14px", marginBottom: "15px" }}
-                          >
-                            Select Recurring Days
-                          </h5>
-                        )}
+                            <h5
+                              style={{ fontSize: "14px", marginBottom: "15px" }}
+                            >
+                              Select Recurring Days
+                            </h5>
+                          )}
 
                         {values.recurringby === 3 && (
                           <h5
@@ -1167,41 +1167,41 @@ export const Booking: FC = () => {
                         )}
                         {(values.recurringby === 1 ||
                           values.recurringby === 2) && (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              flexWrap: "wrap",
-                            }}
-                          >
-                            {weekdays.map((res) => (
-                              //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
-                              <Button
-                                tabIndex={15}
-                                onClick={() => handledays1(res.name)}
-                                className={
-                                  week.some((elm) => elm === res.name)
-                                    ? `${classes.dateButton} active_dates`
-                                    : classes.dateButton
-                                }
-                                disableRipple
-                              >
-                                {res.name.charAt(0)}
-                              </Button>
-                            ))}
-                            {(errorMsgweekly || errorMsg) && (
-                              <span
-                                style={{
-                                  color: "red",
-                                  marginLeft: "12px",
-                                  fontSize: "12px",
-                                }}
-                              >
-                                {errorMsgweekly || errorMsg}
-                              </span>
-                            )}
-                          </Box>
-                        )}
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                flexWrap: "wrap",
+                              }}
+                            >
+                              {weekdays.map((res) => (
+                                //  <span onClick={()=>handledays(res.id)}>{res.name}</span>
+                                <Button
+                                  tabIndex={15}
+                                  onClick={() => handledays1(res.name)}
+                                  className={
+                                    week.some((elm) => elm === res.name)
+                                      ? `${classes.dateButton} active_dates`
+                                      : classes.dateButton
+                                  }
+                                  disableRipple
+                                >
+                                  {res.name.charAt(0)}
+                                </Button>
+                              ))}
+                              {(errorMsgweekly || errorMsg) && (
+                                <span
+                                  style={{
+                                    color: "red",
+                                    marginLeft: "12px",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  {errorMsgweekly || errorMsg}
+                                </span>
+                              )}
+                            </Box>
+                          )}
                       </GridItem>
                       <GridItem
                         xs="6"
@@ -1289,7 +1289,7 @@ export const Booking: FC = () => {
                   {/* End Recurring End Date */}
                   <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
                     <h5 style={{ fontSize: "14px" }}>
-                      Show Activity In Public
+                      Publiser aktivitet
                     </h5>
                   </GridItem>
                   <GridItem xs="12" sm="10" style={{ marginBottom: "15px" }}>
@@ -1330,7 +1330,7 @@ export const Booking: FC = () => {
                         }}
                       />
                       <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
-                        <h5 style={{ fontSize: "14px" }}>Away Team</h5>
+                        <h5 style={{ fontSize: "14px" }}>Bortelag</h5>
                       </GridItem>
                       <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                         <TextField
@@ -1344,7 +1344,7 @@ export const Booking: FC = () => {
                       </GridItem>
 
                       <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
-                        <h5 style={{ fontSize: "14px" }}>Warderobe</h5>
+                        <h5 style={{ fontSize: "14px" }}>Garderobe</h5>
                       </GridItem>
                       <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                         <ItemPicker
@@ -1366,11 +1366,11 @@ export const Booking: FC = () => {
                         style={{ marginBottom: "15px" }}
                       ></GridItem>
                       <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
-                        <h5 style={{ fontSize: "14px" }}>Referee</h5>
+                        <h5 style={{ fontSize: "14px" }}>Dommer</h5>
                       </GridItem>
 
                       <GridItem xs="12" sm="2" style={{ marginBottom: "15px" }}>
-                        <h5 style={{ fontSize: "14px" }}>Warderobe</h5>
+                        <h5 style={{ fontSize: "14px" }}>Garderobe</h5>
                       </GridItem>
                       <GridItem xs="12" sm="3" style={{ marginBottom: "15px" }}>
                         <ItemPicker
@@ -1392,7 +1392,7 @@ export const Booking: FC = () => {
                     type="button"
                     onClick={formik.handleSubmit}
                   >
-                    Book Activity
+                    Lagre aktivitet
                   </Button>
                 </div>
               </form>
