@@ -347,6 +347,9 @@ const UpcomingActivities = ({
       setAcitivityList(temp);
     }
   }, [Activitydata]);
+
+
+
   //console.log(Activitydata.length, "uuuuuuuuu");
   //----------------
   // testing of useeffect
@@ -473,6 +476,15 @@ const UpcomingActivities = ({
 
     return org_name;
   };
+
+  useEffect(() => {
+    moment.updateLocale('en', {
+      week: {
+        dow : 1, // Monday is the first day of the week.
+      }
+    });
+  }, []);
+  
   return (
     <div className="parent">
       {alert}
