@@ -234,6 +234,13 @@ export default function CustomizedTables({
     return org_name;
   };
   //
+  useEffect(() => {
+    moment.updateLocale('en', {
+      week: {
+        dow : 1, // Monday is the first day of the week.
+      }
+    });
+  }, []);
   return (
     <div className={classes.bgContainer}>
       <Container className={classes.Container}>
