@@ -132,7 +132,7 @@ export default function ActivitiesDetail() {
         )}
 
         {!acitivityData && (
-          <h4 style={{ textAlign: "center" }}>No Activity Found</h4>
+          <h4 style={{ textAlign: "center" }}>Ingen aktiviteter</h4>
         )}
         <footer className={classes.footer}>
           <Grid container>

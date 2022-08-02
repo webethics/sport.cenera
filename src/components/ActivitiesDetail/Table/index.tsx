@@ -497,7 +497,7 @@ export default function CustomizedTables({
           </Grid>
         </Grid>
         <span style={{ color: "red", marginLeft: "40%" }}>
-          {activityList && activityList.length < 1 && "No Activity Found"}
+          {activityList && activityList.length < 1 && "Ingen aktiviteter"}
         </span>
         <div
           className=""
