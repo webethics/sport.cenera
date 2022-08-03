@@ -452,13 +452,20 @@ export default function EditActivityModal(props: any) {
           ? EditActivitydata[0].team_id.toString()
           : ""
       );
-
+      //formik.setValues({ ...formik.values,team: EditActivitydata[0].team_id !== null ? EditActivitydata[0].team_id.toString() : "" });
       setinitiallocation(EditActivitydata[0].location_id.toString());
       setinitialwardrobe(EditActivitydata[0].wardrobe_id.toString());
     }
   }, [EditActivitydata]);
   // console.log(typeof initialteam, "hhhhh"); orTeam
   const { values, handleChange, errors, touched } = formik;
+
+
+  useEffect(() => {
+    if (initialteam) {
+      formik.setValues({ ...formik.values,team: initialteam});
+    }
+  }, [initialteam]);
 
   return (
     <div>
@@ -633,7 +640,7 @@ export default function EditActivityModal(props: any) {
                   //disablePortal
 
                   value={
-                    initialteam && teamsList.find((o) => o.id == initialteam)
+                    initialteam && teamsList.find((o) => o.id == initialteam )
                   }
                   id="team"
                   onChange={(e, obj) => {
