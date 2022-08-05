@@ -10,6 +10,9 @@ import {
 // import { useFetchUser } from "@cenera/common/hooks/api-hooks";
 import { useAppContext } from "@cenera/app-context";
 
+
+const LandingPage = Loadable(() => import("@cenera/pages/Landingpage"));
+
 const Activities = Loadable(() => import("@cenera/pages/Activities"));
 const ActivitiesDetail = Loadable(() =>
   import("@cenera/pages/ActivitiesDetail")
@@ -29,7 +32,8 @@ export const AppRoutes = () => {
 
   return (
     <Switch>
-      <Route path="/" exact={true} component={Activities} />
+      <Route path="/" exact={true} component={LandingPage} />
+      <Route path="/booking" exact={true} component={Activities} />
       <Route
         path="/activitiesdetail/:id/:name"
         exact={true}
