@@ -21,7 +21,7 @@ export const GameResults: FC = () => {
     appState.teamId ? appState.teamId : ""
   ); //new
   const { gameInfo, loading, isValidating, revalidate } = useFetchGameInfo(
-    teamId
+    appState.user.user_id
   );
   const { teams, loading: loadingTeam } = useFetchTeams(); // new
   //const {users, loading:loadingUsers} = useFetchUsers();
@@ -39,7 +39,7 @@ export const GameResults: FC = () => {
   }, [loadingTeam, teams, teamsList, teamId]);
 
   useEffect(() => {
-    if (appState.user.user_type === "clubAdmin" && teamsList !== null) {
+    if (teamsList !== null) {
       if (appState.teamId != null) setTeamId(appState.teamId);
       else setTeamId(teamsList[0].team_id); //setting team id for showing default game info of first team
       setshowDropDown(true);

@@ -30,7 +30,7 @@ export const AwayTeam: FC = () => {
   const [teamId, setTeamId] = useState<any>(appState.teamId ? appState.teamId : ""); //new
   const [deleting, setDeleting] = useState(false);
 
-  const { awayTeamInfo, loading, revalidate } = useFetchAwayTeamInfo(teamId);
+  const { awayTeamInfo, loading, revalidate } = useFetchAwayTeamInfo(appState.user.user_id);
 
   const { teams, loading: loadingTeam } = useFetchTeams(); // new
 
@@ -177,7 +177,7 @@ export const AwayTeam: FC = () => {
   }, [loadingTeam, teams, teamsList, teamId]);
 
   useEffect(() => {
-    if (appState.user.user_type === "clubAdmin" && teamsList !== null) {
+    if ( teamsList !== null) {
       setshowDropDown(true);
     } else {
       setshowDropDown(false);

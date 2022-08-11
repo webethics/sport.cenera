@@ -26,7 +26,7 @@ export const GameInfo: FC = () => {
   ); //new
   const [deleting, setDeleting] = useState(false);
 
-  const { gameInfo, loading, revalidate } = useFetchGameInfo(teamId);
+  const { gameInfo, loading, revalidate } = useFetchGameInfo(appState.user.user_id);
   const { teams, loading: loadingTeam } = useFetchTeams(); // new
   const [showDropDown, setshowDropDown] = useState(false); // for showing drop down
 
@@ -132,13 +132,15 @@ export const GameInfo: FC = () => {
         else setTeamId(teamsList[0].team_id); //setting team id for showing default game info of first team
         let a = teams.find((res) => res.team_id === teamId);
         dispatch({ type: "TEAM_NAME", payload: a && a.team_name });
+       
       }
     }
   }, [loadingTeam, teams, teamsList, teamId]);
 
+  
   //check if user is clubadmin then hide the team dropdown
   useEffect(() => {
-    if (appState.user.user_type === "clubAdmin" && teamsList !== null) {
+    if ( teamsList !== null) {
       setshowDropDown(true);
     } else {
       setshowDropDown(false);
@@ -166,7 +168,7 @@ export const GameInfo: FC = () => {
                   id={"test"}
                 />
               )
-            : ""}
+            : "test"}
           <Card>
             <CardHeader>
               <h4>Game Information</h4>
