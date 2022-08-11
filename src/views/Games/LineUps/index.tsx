@@ -43,7 +43,7 @@ export const GameLineUp: FC = () => {
   
  //check if user is clubadmin then hide the team dropdown 
   useEffect(()=>{  
-          if(appState.user.user_type==="clubAdmin" && teamsList !== null){
+          if( teamsList !== null){
             setshowDropDown(true)
           }else{
             setshowDropDown(false)
