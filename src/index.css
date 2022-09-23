@@ -67,9 +67,9 @@ body .MuiOutlinedInput-input {
 .bodyWithChildrenItems tr:last-child td {
   border-bottom: 1px solid rgba(224, 224, 224, 1);
 }
-.MuiBackdrop-root {
+/* .MuiBackdrop-root {
   pointer-events: none;
-}
+} */
 .notpublic {
   background: lightgray !important;
 }
