@@ -362,6 +362,8 @@ export default function EditActivityModal(props: any) {
   //   }
   // }, [startTimefield]);
 
+
+  const[activitytypeis,setactivitytypeis]=useState()
   useEffect(() => {
     if (EditActivitydata[0]) {
       handleStartTimefield(
@@ -403,6 +405,7 @@ export default function EditActivityModal(props: any) {
           if (res.name == EditActivitydata[0].activity_type.toLowerCase()) {
             newActivity = res.id;
             setactivitytype(newActivity);
+            setactivitytypeis(newActivity)
           }
         });
 
@@ -780,12 +783,14 @@ export default function EditActivityModal(props: any) {
                   //disablePortal
                   style={{ width: "75%" }}
                   id="activity"
+                  // value={"2"}
                   value={
                     activitytype &&
-                    activitylist.find((o) => o.id == activitytype)
+                    activitylist.find((o) => o.id == activitytypeis)
                   }
                   onChange={(e, obj) => {
                     if (obj !== null) {
+                      setactivitytypeis(obj.id)
                       formik.setValues({
                         ...formik.values,
                         activity: obj.id,
@@ -796,7 +801,9 @@ export default function EditActivityModal(props: any) {
                         activity: "0",
                       });
                     }
+                 
                     console.log(e);
+
                   }}
                   options={activitylist}
                   getOptionLabel={(option) => option.name}
@@ -805,6 +812,7 @@ export default function EditActivityModal(props: any) {
                     <TextField {...params} label="Velg Aktivitet" />
                   )}
                 />
+              
                 {errors.activity && touched.activity && (
                   <span
                     className={classes.errorColor}

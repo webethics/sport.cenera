@@ -165,7 +165,7 @@ const Location = () => {
           <Card className={classes.root} variant="outlined">
             <CardContent>
               <Typography variant="h6" component="h3">
-                Location
+                Lokasjon
               </Typography>
 
               <List>
@@ -200,7 +200,7 @@ const Location = () => {
               <TextField
                 margin="dense"
                 id="location"
-                label="Add New Location"
+                label="Legg til ny lokasjon"
                 variant="outlined"
                 value={values.location}
                 onChange={handleChange}
@@ -209,7 +209,7 @@ const Location = () => {
                 <span className={classes.errorColor}>{errors.location}</span>
               )}
               <Button type="submit" variant="contained" color="secondary">
-                Add Location
+                Lagre lokasjon
               </Button>
             </CardActions>
           </Card>

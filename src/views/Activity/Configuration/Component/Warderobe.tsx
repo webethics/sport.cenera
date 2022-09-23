@@ -146,7 +146,7 @@ const Warderobe = () => {
           <Card className={classes.root} variant="outlined">
             <CardContent>
               <Typography variant="h6" component="h3">
-                Wardrobe
+                Garderobe
               </Typography>
               <List>
                 {warderobe.map(
@@ -183,7 +183,7 @@ const Warderobe = () => {
               <TextField
                 margin="dense"
                 id="warderobe"
-                label="Add New Warderobe"
+                label="Legg til ny garderobe"
                 variant="outlined"
                 value={values.warderobe}
                 onChange={handleChange}
@@ -197,7 +197,7 @@ const Warderobe = () => {
                 color="secondary"
                 style={{ backgroundColor: "#00ACC1" }}
               >
-                Add Warderobe
+               Lagre garderobe
               </Button>
             </CardActions>
           </Card>

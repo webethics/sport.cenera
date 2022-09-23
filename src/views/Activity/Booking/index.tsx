@@ -39,7 +39,7 @@ export const Booking: FC = () => {
   const [addnewbooking, setaddnewbooking] = useState(1);
   // console.log(addnewbooking, "addnewbookingaddnewbooking");
 
-  const [value, setvalue] = useState({
+  const [teamsare, setteamsare] = useState({
     name: "training",
     isMatch: false,
     id: 2,
@@ -764,7 +764,7 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                       id="activity"
                     /> */}
-                    {console.log("jkjjj", setvalue)}
+                
                     <Autocomplete
                       //disablePortal
                       // defaultValue={Options.find(v => v.label[0])}
@@ -772,11 +772,17 @@ export const Booking: FC = () => {
                       //   (o) => o.id == 2,
                       //   console.log(o, "consoled")
                       // )}
-                      value={value}
+                      value={teamsare}
                       style={{ width: "100%" }}
                       id="activity"
+
+                      // onChange={(event: any, newValue: string | null) => {
+                      //   setValue(newValue);
+                      // }}
+
                       onChange={(e, obj) => {
                         if (obj !== null) {
+                          setteamsare(obj)
                           formik.setValues({
                             ...formik.values,
                             activity: obj.id,
@@ -788,6 +794,7 @@ export const Booking: FC = () => {
                           });
                         }
                         console.log(e);
+                      
                       }}
                       options={activitylist}
                       getOptionLabel={(option) => option.name}
@@ -801,6 +808,7 @@ export const Booking: FC = () => {
                         />
                       )}
                     />
+                
 
                     {errors.activity && touched.activity && (
                       <span
@@ -831,7 +839,7 @@ export const Booking: FC = () => {
                     md="2"
                     style={{ marginBottom: "15px" }}
                   >
-                    <h5 style={{ fontSize: "14px" }}>Wardrobe</h5>
+                    <h5 style={{ fontSize: "14px" }}>Garderobe</h5>
                   </GridItem>
                   <GridItem
                     xs="12"
@@ -852,6 +860,7 @@ export const Booking: FC = () => {
                       id="warderobe"
                       onChange={(e, obj) => {
                         if (obj !== null) {
+                          
                           formik.setValues({
                             ...formik.values,
                             warderobe: obj.id,
@@ -1050,7 +1059,7 @@ export const Booking: FC = () => {
                     md="2"
                     style={{ marginBottom: "15px" }}
                   >
-                    <h5 style={{ fontSize: "14px" }}>Gjentagender</h5>
+                    <h5 style={{ fontSize: "14px" }}>Gjentagende</h5>
                   </GridItem>
                   <GridItem
                     xs="6"

@@ -598,7 +598,7 @@ const UpcomingActivities = ({
                             </span>
                           </StyledTableCell>
                           <StyledTableCell>
-                            Uke :{moment(res.startTime, "YYYYMMDD").week()}
+                            Uke :{moment(res.startTime, "YYYYMMDD").isoWeek()}
                           </StyledTableCell>
                         </TableRow>
                         <TableRow className={`${classes.customeTableRow}`}>
