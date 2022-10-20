@@ -286,10 +286,17 @@ export default function EditActivityModal(props: any) {
         }),
         ...(formValues.team !== "" && { team_id: formValues.team }),
         ...(formValues.orTeam !== "" && { team_text: formValues.orTeam }),
-        away_team_text: formValues.away_team,
+        ...(formValues.activity == "1" && { away_team_text: formValues.away_team }),
+        // away_team_text: formValues.away_team,
+
         wardrobe_id: formValues.warderobe,
-        wardrobe_id_away: formValues.away_team_wardrobe,
-        wardrobe_id_referee: formValues.referee_wardrobe,
+
+        ...(formValues.activity == "1" && { wardrobe_id_away: formValues.away_team_wardrobe }),
+        // wardrobe_id_away: formValues.away_team_wardrobe,
+
+        ...(formValues.activity == "1" && { wardrobe_id_referee: formValues.referee_wardrobe }),
+        // wardrobe_id_referee: formValues.referee_wardrobe,
+        
         wardrobe_extra_time:
           (formValues.extWarBef15 && 15) || (formValues.extWarBef30 && 30),
         description: formValues.description,

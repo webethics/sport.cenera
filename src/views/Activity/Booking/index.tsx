@@ -243,7 +243,7 @@ export const Booking: FC = () => {
       }),
     }),
 
-    onSubmit: async (formValues) => {
+    onSubmit: async (formValues,{ resetForm }) => {
       const {
         start_date,
         start_time,
@@ -289,10 +289,16 @@ export const Booking: FC = () => {
         }),
         ...(formValues.team > "0" && { team_id: formValues.team }),
         ...(formValues.orTeam !== "" && { team_text: formValues.orTeam }),
-        away_team_text: formValues.away_team,
+        ...(formValues.activity == "1" && { away_team_text: formValues.away_team }),
+        // away_team_text: formValues.away_team,
         wardrobe_id: formValues.warderobe,
-        wardrobe_id_away: formValues.away_team_wardrobe,
-        wardrobe_id_referee: formValues.referee_wardrobe,
+
+        ...(formValues.activity == "1" && { wardrobe_id_away: formValues.away_team_wardrobe }),
+        // wardrobe_id_away: formValues.away_team_wardrobe,
+
+        ...(formValues.activity == "1" && { wardrobe_id_referee: formValues.referee_wardrobe }),
+        // wardrobe_id_referee: formValues.referee_wardrobe,
+
         wardrobe_extra_time:
           (formValues.extWarBef15 && 15) || (formValues.extWarBef30 && 30),
         description: formValues.description,
@@ -313,6 +319,14 @@ export const Booking: FC = () => {
             enqueueSnackbar("Activity Added Successfully", {
               variant: "success",
             });
+         
+            formik.setValues({ ...formik.values,team: "0"});
+            formik.setValues({ ...formik.values,activity: "2"});
+            setteamsare({ name: "training",
+            isMatch: false,
+            id: 2})
+           
+            resetForm();
             // setFetchupcoming(1);
           }
           if (addnewbooking === 2) {
@@ -600,6 +614,9 @@ export const Booking: FC = () => {
                       style={{ width: "100%" }}
                       disabled={values.orTeam && true}
                       //disablePortal
+                      value={
+                        values.team != 0 ? teamsList.find((o) => o.id == values.team ):null
+                      }
                       id="team"
                       onChange={(e, obj) => {
                         if (obj !== null) {
@@ -627,6 +644,9 @@ export const Booking: FC = () => {
                         />
                       )}
                     />
+                    {/* <button onClick={(event)=> {event.preventDefault();formik.setValues({ ...formik.values,team: "0"})}}>change</button> */}
+                  
+                  
                   </GridItem>
 
                   <GridItem
@@ -694,6 +714,10 @@ export const Booking: FC = () => {
                       // disablePortal
                       style={{ width: "100%" }}
                       id="location"
+                      
+                      value={
+                        values.location != 0 ? locations.find((o) => o.id == values.location):null
+                      }
                       onChange={(e, obj) => {
                         if (obj !== null) {
                           formik.setValues({
@@ -858,6 +882,10 @@ export const Booking: FC = () => {
                       //disablePortal
                       style={{ width: "100%" }}
                       id="warderobe"
+
+                      value={
+                        values.warderobe != 0 ?  wardrobes.find((o) => o.id == values.warderobe):null
+                      }
                       onChange={(e, obj) => {
                         if (obj !== null) {
                           

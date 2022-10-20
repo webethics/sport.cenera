@@ -30,7 +30,7 @@ export const AwayTeam: FC = () => {
   const [teamId, setTeamId] = useState<any>(appState.teamId ? appState.teamId : ""); //new
   const [deleting, setDeleting] = useState(false);
 
-  const { awayTeamInfo, loading, revalidate } = useFetchAwayTeamInfo(appState.user.user_id);
+  const { awayTeamInfo, loading, revalidate } = useFetchAwayTeamInfo(teamId);
 
   const { teams, loading: loadingTeam } = useFetchTeams(); // new
 
