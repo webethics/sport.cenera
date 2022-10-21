@@ -46,7 +46,7 @@ export default function Listing() {
                       to={{
                         pathname: `/activitiesdetail/${
                           res.club_id
-                        }/${res.club_name.replace(" ", "-").toLowerCase()}`,
+                        }/${res.club_name.replace(" ", "-")}`,
                         // state: { name: res.club_name },
                       }}
                     >

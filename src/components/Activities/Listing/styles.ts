@@ -52,6 +52,7 @@ export const listingStyle = (theme: any) => ({
   },
   media: {
     height: 218,
+    backgroundSize: "contain",
   },
   cardTitle: {
     fonstSize: "18px",
