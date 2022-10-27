@@ -9,8 +9,8 @@ const appStyle = (theme: any) => ({
   wrapper: {
     position: "relative",
     top: "0",
-    // height: "100vh",
-    // overflowY: "auto",
+    height: "100vh",
+    overflowY: "auto",
     "&:after": {
       display: "table",
       clear: "both",
@@ -24,13 +24,13 @@ const appStyle = (theme: any) => ({
     [theme.breakpoints.up("md")]: {
       width: `calc(100% - ${drawerWidth}px)`,
     },
-    // overflow: "scroll",
+    overflow: "scroll",
     position: "relative",
     float: "right",
     ...transition,
     maxHeight: "100%",
     width: "100%",
-    // overflowScrolling: "touch",
+    overflowScrolling: "touch",
   },
   content: {
     marginTop: "70px",
