@@ -10,7 +10,7 @@ const appStyle = (theme: any) => ({
     position: "relative",
     top: "0",
     height: "100vh",
-    overflowY: "auto",
+    // overflowY: "auto",
     "&:after": {
       display: "table",
       clear: "both",
