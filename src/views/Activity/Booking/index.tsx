@@ -73,6 +73,7 @@ export const Booking: FC = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [errorMsgMonth, setErrorMsgMonth] = useState("");
   const [errorMsgweekly, setErrorMsgweekly] = useState("");
+ 
   // const[weekerror,setweekerror]= useState(false);
 
   //Recurring
@@ -243,7 +244,7 @@ export const Booking: FC = () => {
       }),
     }),
 
-    onSubmit: async (formValues,{ resetForm }) => {
+    onSubmit: async (formValues) => {
       const {
         start_date,
         start_time,
@@ -319,14 +320,21 @@ export const Booking: FC = () => {
             enqueueSnackbar("Activity Added Successfully", {
               variant: "success",
             });
-         
-            formik.setValues({ ...formik.values,team: "0"});
-            formik.setValues({ ...formik.values,activity: "2"});
-            setteamsare({ name: "training",
-            isMatch: false,
-            id: 2})
-           
-            resetForm();
+          
+            // formik.setValues({ ...formik.values,description: "apty tested here "});
+            // if(values.description!==""){
+            //   formik.setValues({ ...formik.values,description: "apty tested here "});
+            //   formik.setValues({
+            //     ...formik.values,
+            //     description: "adf tested description is here",
+            //   });
+            // }
+            // formik.setValues({ ...formik.values,activity: "2"});
+            // setteamsare({ name: "training",
+            // isMatch: false,
+            // id: 2})
+            resetform();
+            // resetForm();
             // setFetchupcoming(1);
           }
           if (addnewbooking === 2) {
@@ -339,7 +347,33 @@ export const Booking: FC = () => {
     },
   });
 
+const resetform =()=>{
+  setteamsare({
+    name: "training",
+    isMatch: false,
+    id: 2,
+  })
+  formik.setFieldValue('description',''as any);
+  formik.setFieldValue('team','0'as any);
+  formik.setFieldValue('orTeam',''as any);
+  formik.setFieldValue('location','0'as any);
+  formik.setFieldValue('warderobe','0'as any);
+  formik.setFieldValue('extWarBef15',false as any);
+  formik.setFieldValue('extWarBef30',false as any);
+  formik.setFieldValue('activity',"2" as any);
+  formik.setFieldValue('away_team',"" as any);
+
+  formik.setFieldValue('away_team_wardrobe',"" as any);
+  formik.setFieldValue('referee_wardrobe',"" as any);
+  formik.setFieldValue('show_public',false as any);
+  formik.setFieldValue('recurring',0 as any);
+  formik.setFieldValue('recurringby',1 as any);
+  formik.setFieldValue('week_day',"" as any);
+  formik.setFieldValue('month_day',"" as any);
+}
+
   useEffect(() => {
+    
     if (
       formik.values.recurring == 1 &&
       formik.values.recurringby == 2 &&
@@ -386,6 +420,8 @@ export const Booking: FC = () => {
   //moment(startTime, 'HH:mm:ss').add(durationInMinutes, 'minutes').format('HH:mm');
 
   const { values, handleChange, errors, touched } = formik;
+
+ 
 
   return (
     <div>
@@ -1069,6 +1105,7 @@ export const Booking: FC = () => {
                       onChange={handleChange}
                       style={{ width: "100%" }}
                     />
+                   
                   </GridItem>
                   <GridItem
                     xs="12"
