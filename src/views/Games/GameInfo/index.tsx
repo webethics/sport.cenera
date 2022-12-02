@@ -26,7 +26,7 @@ export const GameInfo: FC = () => {
   ); //new
   const [deleting, setDeleting] = useState(false);
 
-  const { gameInfo, loading, revalidate } = useFetchGameInfo(appState.user.user_id);
+  const { gameInfo, loading, revalidate } = useFetchGameInfo(teamId);
   const { teams, loading: loadingTeam } = useFetchTeams(); // new
   const [showDropDown, setshowDropDown] = useState(false); // for showing drop down
 
