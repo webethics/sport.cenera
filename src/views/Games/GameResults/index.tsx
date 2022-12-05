@@ -21,7 +21,7 @@ export const GameResults: FC = () => {
     appState.teamId ? appState.teamId : ""
   ); //new
   const { gameInfo, loading, isValidating, revalidate } = useFetchGameInfo(
-    appState.user.user_id
+    teamId
   );
   const { teams, loading: loadingTeam } = useFetchTeams(); // new
   //const {users, loading:loadingUsers} = useFetchUsers();
