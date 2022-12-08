@@ -24,6 +24,7 @@ export const GameLineUp: FC = () => {
 
   const { gameInfo, loading: gameInfoLoading, revalidate: revalidateGameInfo } = useFetchGameInfo(teamId !== null && teamId);
   const { club, loading: clubLoading } = useFetchClub(appState.user.club_id);
+
   const { team, loading: teamLoading } = useFetchTeam(teamId);
   const { teams, loading:loadingTeams} = useFetchTeams(); // new
   const [teamsList, setTeamsList] = useState(null); //new
@@ -55,7 +56,7 @@ export const GameLineUp: FC = () => {
   useEffect(() => {
     if (!clubLoading && club) {
       const professionalTeam = club.teams.find(t => t.team_type === 'professional');
-      if (professionalTeam) {
+      if (professionalTeam || !professionalTeam) {
         if(teamsList){
           if(appState.teamId!=null)
          { setTeamId(appState.teamId)
@@ -68,7 +69,8 @@ export const GameLineUp: FC = () => {
           dispatch({ type: 'TEAM_NAME', payload: (a && a.team_name)});
         }
         }
-      } else {
+      }
+       else {
         setNoProfessionalTeam(true);
       }
     }
